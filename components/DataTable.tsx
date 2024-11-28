@@ -16,15 +16,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-interface DataTableProps<ProductType, TValue> {
-  columns: ColumnDef<ProductType, TValue>[];
-  data: ProductType[];
+interface DataTableProps<ItemType, TValue> {
+  columns: ColumnDef<ItemType, TValue>[];
+  data: ItemType[];
 }
 
-export function DataTable<ProductType, TValue>({
+export function DataTable<ItemType, TValue>({
   columns,
   data,
-}: DataTableProps<ProductType, TValue>) {
+}: DataTableProps<ItemType, TValue>) {
   const table = useReactTable({
     data,
     columns,

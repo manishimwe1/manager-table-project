@@ -26,6 +26,7 @@ export const createTask = mutation({
     return newProduct;
   },
 });
+
 export const getProduct = query({
   handler: async (ctx) => {
     const Product = await ctx.db.query("product").order("desc").collect();
@@ -59,5 +60,26 @@ export const updateProduct = mutation({
 
     // Only update fields that are provided
     await ctx.db.patch(id, fields);
+  },
+});
+
+export const getProductByDate = query({
+  args: {
+    date: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const Product = await ctx.db
+      .query("product")
+      .order("desc")
+      .filter((q) => q.eq(q.field("_creationTime"), args.date))
+      .collect();
+
+    if (!Product) {
+      console.log(
+        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT")
+      );
+      return [];
+    }
+    return Product;
   },
 });

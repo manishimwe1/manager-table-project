@@ -2,22 +2,18 @@
 
 import { useShowEditBoxStore } from "@/lib/store/zustand";
 import React from "react";
-import { columns, Payment } from "./columns";
+import { columns } from "./columns";
 import { DataTable } from "./DataTable";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { ProductType } from "@/types";
 import { Loader2 } from "lucide-react";
 
-const DataComponents = () => {
-  const data: ProductType = useQuery(api.product.getProduct);
-  const resetShowEditBox = useShowEditBoxStore(
-    (state) => state.resetShowEditBox
-  );
+const DataComponents = ({ dataByDate }: { dataByDate: ProductType }) => {
   return (
-    <div className="container mx-auto py-10 h-screen">
-      {data ? (
-        <DataTable columns={columns} data={data} />
+    <div className="container mx-auto py-10 h-full">
+      {dataByDate ? (
+        <DataTable columns={columns} data={dataByDate} />
       ) : (
         <Loader2 className="animate-spin" />
       )}
