@@ -1,96 +1,24 @@
 "use client";
 
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { useShowEditBoxStore } from "@/lib/store/zustand";
-import { ProductType } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMutation } from "convex/react";
-import { Send, X } from "lucide-react";
-import Form from "next/form";
-import { useState } from "react";
-import { Input } from "./ui/input";
-
+import { Id } from "@/convex/_generated/dataModel";
 import AddCustomerName from "./addCustomerName";
+import SellingButton from "./SellingButton";
+import TakeInputValue from "./TakeInputValue";
+import { TableRowType } from "@/types";
 
-function EditCell({
-  igicuruzwa,
-  id,
-  field,
-}: {
-  igicuruzwa: string;
-  id: Id<"product">;
-  field: string;
-}) {
-  const [newIgicuruzwa, setNewIgicuruzwa] = useState("");
-  const { showEditBox, activeProductId, activeField, setShowEditBox } =
-    useShowEditBoxStore();
-
-  const updateIgicuruzwa = useMutation(api.product.updateProduct);
-
-  const handleUpdate = () => {
-    if (newIgicuruzwa === "" || newIgicuruzwa === igicuruzwa)
-      return setShowEditBox(id, null);
-    const updatePayload = {
-      id,
-      fields: {
-        [field]: newIgicuruzwa,
-      },
-    };
-
-    // Call the mutation with the updated payload
-    updateIgicuruzwa(updatePayload);
-
-    // Close the edit box after updating
-    setShowEditBox(id, null);
-  };
-
-  return (
-    <div
-      className="h-full cursor-pointer relative"
-      onDoubleClick={() => setShowEditBox(id, field)}
-    >
-      {igicuruzwa}
-      {activeProductId === id && activeField === field && showEditBox && (
-        <div className="bg-violet-50 z-50 absolute top-0 left-0 text-black w-full !h-10">
-          <Form
-            action={handleUpdate}
-            className="relative flex items-center justify-between"
-          >
-            <Input
-              autoFocus
-              value={newIgicuruzwa}
-              onChange={(e) => setNewIgicuruzwa(e.target.value)}
-            />
-            <button
-              type="submit"
-              className="bg-green-300 hover:bg-secondary-foreground"
-            >
-              <Send className="absolute cursor-pointer right-2 bottom-0 h-4 w-4  text-black" />
-            </button>
-          </Form>
-          <button className="border border-black">
-            <X
-              className="absolute cursor-pointer right-0.5 -top-2 text-red-300 h-4 w-4"
-              onClick={() => setShowEditBox(id, null)}
-            />
-          </button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export const columns: ColumnDef<ProductType>[] = [
+export const columns: ColumnDef<TableRowType>[] = [
   {
     accessorKey: "_id",
-    header: () => {},
-    cell: ({ row }) => null,
+    header: "ID",
+    cell: () => null, // Hidden column for internal use
   },
   {
     accessorKey: "_creationTime",
-    header: () => {},
-    cell: ({ row }) => null,
+    header: "Creation Time",
+    cell: () => null, // Hidden column for internal use
   },
   {
     accessorKey: "igicuruzwa",
@@ -101,8 +29,8 @@ export const columns: ColumnDef<ProductType>[] = [
     },
   },
   {
-    accessorKey: "-total",
-    header: "Muri stock",
+    accessorKey: "ingano",
+    header: "Muri Stock",
     cell: ({ row }) => {
       const ingano = row.getValue("ingano") as number;
       return <p>{ingano}</p>;
@@ -114,81 +42,66 @@ export const columns: ColumnDef<ProductType>[] = [
   },
   {
     accessorKey: "ukonyigurisha",
-    header: "Uko nyigurisha",
+    header: "Uko Nyigurisha",
   },
-
   {
-    accessorKey: "totalo",
+    accessorKey: "customerName",
     header: "Izina ry'umukiriya",
     cell: ({ row }) => {
-      const time = row.getValue("_creationTime") as number;
-      return <AddCustomerName time={time} />;
+      const rowId = row.getValue("_id") as Id<"product">;
+      return <AddCustomerName rowId={rowId} />;
     },
   },
-
   {
-    accessorKey: "ingano",
+    accessorKey: "arashaka",
     header: "Aratwara z'ingahe",
     cell: ({ row }) => {
-      const ingano = row.getValue("ingano") as number;
-      return <Input className="w-[100px] px-1" type="number" />;
+      const id = row.getValue("_id") as Id<"product">;
+      const arashaka = row.getValue("arashaka") as string;
+
+      // const updateValue = useMutation(api.product.updateField); // Adjust API call as needed
+
+      const handleUpdate = (value: string) => {
+        // updateValue({ id, field: "arashaka", value });
+      };
+
+      return <TakeInputValue value={arashaka} onValueChange={handleUpdate} />;
     },
   },
-  // {
-  //   accessorKey: "ikiranguzo",
-  //   header: "Igiciro",
-  //   cell: ({ row }) => {
-  //     const ikiranguzo = row.getValue("ikiranguzo") as number;
-  //     return (
-  //       <EditCell
-  //         igicuruzwa={ikiranguzo.toString()}
-  //         id={row.getValue("_id")}
-  //         field="ikiranguzo"
-  //       />
-  //     );
-  //   },
-  // },
-  // {
-  //   accessorKey: "_creationTime",
-  //   header: "Itariki",
-  //   cell: ({ row }) => {
-  //     const date = row.getValue("_creationTime") as number;
-  //     return (
-  //       <p className="text-xs text-nowrap text-muted-foreground">
-  //         {formatReadableDate(date)}
-  //       </p>
-  //     );
-  //   },
-  // },
-
   {
     accessorKey: "yishyuyeAngahe",
     header: "Yishyuye Angahe",
     cell: ({ row }) => {
-      const ingano = row.getValue("ingano") as number;
-      return <Input className="w-[100px] px-1" type="number" />;
+      const id = row.getValue("_id") as Id<"product">;
+      const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as string;
+
+      const updateValue = useMutation(api.product.updateField);
+
+      const handleUpdate = (value: string) => {
+        updateValue({ id, field: "yishyuyeAngahe", value });
+      };
+
+      return (
+        <TakeInputValue value={yishyuyeAngahe} onValueChange={handleUpdate} />
+      );
     },
   },
   {
     accessorKey: "status",
     header: "Arishyuye",
     cell: ({ row }) => {
-      const id = row.getValue("_id");
+      const id = row.getValue("_id") as Id<"product">;
+      const igicuruzwa = row.getValue("igicuruzwa") as string;
+      const ingano = row.getValue("ingano") as number;
+      const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as string;
+
       return (
-        <div className="flex space-x-2">
-          <button
-            // onClick={() => handleEdit(id)}
-            className="bg-blue-500 text-white px-2 py-1 rounded"
-          >
-            Yego
-          </button>
-          <button
-            // onClick={() => handleDelete(id)}
-            className="bg-red-400 text-white px-2 py-1 rounded"
-          >
-            Oya
-          </button>
-        </div>
+        <SellingButton
+          id={id}
+          igicuruzwa={igicuruzwa}
+          ingano={ingano}
+          yishyuyeAngahe={yishyuyeAngahe}
+        />
       );
     },
   },

@@ -9,7 +9,7 @@ import {
 import { ProductType } from "@/types";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Loader2 } from "lucide-react";
+import { ChevronsDownUp, Loader2 } from "lucide-react";
 import { cn, formatReadableDate, groupByDate } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import DataComponents from "./DataComponents";
@@ -37,11 +37,12 @@ const CollapsibleItem = () => {
         <div key={date} className={cn(" py-4 rounded-lg")}>
           <Collapsible>
             <CollapsibleTrigger
+              className="flex items-center justify-between w-1/2 text-lg text-balance"
               onClick={() => handleDateSelection(Number(date))}
             >
-              {date}
+              Urutonde rw'ibyaranguwe kuri {date} <ChevronsDownUp />
             </CollapsibleTrigger>
-            <CollapsibleContent className="flex flex-col bg-blue-50/20 rounded-lg">
+            <CollapsibleContent className="flex flex-col bg-blue-50/20 rounded-lg h-screen w-full">
               <p className="w-full text-sm flex justify-end items-center text-blue-700 font-bold pr-10">
                 Number of items:{" "}
                 <span className="text-lg ml-2">{items?.length}</span>

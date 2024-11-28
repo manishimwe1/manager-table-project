@@ -29,9 +29,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex h-full w-full overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex h-full w-full overflow-x-hidden gap-4`}
       >
-        <div className="flex flex-col h-full p-3 w-fit md:w-60 dark:bg-gray-50 dark:text-gray-800">
+        <div className="flex flex-col h-full px-2 py-7 w-fit dark:bg-gray-50 dark:text-gray-800">
           <Sidebar />
         </div>
         <div className="flex items-start mt-6 flex-col justify-center w-full">

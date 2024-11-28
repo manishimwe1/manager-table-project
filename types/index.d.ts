@@ -21,3 +21,16 @@ export type ItemType = {
   wishyuyeAngahe: number;
   status: string;
 };
+
+export interface TableRowType {
+  _id: Id<"product">;
+  _creationTime: number;
+  igicuruzwa: string;
+  ingano: number;
+  ikiranguzo: string;
+  ukonyigurisha: string;
+  customerName?: string;
+  arashaka?: string;
+  yishyuyeAngahe?: string;
+  status?: string;
+}

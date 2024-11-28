@@ -34,7 +34,10 @@ const SalesPage = () => {
       {data ? (
         <div className={cn(" py-4 rounded-lg w-full")}>
           <Collapsible>
-            <CollapsibleTrigger>{formatToday()}</CollapsibleTrigger>
+            <CollapsibleTrigger className="hover:underline decoration-blue-600 underline-offset-2 hover:text-slate-950">
+              {" "}
+              Urutonde rw'ibicuruzwa kuri {formatToday()}
+            </CollapsibleTrigger>
             <CollapsibleContent className="flex flex-col bg-blue-50/20 rounded-lg">
               <p className="w-full text-sm flex justify-end items-center text-blue-700 font-bold pr-10">
                 Number of items:{" "}
