@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const Sidebar = () => {
@@ -41,7 +42,7 @@ const Sidebar = () => {
           <li className="rounded-sm">
             <a
               rel="noopener noreferrer"
-              href="#"
+              href="/"
               className="flex items-center p-2 space-x-3 rounded-md"
             >
               <svg
@@ -59,9 +60,9 @@ const Sidebar = () => {
             </a>
           </li>
           <li className="rounded-sm">
-            <a
+            <Link
               rel="noopener noreferrer"
-              href="#"
+              href="/sales"
               className="flex items-center p-2 space-x-3 rounded-md"
             >
               <svg
@@ -77,7 +78,7 @@ const Sidebar = () => {
                 <path d="M12 18V6" />
               </svg>
               <span className="hidden md:flex">Sale</span>
-            </a>
+            </Link>
           </li>
           {/* <li className="rounded-sm">
             <a

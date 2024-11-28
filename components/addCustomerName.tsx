@@ -1,35 +1,34 @@
 "use client";
-import { Button } from "./ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Label } from "./ui/label";
-import { Plus, PlusCircle, Send, X } from "lucide-react";
-import { Input } from "./ui/input";
+import { useClientInfoStore } from "@/lib/store/zustand";
+import { PlusCircle, Send } from "lucide-react";
 import Form from "next/form";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
 import { useState } from "react";
-import { Id } from "@/convex/_generated/dataModel";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 
-const AddCustomerName = ({ id }: { id: Id<"product"> }) => {
+const AddCustomerName = ({ time }: { time: number }) => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState<number>(0);
   const [open, setOpen] = useState(false);
-  const createClient = useMutation(api.clientName.createClient);
+  const saveName = useClientInfoStore((state) => state.setName);
+  const Name = useClientInfoStore((state) => state.name);
+  const Phone = useClientInfoStore((state) => state.phone);
+  const savePhone = useClientInfoStore((state) => state.setPhone);
+
   const submitClient = () => {
-    createClient({
-      name: name,
-      phone: phone,
-      productId: id,
-    });
+    Promise.all([saveName(name), savePhone(phone)]);
+
     setName("");
     setPhone(0);
     setOpen(false);
   };
-
+  console.log(Name, Phone);
   return (
     <Popover
       onOpenChange={(open) => {
@@ -43,8 +42,17 @@ const AddCustomerName = ({ id }: { id: Id<"product"> }) => {
             setOpen(true);
           }}
         >
-          <PlusCircle className="h-3 w-3" />
-          new
+          {Name && Phone ? (
+            <div className="flex items-start justify-between flex-col gap-0">
+              <p className="text-xs font-bold text-gray-500">Name: {Name} </p>,
+              <p className="text-xs font-bold text-gray-500">Phone: {Phone}</p>
+            </div>
+          ) : (
+            <>
+              <PlusCircle className="h-4 w-4" />
+              new
+            </>
+          )}
         </div>
       </PopoverTrigger>
       <PopoverContent className="!w-full">

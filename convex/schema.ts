@@ -6,9 +6,9 @@ export default defineSchema({
     igicuruzwa: v.string(),
     ikiranguzo: v.number(),
     ingano: v.number(),
-    total: v.number(),
-    wishyuyeAngahe: v.number(),
-    status: v.string(),
+    uzishyuraAngahe: v.number(),
+    status: v.boolean(),
+    ukonyigurisha: v.number(),
   }).index("by_igicuruzwa", ["igicuruzwa"]),
   client: defineTable({
     name: v.string(),

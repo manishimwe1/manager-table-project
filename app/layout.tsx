@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ConvexClientProvider } from "./ConvexClientProvider";
 import Sidebar from "@/components/Sidebar";
+import NextTopLoader from "nextjs-toploader";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,13 +29,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex h-full w-full`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex h-full w-full overflow-x-hidden`}
       >
         <div className="flex flex-col h-full p-3 w-fit md:w-60 dark:bg-gray-50 dark:text-gray-800">
           <Sidebar />
         </div>
-        <div className="flex items-center p-2 mt-6 space-x-4 justify-self-end w-full">
-          <ConvexClientProvider>{children}</ConvexClientProvider>
+        <div className="flex items-start mt-6 flex-col justify-center w-full">
+          <ConvexClientProvider>
+            {" "}
+            <NextTopLoader />
+            <div className="flex h-full w-full px-2 ">{children}</div>
+          </ConvexClientProvider>
         </div>
       </body>
     </html>

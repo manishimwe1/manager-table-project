@@ -40,3 +40,10 @@ export const groupByDate = (data: ProductType): GroupedData => {
 
   return grouped;
 };
+
+export const formatToday = (): string => {
+  const today = new Date();
+  const dayName = today.toLocaleDateString(undefined, { weekday: "long" }); // Get the day name
+  const formattedDate = today.toLocaleDateString(undefined); // Get the MM/DD/YYYY format
+  return ` ${dayName}, ${formattedDate}`;
+};

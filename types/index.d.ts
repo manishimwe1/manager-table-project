@@ -5,9 +5,9 @@ export type ProductType =
       igicuruzwa: string;
       ikiranguzo: number;
       ingano: number;
-      total: number;
-      wishyuyeAngahe: number;
-      status: string;
+      uzishyuraAngahe: number;
+      ukonyigurisha: number;
+      status: boolean;
     }[]
   | undefined;
 

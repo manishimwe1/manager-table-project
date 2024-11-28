@@ -7,18 +7,18 @@ export const createTask = mutation({
     igicuruzwa: v.string(),
     ikiranguzo: v.number(),
     ingano: v.number(),
-    total: v.number(),
-    status: v.string(),
-    wishyuyeAngahe: v.number(),
+    uzishyuraAngahe: v.number(),
+    status: v.boolean(),
+    ukonyigurisha: v.number(),
   },
   handler: async (ctx, args) => {
     const newProduct = await ctx.db.insert("product", {
       igicuruzwa: args.igicuruzwa,
       ikiranguzo: args.ikiranguzo,
       ingano: args.ingano,
-      total: args.total,
+      uzishyuraAngahe: args.uzishyuraAngahe,
       status: args.status,
-      wishyuyeAngahe: args.wishyuyeAngahe,
+      ukonyigurisha: args.ukonyigurisha,
     });
     if (!newProduct) {
       return new ConvexError("SOMETHING WENT WRONNG WHILE CREATING ");
@@ -50,8 +50,8 @@ export const updateProduct = mutation({
       igicuruzwa: v.optional(v.string()),
       ingano: v.optional(v.number()),
       ikiranguzo: v.optional(v.number()),
-      total: v.optional(v.number()),
-      status: v.optional(v.string()),
+      uzishyuraAngahe: v.optional(v.number()),
+      status: v.optional(v.boolean()),
     }),
   },
 

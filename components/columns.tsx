@@ -1,16 +1,15 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import { MoreVertical, Plus, PlusCircle, Send, X } from "lucide-react";
-import { useState } from "react";
-import { Input } from "./ui/input";
-import Form from "next/form";
-import { useShowEditBoxStore } from "@/lib/store/zustand";
-import { ProductType } from "@/types";
-import { formatReadableDate } from "@/lib/utils";
-import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { useShowEditBoxStore } from "@/lib/store/zustand";
+import { ProductType } from "@/types";
+import { ColumnDef } from "@tanstack/react-table";
+import { useMutation } from "convex/react";
+import { Send, X } from "lucide-react";
+import Form from "next/form";
+import { useState } from "react";
+import { Input } from "./ui/input";
 
 import AddCustomerName from "./addCustomerName";
 
@@ -60,7 +59,7 @@ function EditCell({
           >
             <Input
               autoFocus
-              value={newIgicuruzwa ? newIgicuruzwa : igicuruzwa}
+              value={newIgicuruzwa}
               onChange={(e) => setNewIgicuruzwa(e.target.value)}
             />
             <button
@@ -89,102 +88,106 @@ export const columns: ColumnDef<ProductType>[] = [
     cell: ({ row }) => null,
   },
   {
+    accessorKey: "_creationTime",
+    header: () => {},
+    cell: ({ row }) => null,
+  },
+  {
     accessorKey: "igicuruzwa",
     header: "Igicuruzwa",
     cell: ({ row }) => {
       const igicuruzwa = row.getValue("igicuruzwa") as string;
-      return (
-        <EditCell
-          igicuruzwa={igicuruzwa}
-          id={row.getValue("_id")}
-          field="igicuruzwa"
-        />
-      );
-    },
-  },
-  {
-    accessorKey: "totalo",
-    header: "Izina ry'umukiriya",
-    cell: ({ row }) => {
-      const id = row.getValue("_id") as Id<"product">;
-      return <AddCustomerName id={id} />;
-    },
-  },
-  {
-    accessorKey: "ingano",
-    header: "Ingano",
-    cell: ({ row }) => {
-      const ingano = row.getValue("ingano") as number;
-      return (
-        <EditCell
-          igicuruzwa={ingano.toString()}
-          id={row.getValue("_id")}
-          field="ingano"
-        />
-      );
+      return <p>{igicuruzwa}</p>;
     },
   },
   {
     accessorKey: "-total",
     header: "Muri stock",
+    cell: ({ row }) => {
+      const ingano = row.getValue("ingano") as number;
+      return <p>{ingano}</p>;
+    },
   },
   {
     accessorKey: "ikiranguzo",
-    header: "Igiciro",
-    cell: ({ row }) => {
-      const ikiranguzo = row.getValue("ikiranguzo") as number;
-      return (
-        <EditCell
-          igicuruzwa={ikiranguzo.toString()}
-          id={row.getValue("_id")}
-          field="ikiranguzo"
-        />
-      );
-    },
-  },
-  {
-    accessorKey: "_creationTime",
-    header: "Itariki",
-    cell: ({ row }) => {
-      const date = row.getValue("_creationTime") as number;
-      return (
-        <p className="text-xs text-nowrap text-muted-foreground">
-          {formatReadableDate(date)}
-        </p>
-      );
-    },
-  },
-  {
-    accessorKey: "total",
     header: "Ikiranguzo",
   },
   {
-    accessorKey: "wishyuyeAngahe",
-    header: "Wishyuye Angahe",
+    accessorKey: "ukonyigurisha",
+    header: "Uko nyigurisha",
+  },
+
+  {
+    accessorKey: "totalo",
+    header: "Izina ry'umukiriya",
+    cell: ({ row }) => {
+      const time = row.getValue("_creationTime") as number;
+      return <AddCustomerName time={time} />;
+    },
+  },
+
+  {
+    accessorKey: "ingano",
+    header: "Aratwara z'ingahe",
+    cell: ({ row }) => {
+      const ingano = row.getValue("ingano") as number;
+      return <Input className="w-[100px] px-1" type="number" />;
+    },
+  },
+  // {
+  //   accessorKey: "ikiranguzo",
+  //   header: "Igiciro",
+  //   cell: ({ row }) => {
+  //     const ikiranguzo = row.getValue("ikiranguzo") as number;
+  //     return (
+  //       <EditCell
+  //         igicuruzwa={ikiranguzo.toString()}
+  //         id={row.getValue("_id")}
+  //         field="ikiranguzo"
+  //       />
+  //     );
+  //   },
+  // },
+  // {
+  //   accessorKey: "_creationTime",
+  //   header: "Itariki",
+  //   cell: ({ row }) => {
+  //     const date = row.getValue("_creationTime") as number;
+  //     return (
+  //       <p className="text-xs text-nowrap text-muted-foreground">
+  //         {formatReadableDate(date)}
+  //       </p>
+  //     );
+  //   },
+  // },
+
+  {
+    accessorKey: "yishyuyeAngahe",
+    header: "Yishyuye Angahe",
+    cell: ({ row }) => {
+      const ingano = row.getValue("ingano") as number;
+      return <Input className="w-[100px] px-1" type="number" />;
+    },
   },
   {
     accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "actions",
-    header: "",
+    header: "Arishyuye",
     cell: ({ row }) => {
       const id = row.getValue("_id");
       return (
         <div className="flex space-x-2">
-          {/* <button
+          <button
             // onClick={() => handleEdit(id)}
             className="bg-blue-500 text-white px-2 py-1 rounded"
           >
-          </button> */}
-          <MoreVertical />
-          {/* <button
+            Yego
+          </button>
+          <button
             // onClick={() => handleDelete(id)}
-            className="bg-red-500 text-white px-2 py-1 rounded"
+            className="bg-red-400 text-white px-2 py-1 rounded"
           >
-            Delete
-          </button> */}
+            Oya
+          </button>
         </div>
       );
     },

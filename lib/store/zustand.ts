@@ -9,6 +9,13 @@ interface UseShowEditBox {
   resetShowEditBox: () => void;
 }
 
+interface clientInfo {
+  name: string;
+  phone: number;
+  setName: (nerName: string) => void;
+  setPhone: (newPhone: number) => void;
+}
+
 export const useShowEditBoxStore = create<UseShowEditBox>((set) => ({
   showEditBox: false,
   activeProductId: null,
@@ -23,5 +30,18 @@ export const useShowEditBoxStore = create<UseShowEditBox>((set) => ({
     set(() => ({
       showEditBox: false,
       activeProductId: null,
+    })),
+}));
+
+export const useClientInfoStore = create<clientInfo>((set) => ({
+  name: "",
+  phone: 0,
+  setName: (newName: string) =>
+    set(() => ({
+      name: newName, // Toggle based on productId
+    })),
+  setPhone: (newPhone: number) =>
+    set(() => ({
+      phone: newPhone, // Toggle based on productId
     })),
 }));

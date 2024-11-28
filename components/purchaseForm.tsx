@@ -35,6 +35,9 @@ export function PurchaseForm({
 }) {
   const [submitting, setsubmitting] = useState(false);
 
+  const [wishyuye, setwishyuye] = useState(false);
+  const [ntibyishyuye, setntibyishyuye] = useState(false);
+
   const createProduct = useMutation(api.product.createTask);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -43,26 +46,29 @@ export function PurchaseForm({
       igicuruzwa: "",
       ikiranguzo: 0,
       ingano: 0,
-      total: 0,
-      wishyuyeAngahe: 0,
+      birishyuwe: undefined,
+      ukonyigurisha: 0,
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // const totalPrice = Number(
-    //   form.getValues("quantity") * form.getValues("unitPrice")
-    // );
-    console.log({ values, status });
-    const total = form.getValues("ikiranguzo") * form.getValues("ingano");
+    const uzishyuraAngahe =
+      Number(form.getValues("ikiranguzo")) * Number(form.getValues("ingano"));
+
+    setsubmitting(true);
+
     createProduct({
       igicuruzwa: values.igicuruzwa,
       ikiranguzo: values.ikiranguzo,
       ingano: values.ingano,
-      status: values.status,
-      total: total,
-      wishyuyeAngahe: values.wishyuyeAngahe,
+      status: values.birishyuwe,
+      uzishyuraAngahe: uzishyuraAngahe,
+      ukonyigurisha: values.ukonyigurisha,
     });
     setOpen(false);
+    form.reset();
+    setsubmitting(false);
+    router.push("/sales");
   }
 
   return (
@@ -98,6 +104,7 @@ export function PurchaseForm({
                 <FormLabel className="text-black">Ingano</FormLabel>
                 <FormControl>
                   <Input
+                    type="number"
                     placeholder="Enter product title"
                     className="text-sm placeholder:text-xs bg-dark-1 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20"
                     {...field}
@@ -132,10 +139,10 @@ export function PurchaseForm({
           />
           <FormField
             control={form.control}
-            name="wishyuyeAngahe"
+            name="ukonyigurisha"
             render={({ field }) => (
               <FormItem className="w-full ">
-                <FormLabel className="text-black">Wishyuye Angahe</FormLabel>
+                <FormLabel className="text-black">Uko Nyigurisha</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="eg:100"
@@ -174,67 +181,42 @@ export function PurchaseForm({
               </FormItem>
             )}
           /> */}
-          <FormField
-            control={form.control}
-            name="total"
-            render={({ field }) => (
-              <FormItem className="w-full ">
-                <FormLabel className="text-black">Total</FormLabel>
-                <FormControl>
-                  <Input
-                    disabled
-                    placeholder="eg:100"
-                    type="number"
-                    className="text-sm placeholder:text-xs bg-dark-1 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1"
-                    min={0}
-                    {...field}
-                    value={Number(
-                      form.getValues("ingano") * form.getValues("ikiranguzo")
-                    )}
-                  />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
 
         <div className="flex items-center justify-between w-full gap-4">
           <FormField
             control={form.control}
-            name="status"
+            name="birishyuwe"
             render={({ field }) => (
               <FormItem className=" w-full">
                 <FormLabel className="text-black">Status</FormLabel>
                 <FormControl className="w-full ">
                   <div className="flex items-center gap-3">
-                    <div
-                      onClick={() => {
-                        field.onChange("pending");
-                      }}
-                      className="flex items-center gap-2"
-                    >
-                      <Checkbox />
-                      <Badge>pending</Badge>
+                    <div className="flex items-center gap-2 rounded-full bg-green-400 py-1 px-2">
+                      <Checkbox
+                        className="text-white border-white"
+                        onClick={() => {
+                          setntibyishyuye(false);
+                          setwishyuye(!wishyuye);
+                          field.onChange(true);
+                        }}
+                      />
+                      <Badge className="bg-green-400 hover:bg-green-500 py-1 px-2 text-black">
+                        Byishyuwe
+                      </Badge>
                     </div>
-                    <div
-                      onClick={() => {
-                        field.onChange("processing");
-                      }}
-                      className="flex items-center gap-2"
-                    >
-                      <Checkbox />
-                      <Badge>processing</Badge>
-                    </div>
-                    <div
-                      onClick={() => {
-                        field.onChange("success");
-                      }}
-                      className="flex items-center gap-2"
-                    >
-                      <Checkbox />
-                      <Badge>success</Badge>
+                    <div className="flex items-center gap-2 rounded-full bg-red-400 py-1 px-2">
+                      <Checkbox
+                        className="border-white"
+                        onClick={() => {
+                          setwishyuye(false);
+                          setntibyishyuye(!ntibyishyuye);
+                          field.onChange(false);
+                        }}
+                      />
+                      <Badge className="bg-red-400 hover:bg-red-500 py-1 text-pretty font-semibold px-2 ">
+                        Ntibyishyuwe
+                      </Badge>
                     </div>
                   </div>
                 </FormControl>
@@ -245,6 +227,56 @@ export function PurchaseForm({
           />
         </div>
 
+        {wishyuye && (
+          <FormField
+            control={form.control}
+            name="uzishyuraAngahe"
+            render={({ field }) => (
+              <FormItem className="w-full ">
+                <FormLabel className="text-black">Wishyuye Angahe</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled
+                    placeholder="eg:100"
+                    type="number"
+                    className="text-sm placeholder:text-xs bg-dark-1 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1"
+                    value={
+                      Number(form.getValues("ikiranguzo")) *
+                      Number(form.getValues("ingano"))
+                    }
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+        {ntibyishyuye && (
+          <FormField
+            control={form.control}
+            name="uzishyuraAngahe"
+            render={({ field }) => (
+              <FormItem className="w-full ">
+                <FormLabel className="text-black">Uzishyura Angahe</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled
+                    placeholder="eg:100"
+                    type="number"
+                    className="text-sm placeholder:text-xs bg-dark-1 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1"
+                    value={
+                      Number(form.getValues("ikiranguzo")) *
+                      Number(form.getValues("ingano"))
+                    }
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <div className="flex w-full gap-4 sm:flex-row flex-col"></div>
         <div className="w-full flex justify-end items-center gap-6">
           <Button

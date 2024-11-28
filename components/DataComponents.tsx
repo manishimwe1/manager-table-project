@@ -11,7 +11,7 @@ import { Loader2 } from "lucide-react";
 
 const DataComponents = ({ dataByDate }: { dataByDate: ProductType }) => {
   return (
-    <div className="container mx-auto py-10 h-full">
+    <div className="container mx-auto py-3 h-full">
       {dataByDate ? (
         <DataTable columns={columns} data={dataByDate} />
       ) : (

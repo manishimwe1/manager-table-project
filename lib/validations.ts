@@ -6,7 +6,7 @@ export const formSchema = z.object({
   }),
   ikiranguzo: z.coerce.number(),
   ingano: z.coerce.number(),
-  total: z.coerce.number(),
-  wishyuyeAngahe: z.coerce.number(),
-  status: z.enum(["pending", "processing", "success"]),
+  birishyuwe: z.boolean(),
+  uzishyuraAngahe: z.undefined(),
+  ukonyigurisha: z.coerce.number(),
 });
