@@ -1,4 +1,4 @@
-import { mutation, query } from "./_generated/server";
+import { internalMutation, mutation, query } from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 
 // Create a new task with the given text
@@ -83,5 +83,32 @@ export const getProductByDate = query({
       return [];
     }
     return Product;
+  },
+});
+
+export const getProductById = query({
+  args: { id: v.id("product") },
+  handler: async (ctx, args) => {
+    const Product = await ctx.db.get(args.id);
+
+    if (!Product) {
+      console.log(
+        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT")
+      );
+      return [];
+    }
+    return Product;
+  },
+});
+
+export const updateProdut = internalMutation({
+  args: { id: v.id("product"), value: v.number() },
+  handler: async (ctx, args) => {
+    const { id } = args;
+    const product = await ctx.db.get(id);
+    if (!product) {
+      new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT");
+    }
+    await ctx.db.patch(id, { ingano: Number(product?.ingano) - args.value });
   },
 });

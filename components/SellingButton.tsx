@@ -1,45 +1,66 @@
+"use client";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import { useClientInfoStore } from "@/lib/store/zustand";
+import { Purchase } from "@/types";
+import { useMutation, useQuery } from "convex/react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 // Define props interface
 interface SellingButtonProps {
-  id: string;
-  igicuruzwa: string;
-  ingano: number;
-  yishyuyeAngahe: number;
+  id: Id<"product">;
 }
 
-const SellingButton: React.FC<SellingButtonProps> = ({
-  id,
-  igicuruzwa,
-  ingano,
-  yishyuyeAngahe,
-}) => {
+const SellingButton: React.FC<SellingButtonProps> = ({ id }) => {
+  const router = useRouter();
   const [ideni, setIdeni] = useState<"Yego" | "Oya" | undefined>();
+  const newClient = useMutation(api.clientName.createClient);
+  const { name, phone, aratwaraZingahe, yishyuyeAngahe } = useClientInfoStore();
+  const handleSales = (value: string) => {
+    if (value === "Yego") {
+      setIdeni("Yego");
 
-  const handleSales = (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent the form from reloading the page
-    console.log("Sales action triggered with:", {
-      id,
-      igicuruzwa,
-      ingano,
-      yishyuyeAngahe,
-      ideni,
-    });
-    // Add logic for handling the sale here (e.g., API call or state update)
+      newClient({
+        id: id,
+        name,
+        phone,
+        aratwaraZingahe,
+        yishyuyeAngahe,
+        nideni: false,
+      });
+    } else if (value === "Oya") {
+      setIdeni("Oya");
+
+      newClient({
+        id: id,
+        name,
+        phone,
+        aratwaraZingahe,
+        yishyuyeAngahe,
+        nideni: true,
+      });
+    } else {
+      console.log("Garagaza niba yishyuye❤");
+    }
+
+    router.refresh();
   };
 
   return (
-    <form onSubmit={handleSales} className="flex space-x-2">
+    <form className="flex space-x-2">
       <button
         type="button"
-        onClick={() => setIdeni("Yego")}
+        onClick={() => {
+          handleSales("Yego");
+        }}
         className="bg-blue-500 text-white px-2 py-1 rounded"
       >
         Yego
       </button>
       <button
         type="button"
-        onClick={() => setIdeni("Oya")}
+        onClick={() => handleSales("Oya")}
         className="bg-red-400 text-white px-2 py-1 rounded"
       >
         Oya

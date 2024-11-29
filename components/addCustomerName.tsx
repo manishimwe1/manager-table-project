@@ -17,19 +17,20 @@ const AddCustomerName = ({ rowId }: { rowId: string }) => {
   const clientName = useClientInfoStore((state) => state.setName);
   const clientPhone = useClientInfoStore((state) => state.setPhone);
   const submitClient = () => {
-    console.log(`Saved for row ${rowId}:`, { name, phone });
     Promise.all([clientName(name), clientPhone(phone)]);
     setOpen(false);
+    setName("");
+    setPhone(0);
   };
 
   return (
-    <Popover onOpenChange={setOpen}>
+    <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger>
         <div
           className="bg-secondary text-sm text-black font-medium hover:bg-background flex items-center gap-1 rounded-lg py-1 px-2"
           onClick={() => setOpen(true)}
         >
-          {name || phone ? (
+          {/* {name || phone ? (
             <div className="flex flex-col gap-0">
               <p className="text-xs font-bold text-gray-500">Name: {name}</p>
               {phone && (
@@ -43,7 +44,11 @@ const AddCustomerName = ({ rowId }: { rowId: string }) => {
               <PlusCircle className="h-4 w-4" />
               New
             </>
-          )}
+          )} */}
+          <>
+            <PlusCircle className="h-4 w-4" />
+            New
+          </>
         </div>
       </PopoverTrigger>
       <PopoverContent className="!w-full">

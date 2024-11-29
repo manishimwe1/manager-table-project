@@ -57,35 +57,16 @@ export const columns: ColumnDef<TableRowType>[] = [
     header: "Aratwara z'ingahe",
     cell: ({ row }) => {
       const id = row.getValue("_id") as Id<"product">;
-      const arashaka = row.getValue("arashaka") as string;
-
-      // const updateValue = useMutation(api.product.updateField); // Adjust API call as needed
-
-      const handleUpdate = (value: string) => {
-        // updateValue({ id, field: "arashaka", value });
-      };
-
-      return (
-        <TakeInputValue yishyuyeAngahe={arashaka} setYishyuye={handleUpdate} />
-      );
+      return <TakeInputValue />;
     },
   },
   {
     accessorKey: "yishyuyeAngahe",
     header: "Yishyuye Angahe",
     cell: ({ row }) => {
-      const id = row.getValue("_id") as Id<"product">;
-      const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as string;
+      const ukonyigurisha = row.getValue("ukonyigurisha") as number;
 
-      const updateValue = useMutation(api.product.updateField);
-
-      const handleUpdate = (value: string) => {
-        updateValue({ id, field: "yishyuyeAngahe", value });
-      };
-
-      return (
-        <TakeInputValue value={yishyuyeAngahe} onValueChange={handleUpdate} />
-      );
+      return <TakeInputValue value={"sale"} ukonyigurisha={ukonyigurisha} />;
     },
   },
   {
@@ -93,18 +74,8 @@ export const columns: ColumnDef<TableRowType>[] = [
     header: "Arishyuye",
     cell: ({ row }) => {
       const id = row.getValue("_id") as Id<"product">;
-      const igicuruzwa = row.getValue("igicuruzwa") as string;
-      const ingano = row.getValue("ingano") as number;
-      const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as string;
 
-      return (
-        <SellingButton
-          id={id}
-          igicuruzwa={igicuruzwa}
-          ingano={ingano}
-          yishyuyeAngahe={yishyuyeAngahe}
-        />
-      );
+      return <SellingButton id={id} />;
     },
   },
 ];

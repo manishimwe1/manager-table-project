@@ -1,19 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "./ui/input";
+import { useClientInfoStore } from "@/lib/store/zustand";
 
 const TakeInputValue = ({
-  setYishyuye,
-  yishyuyeAngahe,
+  value,
+  ukonyigurisha,
 }: {
-  setYishyuye: (value: string) => void;
-  yishyuyeAngahe: string;
+  value?: string;
+  ukonyigurisha?: number;
 }) => {
+  const [yishyuyeAngahe, setYishyuye] = useState<string>("");
+  const { setAratwaraZingahe, setYishyuyeAngahe } = useClientInfoStore();
+
   return (
     <Input
       className="w-[100px] px-1"
       type="number"
-      value={yishyuyeAngahe}
-      onChange={(v) => setYishyuye(v.target.value)}
+      value={
+        value === "sale" && ukonyigurisha && yishyuyeAngahe
+          ? Number(yishyuyeAngahe) * ukonyigurisha
+          : yishyuyeAngahe
+      }
+      onChange={(v) => {
+        if (value === "sale") {
+          setYishyuye(v.target.value);
+          setYishyuyeAngahe(Number(v.target.value));
+        } else {
+          setYishyuye(v.target.value);
+
+          setAratwaraZingahe(Number(v.target.value));
+        }
+      }}
     />
   );
 };

@@ -13,6 +13,9 @@ export default defineSchema({
   client: defineTable({
     name: v.string(),
     phone: v.number(),
-    productId: v.id("product"),
+    igicuruzwa: v.string(),
+    aratwaraZingahe: v.number(),
+    yishyuyeAngahe: v.number(),
+    nideni: v.boolean(),
   }).index("by_name", ["name"]),
 });
