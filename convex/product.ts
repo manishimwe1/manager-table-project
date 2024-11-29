@@ -65,24 +65,29 @@ export const updateProduct = mutation({
 
 export const getProductByDate = query({
   args: {
-    date: v.number(),
+    date: v.number(), // Pass the date as a UNIX timestamp
   },
   handler: async (ctx, args) => {
-    console.log(args.date, ".....................");
+    const startOfDay = new Date(args.date).setHours(0, 0, 0, 0); // Start of the day
+    const endOfDay = new Date(args.date).setHours(23, 59, 59, 999); // End of the day
 
-    const Product = await ctx.db
-      .query("product")
-      .order("desc")
-      .filter((q) => q.eq(q.field("_creationTime"), args.date))
-      .collect();
+    try {
+      const Product = await ctx.db
+        .query("product")
+        .filter((q) =>
+          q.and(
+            q.gte(q.field("_creationTime"), startOfDay),
+            q.lte(q.field("_creationTime"), endOfDay)
+          )
+        )
+        .order("desc")
+        .collect();
 
-    if (!Product) {
-      console.log(
-        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT")
-      );
-      return [];
+      return Product;
+    } catch (error) {
+      console.error("Error while fetching products:", error);
+      throw new ConvexError("Something went wrong while getting the product");
     }
-    return Product;
   },
 });
 

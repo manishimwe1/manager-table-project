@@ -19,6 +19,7 @@ import {
 } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import DataComponents from "@/components/DataComponents";
+import CollapsibleComponents from "@/components/collapsibleComponents";
 
 const SalesPage = () => {
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
@@ -38,23 +39,17 @@ const SalesPage = () => {
     <section className="flex flex-col w-full h-full ">
       {/* Render unique dates */}
       {data ? (
-        <div className={cn(" py-4 rounded-lg w-full")}>
-          <Collapsible>
-            <CollapsibleTrigger className="hover:underline decoration-blue-600 underline-offset-2 hover:text-slate-950 font-bold text-lg">
-              {" "}
-              Urutonde rw'ibicuruzwa kuwa {getTranslatedDay(formatToday())}
-            </CollapsibleTrigger>
-            <CollapsibleContent className="flex flex-col bg-blue-50/20 rounded-lg">
-              <p className="w-full text-sm flex justify-end items-center text-blue-700 font-bold pr-10">
-                Number of items:{" "}
-                <span className="text-lg ml-2">{data?.length}</span>
-              </p>
-              <div>
-                <DataComponents dataByDate={data} />
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
-        </div>
+        <CollapsibleComponents
+          title={`Urutonde rw'ibicuruzwa kuwa ${getTranslatedDay(formatToday())}`}
+        >
+          <p className="w-full text-sm flex justify-end items-center text-blue-700 font-bold pr-10">
+            Number of items:{" "}
+            <span className="text-lg ml-2">{data?.length}</span>
+          </p>
+          <div>
+            <DataComponents dataByDate={data} />
+          </div>
+        </CollapsibleComponents>
       ) : (
         <Loader2 className="animate-spin" />
       )}
