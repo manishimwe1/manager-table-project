@@ -45,6 +45,7 @@ const SellingButton: React.FC<SellingButtonProps> = ({
         Oya
       </button>
       <button
+        hidden
         type="submit"
         className="bg-green-500 text-white px-3 py-1 rounded"
       >

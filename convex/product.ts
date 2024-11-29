@@ -68,6 +68,8 @@ export const getProductByDate = query({
     date: v.number(),
   },
   handler: async (ctx, args) => {
+    console.log(args.date, ".....................");
+
     const Product = await ctx.db
       .query("product")
       .order("desc")

@@ -1,8 +1,7 @@
 import CollapsibleItem from "@/components/CollapsibleItem";
-import { columns } from "@/components/columns";
 import CreateProduct from "@/components/Create-product";
 import DataComponents from "@/components/DataComponents";
-import { DataTable } from "@/components/DataTable";
+import { DataTable } from "@/components/saleTable/DataTable";
 import {
   Collapsible,
   CollapsibleContent,

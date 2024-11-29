@@ -10,7 +10,13 @@ import { ProductType } from "@/types";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Loader2 } from "lucide-react";
-import { cn, formatReadableDate, formatToday, groupByDate } from "@/lib/utils";
+import {
+  cn,
+  formatReadableDate,
+  formatToday,
+  getTranslatedDay,
+  groupByDate,
+} from "@/lib/utils";
 import { useEffect, useState } from "react";
 import DataComponents from "@/components/DataComponents";
 
@@ -34,9 +40,9 @@ const SalesPage = () => {
       {data ? (
         <div className={cn(" py-4 rounded-lg w-full")}>
           <Collapsible>
-            <CollapsibleTrigger className="hover:underline decoration-blue-600 underline-offset-2 hover:text-slate-950">
+            <CollapsibleTrigger className="hover:underline decoration-blue-600 underline-offset-2 hover:text-slate-950 font-bold text-lg">
               {" "}
-              Urutonde rw'ibicuruzwa kuri {formatToday()}
+              Urutonde rw'ibicuruzwa kuwa {getTranslatedDay(formatToday())}
             </CollapsibleTrigger>
             <CollapsibleContent className="flex flex-col bg-blue-50/20 rounded-lg">
               <p className="w-full text-sm flex justify-end items-center text-blue-700 font-bold pr-10">

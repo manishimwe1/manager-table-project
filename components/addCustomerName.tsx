@@ -8,14 +8,17 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { useClientInfoStore } from "@/lib/store/zustand";
 
 const AddCustomerName = ({ rowId }: { rowId: string }) => {
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState<number | undefined>();
+  const [phone, setPhone] = useState<number>(0);
   const [open, setOpen] = useState(false);
-
+  const clientName = useClientInfoStore((state) => state.setName);
+  const clientPhone = useClientInfoStore((state) => state.setPhone);
   const submitClient = () => {
     console.log(`Saved for row ${rowId}:`, { name, phone });
+    Promise.all([clientName(name), clientPhone(phone)]);
     setOpen(false);
   };
 

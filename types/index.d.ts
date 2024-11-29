@@ -27,10 +27,27 @@ export interface TableRowType {
   _creationTime: number;
   igicuruzwa: string;
   ingano: number;
-  ikiranguzo: string;
-  ukonyigurisha: string;
+  ikiranguzo: number;
+  ukonyigurisha: number;
   customerName?: string;
+  customerPhone: number;
   arashaka?: string;
-  yishyuyeAngahe?: string;
-  status?: string;
+  uzishyuraAngahe?: number;
+  yishyuyeAngahe?: number;
+  status?: boolean;
+  arashyuye: boolean;
 }
+
+uzishyuraAngahe: 15000;
+
+export interface PurchaseType {
+  _id: Id<"product">;
+  _creationTime: number;
+  igicuruzwa: string;
+  ikiranguzo: number;
+  ingano: number;
+  uzishyuraAngahe: number;
+  status: boolean;
+  ukonyigurisha: number;
+}
+[] | undefined;

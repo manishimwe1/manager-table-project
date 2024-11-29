@@ -4,20 +4,20 @@ import { api } from "@/convex/_generated/api";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMutation } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
-import AddCustomerName from "./addCustomerName";
-import SellingButton from "./SellingButton";
-import TakeInputValue from "./TakeInputValue";
+import AddCustomerName from "../addCustomerName";
+import SellingButton from "../SellingButton";
+import TakeInputValue from "../TakeInputValue";
 import { TableRowType } from "@/types";
 
 export const columns: ColumnDef<TableRowType>[] = [
   {
     accessorKey: "_id",
-    header: "ID",
+    header: "",
     cell: () => null, // Hidden column for internal use
   },
   {
     accessorKey: "_creationTime",
-    header: "Creation Time",
+    header: "",
     cell: () => null, // Hidden column for internal use
   },
   {
@@ -65,7 +65,9 @@ export const columns: ColumnDef<TableRowType>[] = [
         // updateValue({ id, field: "arashaka", value });
       };
 
-      return <TakeInputValue value={arashaka} onValueChange={handleUpdate} />;
+      return (
+        <TakeInputValue yishyuyeAngahe={arashaka} setYishyuye={handleUpdate} />
+      );
     },
   },
   {
