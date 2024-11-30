@@ -6,22 +6,42 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
-const HomeCard = ({ title, content }: { title: string; content: number }) => {
+const HomeCard = ({
+  title,
+  content,
+  link,
+}: {
+  title: string;
+  content?: number;
+  link: string;
+}) => {
   return (
-    <Card className="!gap-0 !p-0 cursor-pointer">
-      <CardHeader className="!p-2">
-        <CardTitle className="text-balance tracking-wider font-semibold text-stone-600 text-sm capitalize !p-0">
-          {title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex justify-end !p-0 mr-3 text-3xl font-bold">
-        <p>{content}</p>
-      </CardContent>
-      {/* <CardFooter>
+    <Link href={link}>
+      <Card
+        className={cn(
+          "!gap-0 !p-0 cursor-pointer bg-gradient-to-r from-blue-100 via-blue-200 to-blue-50 ",
+          title === "Abagufitiye Ideni" &&
+            "bg-gradient-to-br from-red-200 via-red-100 to-rose-100",
+          title === "Muri stock" &&
+            "bg-gradient-to-tl from-green-100 via-green-200 to-emerald-300"
+        )}
+      >
+        <CardHeader className="!p-2">
+          <CardTitle className="text-balance tracking-wider font-bold text-stone-900 text-sm capitalize !p-0">
+            {title}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex justify-end !p-0 mr-3 text-3xl font-bold">
+          <p>{content}</p>
+        </CardContent>
+        {/* <CardFooter>
         <p>Card Footer</p>
       </CardFooter> */}
-    </Card>
+      </Card>
+    </Link>
   );
 };
 

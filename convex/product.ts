@@ -29,7 +29,28 @@ export const createTask = mutation({
 
 export const getProduct = query({
   handler: async (ctx) => {
-    const Product = await ctx.db.query("product").order("desc").collect();
+    const Product = await ctx.db
+      .query("product")
+      .filter((q) => q.gt(q.field("ingano"), 0))
+      .order("desc")
+      .collect();
+
+    if (!Product) {
+      console.log(
+        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT")
+      );
+      return [];
+    }
+    return Product;
+  },
+});
+export const getProductOutOfStock = query({
+  handler: async (ctx) => {
+    const Product = await ctx.db
+      .query("product")
+      .filter((q) => q.lte(q.field("ingano"), 1))
+      .order("desc")
+      .collect();
 
     if (!Product) {
       console.log(

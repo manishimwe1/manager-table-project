@@ -61,3 +61,14 @@ export interface Purchase {
   status: boolean;
   ukonyigurisha: number;
 }
+export interface IdenClient {
+  _id: Id<"client">;
+  _creationTime: number;
+  igicuruzwa: string;
+  name: string;
+  phone: number;
+  aratwaraZingahe: number;
+  yishyuyeAngahe: number;
+  nideni: boolean;
+}
+[] | undefined;

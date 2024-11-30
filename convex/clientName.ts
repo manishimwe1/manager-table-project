@@ -1,5 +1,5 @@
 import { api, internal } from "./_generated/api";
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 
 export const createClient = mutation({
@@ -34,5 +34,23 @@ export const createClient = mutation({
       return new ConvexError("SOMETHING WENT WRONNG WHILE CREATING ");
     }
     return newClient;
+  },
+});
+
+export const getClientByIden = query({
+  handler: async (ctx) => {
+    const Product = await ctx.db
+      .query("client")
+      .filter((q) => q.eq(q.field("nideni"), true))
+      .order("desc")
+      .collect();
+
+    if (!Product) {
+      console.log(
+        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT")
+      );
+      return [];
+    }
+    return Product;
   },
 });
