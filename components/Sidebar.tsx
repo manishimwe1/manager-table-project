@@ -9,9 +9,9 @@ import React from "react";
 const Sidebar = () => {
   const pathname = usePathname();
   return (
-    <div className="space-y-3 md:w-32 mt-10 hidden md:flex">
-      <div className="flex-1 w-full">
-        <ul className="pt-2 pb-4 space-y-4 text-sm  flex-col w-full">
+    <div className="space-y-3 md:w-32 mt-4 hidden lg:flex">
+      <div className="flex-1 w-full px-2">
+        <ul className=" pb-4 space-y-4 text-sm  flex-col w-full">
           {navLink.map((link) => {
             const isActive = pathname === link.route;
             return (

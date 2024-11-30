@@ -29,16 +29,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex h-full w-full overflow-x-hidden gap-4`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex h-full w-full overflow-x-hidden  `}
       >
-        <div className="flex flex-col h-full px-2 py-7 w-fit dark:bg-gray-50 dark:text-gray-800">
+        <div className="md:flex flex-col h-screen px-2 py-7 w-fit dark:bg-gray-50 dark:text-gray-800 hidden ">
           <Sidebar />
         </div>
-        <div className="flex items-start mt-6 flex-col justify-center w-full">
+        <div className="flex items-start mt-8 flex-col justify-center w-full  px-3 md:px-6">
           <ConvexClientProvider>
             {" "}
             <NextTopLoader />
-            <div className="flex h-full w-full px-2 ">{children}</div>
+            <div className="flex h-full w-full">{children}</div>
           </ConvexClientProvider>
         </div>
       </body>

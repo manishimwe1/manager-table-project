@@ -1,6 +1,8 @@
+import CardComponents from "@/components/CardComponents";
 import CollapsibleItem from "@/components/CollapsibleItem";
 import CreateProduct from "@/components/Create-product";
 import DataComponents from "@/components/DataComponents";
+import HomeCard from "@/components/HomeCard";
 import { DataTable } from "@/components/saleTable/DataTable";
 import {
   Collapsible,
@@ -14,9 +16,8 @@ import { Loader2 } from "lucide-react";
 
 export default async function Page() {
   return (
-    <section className="flex flex-col w-full h-full ">
-      <CreateProduct />
-
+    <section className="flex flex-col w-full h-full space-y-4">
+      <CardComponents />
       <CollapsibleItem />
     </section>
   );
