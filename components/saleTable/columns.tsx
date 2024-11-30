@@ -8,6 +8,7 @@ import AddCustomerName from "../addCustomerName";
 import SellingButton from "../SellingButton";
 import TakeInputValue from "../TakeInputValue";
 import { TableRowType } from "@/types";
+import { Loader2 } from "lucide-react";
 
 export const columns: ColumnDef<TableRowType>[] = [
   {
@@ -49,7 +50,15 @@ export const columns: ColumnDef<TableRowType>[] = [
     header: "Izina ry'umukiriya",
     cell: ({ row }) => {
       const rowId = row.getValue("_id") as Id<"product">;
-      return <AddCustomerName rowId={rowId} />;
+      return <TakeInputValue value={"name"} />;
+    },
+  },
+  {
+    accessorKey: "customerPhone",
+    header: "Phone / TIN",
+    cell: ({ row }) => {
+      const rowId = row.getValue("_id") as Id<"product">;
+      return <TakeInputValue value={"phone"} />;
     },
   },
   {
@@ -57,7 +66,7 @@ export const columns: ColumnDef<TableRowType>[] = [
     header: "Aratwara z'ingahe",
     cell: ({ row }) => {
       const id = row.getValue("_id") as Id<"product">;
-      return <TakeInputValue />;
+      return <TakeInputValue value={"arashaka"} />;
     },
   },
   {
@@ -65,8 +74,13 @@ export const columns: ColumnDef<TableRowType>[] = [
     header: "Yishyuye Angahe",
     cell: ({ row }) => {
       const ukonyigurisha = row.getValue("ukonyigurisha") as number;
-
-      return <TakeInputValue value={"sale"} ukonyigurisha={ukonyigurisha} />;
+      console.log(ukonyigurisha);
+      const id = row.getValue("_id") as Id<"product">;
+      return ukonyigurisha ? (
+        <TakeInputValue value={"sale"} ukonyigurisha={ukonyigurisha} id={id} />
+      ) : (
+        <Loader2 className="animate-spin h-2 w-2" />
+      );
     },
   },
   {

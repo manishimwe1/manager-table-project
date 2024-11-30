@@ -4,6 +4,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 interface CollapsibleItemProps {
   title: string;
@@ -18,9 +19,10 @@ const CollapsibleComponents = ({
   dataLength,
   children,
 }: CollapsibleItemProps) => {
+  const [isOpen, setIsOpen] = useState(true);
   return (
     <div className={cn("py-4 rounded-lg w-full")}>
-      <Collapsible>
+      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger
           className={cn(
             "flex items-center justify-between w-full lg:w-1/2 text-lg text-balance border-b-2 border-blue-200 shadow-md shadow-blue-200 py-2 px-3 rounded-xl text-blue-300text-black"
