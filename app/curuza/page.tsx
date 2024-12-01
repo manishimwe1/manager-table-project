@@ -1,22 +1,10 @@
 "use client";
 
-import { Id } from "@/convex/_generated/dataModel";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import { ProductType } from "@/types";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Loader2 } from "lucide-react";
-import {
-  cn,
-  formatReadableDate,
-  formatToday,
-  getTranslatedDay,
-  groupByDate,
-} from "@/lib/utils";
+import { formatToday, getTranslatedDay, groupByDate } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import DataComponents from "@/components/DataComponents";
 import CollapsibleComponents from "@/components/collapsibleComponents";

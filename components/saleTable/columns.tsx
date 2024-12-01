@@ -14,7 +14,9 @@ export const columns: ColumnDef<TableRowType>[] = [
   {
     accessorKey: "_id",
     header: "",
-    cell: () => null, // Hidden column for internal use
+    cell: () => {
+      null;
+    }, // Hidden column for internal use
   },
   {
     accessorKey: "_creationTime",
@@ -49,29 +51,38 @@ export const columns: ColumnDef<TableRowType>[] = [
     accessorKey: "customerName",
     header: "Izina ry'umukiriya",
     cell: ({ row }) => {
+      const ukonyigurisha = row.getValue("ukonyigurisha") as number;
       const rowId = row.getValue("_id") as Id<"product">;
-      return <TakeInputValue value={"name"} />;
+      return <TakeInputValue value={"name"} ukonyigurisha={ukonyigurisha} />;
     },
   },
   {
     accessorKey: "customerPhone",
     header: "Phone / TIN",
     cell: ({ row }) => {
+      const ukonyigurisha = row.getValue("ukonyigurisha") as number;
       const rowId = row.getValue("_id") as Id<"product">;
-      return <TakeInputValue value={"phone"} />;
+      return <TakeInputValue value={"phone"} ukonyigurisha={ukonyigurisha} />;
     },
   },
   {
     accessorKey: "arashaka",
     header: "Aratwara z'ingahe",
     cell: ({ row }) => {
+      const ukonyigurisha = row.getValue("ukonyigurisha") as number;
       const id = row.getValue("_id") as Id<"product">;
-      return <TakeInputValue value={"arashaka"} />;
+      return (
+        <TakeInputValue
+          value={"arashaka"}
+          ukonyigurisha={ukonyigurisha}
+          id={id}
+        />
+      );
     },
   },
   {
     accessorKey: "yishyuyeAngahe",
-    header: "Yishyuye Angahe",
+    header: "Arishyura Angahe",
     cell: ({ row }) => {
       const ukonyigurisha = row.getValue("ukonyigurisha") as number;
       console.log(ukonyigurisha);
@@ -85,7 +96,7 @@ export const columns: ColumnDef<TableRowType>[] = [
   },
   {
     accessorKey: "status",
-    header: "Arishyuye",
+    header: "Yishyuye",
     cell: ({ row }) => {
       const id = row.getValue("_id") as Id<"product">;
 

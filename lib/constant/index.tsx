@@ -1,4 +1,4 @@
-import { BadgeDollarSign, Home } from "lucide-react";
+import { BadgeDollarSign, Home, PackagePlus } from "lucide-react";
 
 export const navLink = [
   {
@@ -7,8 +7,13 @@ export const navLink = [
     Icon: <Home className="text-gray-500 h-5 w-5" />,
   },
   {
-    label: "Sale",
-    route: "/sales",
+    label: "Curuza",
+    route: "/curuza",
     Icon: <BadgeDollarSign className="text-gray-500 h-5 w-5" />,
+  },
+  {
+    label: "Rangura",
+    route: "/rangura",
+    Icon: <PackagePlus className="text-gray-500 h-5 w-5" />,
   },
 ];

@@ -39,7 +39,7 @@ const CollapsibleItem = () => {
   }
 
   return (
-    <div>
+    <div className="w-full h-full ">
       {Object.entries(groupedData).map(([date, items]) => (
         <div key={date} className={cn("py-4 rounded-lg")}>
           <Collapsible>

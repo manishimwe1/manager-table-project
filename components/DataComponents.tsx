@@ -7,12 +7,10 @@ import { DataTable } from "./saleTable/DataTable";
 import { columns } from "./saleTable/columns";
 
 const DataComponents = ({ dataByDate }: { dataByDate: ProductType }) => {
-  console.log(dataByDate, "[[[[[[[[[[[[[[[");
-
   return (
     <div className="container mx-auto py-3 h-full">
       {dataByDate ? (
-        <DataTable columns={columns} data={dataByDate} />
+        <DataTable columns={columns} data={dataByDate || []} />
       ) : (
         <Loader2 className="animate-spin" />
       )}
