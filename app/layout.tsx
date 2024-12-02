@@ -5,6 +5,7 @@ import { ConvexClientProvider } from "./ConvexClientProvider";
 import Sidebar from "@/components/Sidebar";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/toaster";
+import MobileMenu from "@/components/MobileMenu";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,15 +31,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex h-full w-full scroll-smooth`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex h-full w-full scroll-smooth relative`}
       >
+        <div className="w-fit h-fit bg-white left-3 top-5 shadow-sm shadow-black/20 px-1 lg:hidden fixed z-30">
+          <MobileMenu />
+        </div>
         <div className="md:flex flex-col min-h-screen px-2 py-7 w-fit bg-gray-50 dark:text-gray-800 hidden">
           <Sidebar />
         </div>
         <div className="flex items-start mt-8 flex-col justify-center w-full  px-3 md:px-6  min-h-screen ">
           <ConvexClientProvider>
             {" "}
-            <NextTopLoader />
+            <NextTopLoader showSpinner={false} />
             <div className="flex h-full w-full ">
               {children}
               <Toaster />

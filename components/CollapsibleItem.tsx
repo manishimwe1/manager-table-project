@@ -13,6 +13,7 @@ import { cn, getTranslatedDay, groupByDate } from "@/lib/utils";
 import { useState } from "react";
 import { DataTable } from "./ibyaranguwe/DataTable";
 import { columns } from "./ibyaranguwe/columns";
+import { Skeleton } from "./ui/skeleton";
 
 const CollapsibleItem = () => {
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
@@ -35,7 +36,24 @@ const CollapsibleItem = () => {
   };
 
   if (!data || data.length === 0) {
-    return <div className="text-center">No data found!</div>;
+    return (
+      <div className="flex w-full flex-col gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4  w-full ">
+          <Skeleton className="w-full h-[100px] rounded-md" />
+          <Skeleton className="w-full h-[100px] rounded-md" />
+          <Skeleton className="w-full h-[100px] rounded-md" />
+          <Skeleton className="w-full h-[100px] rounded-md" />
+        </div>
+        <div className="flex gap-3 items-center">
+          <Skeleton className="w-1/2 h-[30px] rounded-md" />
+          <Skeleton className="w-1/2 h-[30px] rounded-md" />
+        </div>
+        <div className="flex flex-col gap-3 items-center">
+          <Skeleton className="w-1/2 h-[30px] rounded-md" />
+          <Skeleton className="w-1/2 h-[30px] rounded-md" />
+        </div>
+      </div>
+    );
   }
 
   return (
