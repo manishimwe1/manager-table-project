@@ -50,7 +50,7 @@ const CollapsibleItem = () => {
               )}
               onClick={() => handleToggle(date)}
             >
-              Urutonde rw'ibyaranguwe {getTranslatedDay(date)}{" "}
+              Urutonde rw'ibyaranguwe {getTranslatedDay(date)}
               <ChevronsDownUp
                 className={cn(
                   "text-gray-400 transition-transform",

@@ -10,7 +10,9 @@ const CardComponents = () => {
   const product = useQuery(api.product.getProduct);
   const IdenClient = useQuery(api.clientName.getClientByIden);
 
-  console.log(IdenClient, "stock");
+  const saledProduct = useQuery(api.clientName.getSaledProduct);
+
+  console.log(saledProduct, "client");
 
   if (!outOfStock) return;
   return (
@@ -27,7 +29,11 @@ const CardComponents = () => {
           content={outOfStock.length}
           link="/"
         />
-        <HomeCard title="Ibicuruzwa biri muri stock" content={5} link="/" />
+        <HomeCard
+          title="Ibicuruzwa bya gurishijwe"
+          content={saledProduct?.length}
+          link="/"
+        />
         {/* <HomeCard /> */}
       </div>
       <div className="flex justify-end w-full md:w-fit">

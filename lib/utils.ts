@@ -58,26 +58,29 @@ const TranslateDay = {
   Sunday: "Ku Cyumweru", // Adding Sunday for completeness
 };
 export function getTranslatedDay(day: string): string {
-  // Extract the day name (split by comma and take the first part)
-  const dayName = day.split(",")[0].trim();
+  if (!day) {
+    console.error("Invalid input: Day is empty or undefined.");
+    return "Unknown day";
+  }
 
-  // Normalize: trim and capitalize the first letter, lowercase the rest
+  // Extract the day name and the date part
+  const [dayName, date] = day.split(",").map((part) => part.trim());
+
+  // Normalize the day name
   const normalizedDay =
     dayName.charAt(0).toUpperCase() + dayName.slice(1).toLowerCase();
 
-  console.log(normalizedDay, ">>>>>>>>>>> Normalized Day");
+  // Find the translated day
+  const translatedDay =
+    TranslateDay[normalizedDay as keyof typeof TranslateDay];
 
-  // Find the matching key in TranslateDay
-  const resetDay = Object.keys(TranslateDay).find(
-    (key) => key.toLowerCase() === normalizedDay.toLowerCase()
-  );
-
-  if (!resetDay) {
-    console.log("Day not found:", dayName);
-    return "Unknown day"; // Return fallback if day is invalid
+  if (!translatedDay) {
+    console.warn(`Day not found: "${dayName}"`);
+    return "Unknown day";
   }
 
-  return TranslateDay[resetDay as keyof typeof TranslateDay];
+  // Return the translated day with the date if provided
+  return date ? `${translatedDay}, ${date}` : translatedDay;
 }
 
 export function calculateTotal(

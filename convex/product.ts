@@ -121,7 +121,7 @@ export const getProductById = query({
       console.log(
         new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT")
       );
-      return [];
+      return undefined;
     }
     return Product;
   },

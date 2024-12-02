@@ -4,6 +4,7 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  RowSelectionState,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -15,6 +16,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<ItemType, TValue> {
   columns: ColumnDef<ItemType, TValue>[];
@@ -25,9 +28,15 @@ export function DataTable<ItemType, TValue>({
   columns,
   data,
 }: DataTableProps<ItemType, TValue>) {
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const table = useReactTable({
     data,
     columns,
+    state: {
+      rowSelection,
+    },
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -58,6 +67,7 @@ export function DataTable<ItemType, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                className={cn(row.getIsSelected() && "!bg-blue-50")}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell

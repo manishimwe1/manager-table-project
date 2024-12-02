@@ -4,6 +4,7 @@ import "./globals.css";
 import { ConvexClientProvider } from "./ConvexClientProvider";
 import Sidebar from "@/components/Sidebar";
 import NextTopLoader from "nextjs-toploader";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -38,7 +39,10 @@ export default function RootLayout({
           <ConvexClientProvider>
             {" "}
             <NextTopLoader />
-            <div className="flex h-full w-full ">{children}</div>
+            <div className="flex h-full w-full ">
+              {children}
+              <Toaster />
+            </div>
           </ConvexClientProvider>
         </div>
       </body>

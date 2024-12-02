@@ -9,6 +9,7 @@ import SellingButton from "../SellingButton";
 import TakeInputValue from "../TakeInputValue";
 import { TableRowType } from "@/types";
 import { Loader2 } from "lucide-react";
+import { Checkbox } from "../ui/checkbox";
 
 export const columns: ColumnDef<TableRowType>[] = [
   {
@@ -50,10 +51,17 @@ export const columns: ColumnDef<TableRowType>[] = [
   {
     accessorKey: "customerName",
     header: "Izina ry'umukiriya",
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       const ukonyigurisha = row.getValue("ukonyigurisha") as number;
       const rowId = row.getValue("_id") as Id<"product">;
-      return <TakeInputValue value={"name"} ukonyigurisha={ukonyigurisha} />;
+      return (
+        <TakeInputValue
+          value={"name"}
+          ukonyigurisha={ukonyigurisha}
+          id={rowId}
+          activeRow={row}
+        />
+      );
     },
   },
   {
@@ -62,7 +70,14 @@ export const columns: ColumnDef<TableRowType>[] = [
     cell: ({ row }) => {
       const ukonyigurisha = row.getValue("ukonyigurisha") as number;
       const rowId = row.getValue("_id") as Id<"product">;
-      return <TakeInputValue value={"phone"} ukonyigurisha={ukonyigurisha} />;
+      return (
+        <TakeInputValue
+          activeRow={row}
+          value={"phone"}
+          ukonyigurisha={ukonyigurisha}
+          id={rowId}
+        />
+      );
     },
   },
   {
@@ -73,6 +88,7 @@ export const columns: ColumnDef<TableRowType>[] = [
       const id = row.getValue("_id") as Id<"product">;
       return (
         <TakeInputValue
+          activeRow={row}
           value={"arashaka"}
           ukonyigurisha={ukonyigurisha}
           id={id}
@@ -85,10 +101,14 @@ export const columns: ColumnDef<TableRowType>[] = [
     header: "Arishyura Angahe",
     cell: ({ row }) => {
       const ukonyigurisha = row.getValue("ukonyigurisha") as number;
-      console.log(ukonyigurisha);
       const id = row.getValue("_id") as Id<"product">;
       return ukonyigurisha ? (
-        <TakeInputValue value={"sale"} ukonyigurisha={ukonyigurisha} id={id} />
+        <TakeInputValue
+          activeRow={row}
+          value={"sale"}
+          ukonyigurisha={ukonyigurisha}
+          id={id}
+        />
       ) : (
         <Loader2 className="animate-spin h-2 w-2" />
       );
@@ -100,7 +120,7 @@ export const columns: ColumnDef<TableRowType>[] = [
     cell: ({ row }) => {
       const id = row.getValue("_id") as Id<"product">;
 
-      return <SellingButton id={id} />;
+      return <SellingButton id={id} activeRow={row} />;
     },
   },
 ];

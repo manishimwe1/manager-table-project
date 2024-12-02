@@ -2,25 +2,43 @@
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useClientInfoStore } from "@/lib/store/zustand";
-import { Purchase } from "@/types";
+import { Purchase, TableRowType } from "@/types";
+import { Row } from "@tanstack/react-table";
 import { useMutation, useQuery } from "convex/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { Button } from "./ui/button";
+import { Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 // Define props interface
 interface SellingButtonProps {
   id: Id<"product">;
+  activeRow: Row<TableRowType>;
 }
 
-const SellingButton: React.FC<SellingButtonProps> = ({ id }) => {
+const SellingButton: React.FC<SellingButtonProps> = ({ id, activeRow }) => {
   const router = useRouter();
   const [ideni, setIdeni] = useState<"Yego" | "Oya" | undefined>();
+  const [loading, setLoading] = useState(false);
   const newClient = useMutation(api.clientName.createClient);
-  const { name, phone, aratwaraZingahe, yishyuyeAngahe } = useClientInfoStore();
-  const handleSales = (value: string) => {
-    if (value === "Yego") {
-      setIdeni("Yego");
+  const {
+    name,
+    phone,
+    aratwaraZingahe,
+    yishyuyeAngahe,
+    setisSubmiting,
+    setReset,
+  } = useClientInfoStore();
 
+  const { toast } = useToast();
+
+  const productId = useQuery(api.product.getProductById, { id: id });
+
+  const handleSales = (value: string) => {
+    setLoading(!loading);
+    if (value === "Yego" && aratwaraZingahe) {
+      setIdeni("Yego");
       newClient({
         id: id,
         name,
@@ -29,7 +47,14 @@ const SellingButton: React.FC<SellingButtonProps> = ({ id }) => {
         yishyuyeAngahe,
         nideni: false,
       });
-    } else if (value === "Oya") {
+      setisSubmiting(true);
+      setLoading(false);
+      activeRow.toggleSelected(false);
+      toast({
+        title: `Ugurishije  ${productId?.igicuruzwa} kuri ${name}`,
+        variant: "success",
+      });
+    } else if (value === "Oya" && aratwaraZingahe) {
       setIdeni("Oya");
 
       newClient({
@@ -40,31 +65,55 @@ const SellingButton: React.FC<SellingButtonProps> = ({ id }) => {
         yishyuyeAngahe,
         nideni: true,
       });
+      setisSubmiting(true);
+      setLoading(false);
+      activeRow.toggleSelected(false);
+      toast({
+        title: `Ugurishije  ${productId?.igicuruzwa} kuri ${name}`,
+        variant: "success",
+      });
+      router.refresh();
     } else {
-      console.log("Garagaza niba yishyuye❤");
+      setisSubmiting(true);
+      setLoading(false);
+      toast({
+        title: "Garagaza ibyo atwaye",
+        variant: "destructive",
+      });
+      return console.log();
     }
-
-    router.refresh();
+    setReset();
+    console.log(name, phone, aratwaraZingahe);
   };
 
   return (
     <form className="flex space-x-2">
-      <button
+      <Button
+        disabled={!activeRow.getIsSelected() || loading}
         type="button"
         onClick={() => {
           handleSales("Yego");
         }}
-        className="bg-blue-500 text-white px-2 py-1 rounded"
+        className="bg-blue-500 disabled:bg-gray-500 transition-all duration-150 text-white px-2 py-1 rounded"
       >
-        Yego
-      </button>
-      <button
+        {loading ? (
+          <Loader2 className="animate-spin h-2 w-2" />
+        ) : (
+          <span>Yego</span>
+        )}
+      </Button>
+      <Button
+        disabled={!activeRow.getIsSelected() || loading}
         type="button"
         onClick={() => handleSales("Oya")}
-        className="bg-red-400 text-white px-2 py-1 rounded"
+        className="bg-red-400 disabled:bg-gray-500 transition-all duration-150 text-white px-2 py-1 rounded"
       >
-        Oya
-      </button>
+        {loading ? (
+          <Loader2 className="animate-spin h-2 w-2" />
+        ) : (
+          <span>Oya</span>
+        )}
+      </Button>
       <button
         hidden
         type="submit"

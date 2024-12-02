@@ -12,7 +12,7 @@ export default defineSchema({
   }).index("by_igicuruzwa", ["igicuruzwa"]),
   client: defineTable({
     name: v.string(),
-    phone: v.number(),
+    phone: v.optional(v.number()),
     igicuruzwa: v.string(),
     aratwaraZingahe: v.number(),
     yishyuyeAngahe: v.number(),

@@ -14,11 +14,13 @@ interface ClientInfo {
   phone: number;
   aratwaraZingahe: number;
   yishyuyeAngahe: number;
+  isSubmiting: boolean;
   setName: (newName: string) => void;
   setPhone: (newPhone: number) => void;
   setAratwaraZingahe: (newAratwaraZingahe: number) => void;
   setYishyuyeAngahe: (newYishyuyeAngahe: number) => void;
   setReset: () => void;
+  setisSubmiting: (value: boolean) => void;
 }
 
 export const useClientInfoStore = create<ClientInfo>((set) => ({
@@ -26,7 +28,7 @@ export const useClientInfoStore = create<ClientInfo>((set) => ({
   phone: 0,
   aratwaraZingahe: 0,
   yishyuyeAngahe: 0,
-
+  isSubmiting: false,
   setName: (newName: string) =>
     set(() => ({
       name: newName,
@@ -49,6 +51,13 @@ export const useClientInfoStore = create<ClientInfo>((set) => ({
   setReset: () =>
     set(() => ({
       yishyuyeAngahe: 0,
+      name: "",
+      phone: undefined,
+      aratwaraZingahe: undefined,
+    })),
+  setisSubmiting: (value: boolean) =>
+    set(() => ({
+      isSubmiting: value,
     })),
 }));
 
