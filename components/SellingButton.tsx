@@ -40,9 +40,9 @@ const SellingButton: React.FC<SellingButtonProps> = ({ id, activeRow }) => {
     if (value === "Yego" && aratwaraZingahe) {
       setIdeni("Yego");
       newClient({
-        id: id,
+        productId: id,
         name,
-        phone,
+        phone: phone ?? 0,
         aratwaraZingahe,
         yishyuyeAngahe,
         nideni: false,
@@ -51,14 +51,19 @@ const SellingButton: React.FC<SellingButtonProps> = ({ id, activeRow }) => {
       setLoading(false);
       activeRow.toggleSelected(false);
       toast({
-        title: `Ugurishije  ${productId?.igicuruzwa} kuri ${name}`,
+        title: `Ugurishije  ${productId?.igicuruzwa} kuri ${name ?? "unknown"}`,
         variant: "success",
       });
-    } else if (value === "Oya" && aratwaraZingahe) {
+    } else if (
+      value === "Oya" &&
+      aratwaraZingahe &&
+      name !== "" &&
+      phone !== 0
+    ) {
       setIdeni("Oya");
 
       newClient({
-        id: id,
+        productId: id,
         name,
         phone,
         aratwaraZingahe,
@@ -77,7 +82,7 @@ const SellingButton: React.FC<SellingButtonProps> = ({ id, activeRow }) => {
       setisSubmiting(true);
       setLoading(false);
       toast({
-        title: "Garagaza ibyo atwaye",
+        title: "Garagaza ibyo atwaye cg Izina na Telephone by' umukiriya",
         variant: "destructive",
       });
       return console.log();

@@ -8,7 +8,7 @@ import { api } from "@/convex/_generated/api";
 const CardComponents = () => {
   const outOfStock = useQuery(api.product.getProductOutOfStock);
   const product = useQuery(api.product.getProduct);
-  const IdenClient = useQuery(api.clientName.getClientByIden);
+  const Client = useQuery(api.clientName.getClientByIden);
 
   const saledProduct = useQuery(api.clientName.getSaledProduct);
 
@@ -21,7 +21,7 @@ const CardComponents = () => {
         <HomeCard title="Muri stock" content={product?.length} link="/stock" />
         <HomeCard
           title="Abagufitiye Ideni"
-          content={IdenClient?.length}
+          content={Client?.length}
           link="/ideni"
         />
         <HomeCard
@@ -32,7 +32,7 @@ const CardComponents = () => {
         <HomeCard
           title="Ibicuruzwa bya gurishijwe"
           content={saledProduct?.length}
-          link="/"
+          link="/ibyagurishijwe"
         />
         {/* <HomeCard /> */}
       </div>

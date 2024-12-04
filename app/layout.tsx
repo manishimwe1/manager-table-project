@@ -39,7 +39,7 @@ export default function RootLayout({
         <div className="md:flex flex-col min-h-screen px-2 py-7 w-fit bg-gray-50 dark:text-gray-800 hidden">
           <Sidebar />
         </div>
-        <div className="flex items-start mt-8 flex-col justify-center w-full  px-3 md:px-6  min-h-screen ">
+        <div className="flex items-start mt-12 max-md:mt10 flex-col justify-center w-full  px-3 md:px-6  min-h-screen ">
           <ConvexClientProvider>
             {" "}
             <NextTopLoader showSpinner={false} />

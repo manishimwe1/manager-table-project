@@ -1,16 +1,3 @@
-export type ProductType =
-  | {
-      _id: Id<"product">;
-      _creationTime: number;
-      igicuruzwa: string;
-      ikiranguzo: number;
-      ingano: number;
-      uzishyuraAngahe: number;
-      ukonyigurisha: number;
-      status: boolean;
-    }[]
-  | undefined;
-
 export type ItemType = {
   _id: Id<"product">;
   _creationTime: number;
@@ -49,7 +36,8 @@ export interface PurchaseType {
   uzishyuraAngahe: number;
   status: boolean;
   ukonyigurisha: number;
-  inyungu: number | undefined;
+  inyungu: number;
+  ndanguyeZingahe: number;
 }
 [] | undefined;
 export interface Purchase {
@@ -61,15 +49,28 @@ export interface Purchase {
   uzishyuraAngahe: number;
   status: boolean;
   ukonyigurisha: number;
+  inyungu: number;
 }
-export interface IdenClient {
+export type ProductType = {
+  _id: Id<"product">;
+  _creationTime: number;
+  igicuruzwa: string;
+  ikiranguzo: number;
+  ingano: number;
+  uzishyuraAngahe: number;
+  ukonyigurisha: number;
+  status: boolean;
+  inyungu: number;
+};
+
+export interface Client {
   _id: Id<"client">;
+  productId: Id<"product">;
   _creationTime: number;
   igicuruzwa: string;
   name: string;
-  phone: number;
+  phone: number | undefined;
   aratwaraZingahe: number;
   yishyuyeAngahe: number;
   nideni: boolean;
 }
-[] | undefined;

@@ -9,14 +9,16 @@ export default defineSchema({
     uzishyuraAngahe: v.number(),
     status: v.boolean(),
     ukonyigurisha: v.number(),
-    inyungu: v.optional(v.number()),
+    inyungu: v.number(),
+    ndanguyeZingahe: v.number(),
   }).index("by_igicuruzwa", ["igicuruzwa"]),
   client: defineTable({
     name: v.string(),
-    phone: v.optional(v.number()),
+    phone: v.number(),
     igicuruzwa: v.string(),
     aratwaraZingahe: v.number(),
     yishyuyeAngahe: v.number(),
     nideni: v.boolean(),
+    productId: v.id("product"),
   }).index("by_name", ["name"]),
 });

@@ -15,6 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<Client, TValue> {
   columns: ColumnDef<Client, TValue>[];
@@ -56,6 +58,9 @@ export function DataTable<Client, TValue>({
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
+                className={cn(
+                  row.getValue("nideni") === true ? "bg-red-200" : null
+                )}
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >

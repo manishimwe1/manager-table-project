@@ -1,4 +1,4 @@
-import { ProductType } from "@/types";
+import { Client, ProductType } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -11,8 +11,8 @@ export function formatReadableDate(isoString: number): string {
 
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
-    month: "short",
     day: "2-digit",
+    month: "short",
     hour: "2-digit",
   };
 
@@ -20,14 +20,41 @@ export function formatReadableDate(isoString: number): string {
 }
 
 type GroupedData = {
-  [key: string]: ProductType; // Key is the formatted date with the day, value is an array of ProductType
+  [key: string]: ProductType[]; // Key is the formatted date with the day, value is an array of ProductType
 };
-
-export const groupByDate = (data: ProductType): GroupedData => {
+type GroupedDataInSaled = {
+  [key: string]: Client[]; // Key is the formatted date with the day, value is an array of Client
+};
+export const groupByDate = (data: ProductType[] | undefined): GroupedData => {
   const grouped: GroupedData = {};
 
+  // Check if data is an array
+  if (!data || !Array.isArray(data)) {
+    console.log("Invalid data input: Expected an array of ProductType.");
+    return grouped;
+  }
+
+  data.forEach((item) => {
+    const dateObj = new Date(item._creationTime);
+    const date = dateObj.toLocaleDateString(); // e.g., "11/28/2024"
+    const day = dateObj.toLocaleDateString("en-US", { weekday: "long" }); // e.g., "Thursday"
+    const fullDate = `${day}, ${date}`; // e.g., "Thursday, 11/28/2024"
+
+    if (!grouped[fullDate]) {
+      grouped[fullDate] = []; // Initialize an array for this date
+    }
+    grouped[fullDate].push(item); // Add the item to the array
+  });
+
+  return grouped;
+};
+export const groupByDateInSaled = (
+  data: Client[] | undefined
+): GroupedDataInSaled => {
+  const grouped: GroupedDataInSaled = {};
+
   data?.forEach((item) => {
-    const dateObj = new Date(item?._creationTime);
+    const dateObj = new Date(item._creationTime);
     const date = dateObj.toLocaleDateString(); // e.g., "11/28/2024"
     const day = dateObj.toLocaleDateString("en-US", { weekday: "long" }); // e.g., "Thursday"
     const fullDate = `${day}, ${date}`; // e.g., "Thursday, 11/28/2024"
@@ -45,7 +72,7 @@ export const formatToday = (): string => {
   const today = new Date();
   const dayName = today.toLocaleDateString(undefined, { weekday: "long" }); // Get the day name
   const formattedDate = today.toLocaleDateString(undefined); // Get the MM/DD/YYYY format
-  return ` ${dayName}, ${formattedDate}`;
+  return `${dayName}, ${formattedDate}`;
 };
 
 const TranslateDay = {

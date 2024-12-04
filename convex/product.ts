@@ -11,6 +11,7 @@ export const createTask = mutation({
     status: v.boolean(),
     ukonyigurisha: v.number(),
     inyungu: v.number(),
+    ndanguyeZingahe: v.number(),
   },
   handler: async (ctx, args) => {
     const newProduct = await ctx.db.insert("product", {
@@ -21,6 +22,7 @@ export const createTask = mutation({
       status: args.status,
       ukonyigurisha: args.ukonyigurisha,
       inyungu: args.inyungu,
+      ndanguyeZingahe: args.ndanguyeZingahe,
     });
     if (!newProduct) {
       return new ConvexError("SOMETHING WENT WRONNG WHILE CREATING ");
@@ -137,6 +139,9 @@ export const updateProdut = internalMutation({
     if (!product) {
       new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT");
     }
-    await ctx.db.patch(id, { ingano: Number(product?.ingano) - args.value });
+    await ctx.db.patch(id, {
+      ingano: Number(product?.ingano) - args.value,
+      inyungu: product?.inyungu,
+    });
   },
 });

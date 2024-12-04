@@ -2,17 +2,18 @@
 
 import { Id } from "@/convex/_generated/dataModel";
 import { formatReadableDate } from "@/lib/utils";
-import { IdenClient, PurchaseType } from "@/types";
+import { Client, PurchaseType } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "../ui/badge";
 
 import React from "react";
 import DisplayBadge from "../DisplayBadge";
 import { MoreVertical } from "lucide-react";
+import ActionComponents from "../ActionComponents";
 
 function displayBadge() {}
 
-export const columns: ColumnDef<IdenClient>[] = [
+export const columns: ColumnDef<Client>[] = [
   {
     accessorKey: "_id",
     header: "",
@@ -81,9 +82,11 @@ export const columns: ColumnDef<IdenClient>[] = [
     header: "",
     cell: () => {
       return (
-        <p className="text-right  flex justify-end">
-          <MoreVertical className="text-right" />
-        </p>
+        <ActionComponents>
+          <p className="text-right  flex justify-end ">
+            <MoreVertical className="text-right cursor-pointer" />
+          </p>
+        </ActionComponents>
       );
     },
   },

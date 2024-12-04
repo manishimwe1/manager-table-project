@@ -1,5 +1,6 @@
 "use client";
 
+import HeaderSection from "@/components/HeaderSection";
 import { columns } from "@/components/ibyaranguwe/columns";
 import { DataTable } from "@/components/ibyaranguwe/DataTable";
 import { api } from "@/convex/_generated/api";
@@ -11,9 +12,8 @@ const StockPage = () => {
   const data: PurchaseType[] | undefined = useQuery(api.product.getProduct);
   return (
     <section className="w-full mt-2">
-      <h1 className="lg:text-2xl mb-4 text-lg font-semibold">
-        Ibicuruzwa biri muri Stock
-      </h1>
+      <HeaderSection title="Ibicuruzwa biri muri Stock" />
+
       <DataTable columns={columns} data={data || []} />
     </section>
   );

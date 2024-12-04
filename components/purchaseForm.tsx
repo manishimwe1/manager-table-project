@@ -72,6 +72,7 @@ export function PurchaseForm({
       uzishyuraAngahe: uzishyuraAngahe,
       ukonyigurisha: values.ukonyigurisha,
       inyungu: inyungu,
+      ndanguyeZingahe: values.ingano,
     });
     setOpen(false);
     form.reset();
@@ -83,7 +84,7 @@ export function PurchaseForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 max-w-2xl w-full h-fit transition-all duration-200 delay-500 ease-in-out rounded-md px-2 lg:px-4 py-4 "
+        className="space-y-4 max-w-2xl w-full h-fit transition-all duration-200 delay-500 ease-in-out rounded-md px-2 lg:px-0 py-4 "
       >
         <div
           className={cn(

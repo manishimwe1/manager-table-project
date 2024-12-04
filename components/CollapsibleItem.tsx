@@ -48,9 +48,19 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
           <Skeleton className="w-1/2 h-[30px] rounded-md" />
           <Skeleton className="w-1/2 h-[30px] rounded-md" />
         </div>
-        <div className="flex flex-col gap-3 items-center">
-          <Skeleton className="w-1/2 h-[30px] rounded-md" />
-          <Skeleton className="w-1/2 h-[30px] rounded-md" />
+        <div className="flex gap-2 w-full ">
+          <div className="flex flex-col gap-3 items-start w-full">
+            <Skeleton className="w-full h-[30px] rounded-md" />
+            <Skeleton className="w-full h-[30px] rounded-md" />
+          </div>
+          <div className="flex flex-col gap-3 items-start w-full">
+            <Skeleton className="w-full h-[30px] rounded-md" />
+            <Skeleton className="w-full h-[30px] rounded-md" />
+          </div>
+          <div className="flex flex-col gap-3 items-center">
+            <Skeleton className="w-[200px] h-[30px] rounded-md" />
+            <Skeleton className="w-[200px] h-[30px] rounded-md" />
+          </div>
         </div>
       </div>
     );

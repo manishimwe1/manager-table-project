@@ -1,6 +1,7 @@
 "use client";
 
 import CollapsibleItem from "@/components/CollapsibleItem";
+import HeaderSection from "@/components/HeaderSection";
 import { PurchaseForm } from "@/components/purchaseForm";
 import { useState } from "react";
 
@@ -8,10 +9,8 @@ const RanguraPage = () => {
   const [isOpen, setIsOpen] = useState(true);
   return (
     <div className="w-full overflow-hidden min-h-screen">
-      <h1 className="lg:text-2xl mb-4 text-lg font-semibold">
-        Ogera ibicuruzwa muri Stock
-      </h1>
-      <div className="w-full h-full flex gap-2 flex-col lg:flex-row">
+      <HeaderSection title="Ogera ibicuruzwa muri Stock" />
+      <div className="w-full h-full flex gap-2 flex-col lg:flex-row lg:gap-4">
         <div className="w-full lg:w-[50%]">
           <PurchaseForm
             setOpen={setIsOpen}
