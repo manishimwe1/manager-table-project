@@ -9,6 +9,7 @@ export default defineSchema({
     uzishyuraAngahe: v.number(),
     status: v.boolean(),
     ukonyigurisha: v.number(),
+    inyungu: v.optional(v.number()),
   }).index("by_igicuruzwa", ["igicuruzwa"]),
   client: defineTable({
     name: v.string(),

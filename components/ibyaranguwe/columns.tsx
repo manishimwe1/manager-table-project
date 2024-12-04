@@ -71,7 +71,7 @@ export const columns: ColumnDef<PurchaseType>[] = [
     header: () => {
       return <p className="text-right">Inyungu</p>;
     },
-    size: 20,
+
     cell: ({ row }) => {
       const id = row.getValue("_id") as Id<"product">;
       const ukonyigurisha = row.getValue("ukonyigurisha") as number;

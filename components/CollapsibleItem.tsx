@@ -15,7 +15,7 @@ import { DataTable } from "./ibyaranguwe/DataTable";
 import { columns } from "./ibyaranguwe/columns";
 import { Skeleton } from "./ui/skeleton";
 
-const CollapsibleItem = () => {
+const CollapsibleItem = ({ className }: { className?: string }) => {
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [openState, setOpenState] = useState<{ [key: string]: boolean }>({});
 
@@ -63,7 +63,8 @@ const CollapsibleItem = () => {
           <Collapsible>
             <CollapsibleTrigger
               className={cn(
-                "flex items-center justify-between w-full lg:w-1/2 text-lg text-balance border-b-2 border-blue-200 shadow-sm shadow-blue-200 py-2 px-3 rounded-xl",
+                "flex items-center justify-between w-full text-lg text-balance border-b-2 border-blue-200 shadow-sm shadow-blue-200 py-2 px-3 rounded-xl",
+                className ? className : "lg:w-1/2 ",
                 openState[date] ? "text-blue-300" : "text-black"
               )}
               onClick={() => handleToggle(date)}

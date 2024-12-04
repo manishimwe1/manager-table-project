@@ -49,6 +49,7 @@ export interface PurchaseType {
   uzishyuraAngahe: number;
   status: boolean;
   ukonyigurisha: number;
+  inyungu: number | undefined;
 }
 [] | undefined;
 export interface Purchase {

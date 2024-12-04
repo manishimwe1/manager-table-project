@@ -10,6 +10,7 @@ export const createTask = mutation({
     uzishyuraAngahe: v.number(),
     status: v.boolean(),
     ukonyigurisha: v.number(),
+    inyungu: v.number(),
   },
   handler: async (ctx, args) => {
     const newProduct = await ctx.db.insert("product", {
@@ -19,6 +20,7 @@ export const createTask = mutation({
       uzishyuraAngahe: args.uzishyuraAngahe,
       status: args.status,
       ukonyigurisha: args.ukonyigurisha,
+      inyungu: args.inyungu,
     });
     if (!newProduct) {
       return new ConvexError("SOMETHING WENT WRONNG WHILE CREATING ");

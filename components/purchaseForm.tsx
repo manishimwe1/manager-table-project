@@ -25,13 +25,16 @@ import { Checkbox } from "./ui/checkbox";
 import { Badge } from "./ui/badge";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { cn } from "@/lib/utils";
 // import { toast } from "sonner";
 // import { Textarea } from "./ui/textarea";
 
 export function PurchaseForm({
   setOpen,
+  className,
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
+  className?: string;
 }) {
   const [submitting, setsubmitting] = useState(false);
 
@@ -55,6 +58,10 @@ export function PurchaseForm({
     const uzishyuraAngahe =
       Number(form.getValues("ikiranguzo")) * Number(form.getValues("ingano"));
 
+    const inyungu =
+      Number(form.getValues("ukonyigurisha")) *
+        Number(form.getValues("ingano")) -
+      uzishyuraAngahe;
     setsubmitting(true);
 
     createProduct({
@@ -64,11 +71,12 @@ export function PurchaseForm({
       status: values.birishyuwe,
       uzishyuraAngahe: uzishyuraAngahe,
       ukonyigurisha: values.ukonyigurisha,
+      inyungu: inyungu,
     });
     setOpen(false);
     form.reset();
     setsubmitting(false);
-    router.push("/sales");
+    router.push("/curuza");
   }
 
   return (
@@ -77,7 +85,11 @@ export function PurchaseForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4 max-w-2xl w-full h-fit transition-all duration-200 delay-500 ease-in-out rounded-md px-2 lg:px-4 py-4 "
       >
-        <div className="flex gap-3 w-full">
+        <div
+          className={cn(
+            className ? className : "flex gap-3 w-full flex-col lg:flex-row"
+          )}
+        >
           <FormField
             control={form.control}
             name="igicuruzwa"
@@ -116,7 +128,7 @@ export function PurchaseForm({
             )}
           />
         </div>
-        <div className="flex items-center justify-between w-full gap-4">
+        <div className="flex items-center justify-between w-full gap-4 flex-col lg:flex-row">
           <FormField
             control={form.control}
             name="ikiranguzo"
@@ -189,33 +201,51 @@ export function PurchaseForm({
             name="birishyuwe"
             render={({ field }) => (
               <FormItem className=" w-full">
-                <FormLabel className="text-black">Status</FormLabel>
+                <FormLabel className="text-black"></FormLabel>
                 <FormControl className="w-full ">
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 rounded-full bg-green-400 py-1 px-2">
-                      <Checkbox
-                        className="text-white border-white"
+                    <div
+                      className={cn(
+                        wishyuye
+                          ? "bg-green-400 hover:bg-green-500 py-1 px-2  rounded-full cursor-pointer"
+                          : "bg-gray-400 hover:bg-gray-700 py-1 px-2  rounded-full cursor-pointer"
+                      )}
+                    >
+                      <Badge
+                        className={cn(
+                          wishyuye
+                            ? "bg-green-400 hover:bg-green-500 py-1 px-2 text-white"
+                            : "bg-gray-400 hover:bg-gray-700 py-1 px-2 text-black hover:text-white"
+                        )}
                         onClick={() => {
                           setntibyishyuye(false);
                           setwishyuye(!wishyuye);
                           field.onChange(true);
                         }}
-                      />
-                      <Badge className="bg-green-400 hover:bg-green-500 py-1 px-2 text-black">
-                        Byishyuwe
+                      >
+                        Ndishyuye
                       </Badge>
                     </div>
-                    <div className="flex items-center gap-2 rounded-full bg-red-400 py-1 px-2">
-                      <Checkbox
-                        className="border-white"
+                    <div
+                      className={cn(
+                        ntibyishyuye
+                          ? "bg-red-400 hover:bg-red-500 py-1 px-2 rounded-full cursor-pointer"
+                          : "bg-gray-400 hover:bg-gray-700 py-1 px-2 rounded-full cursor-pointer"
+                      )}
+                    >
+                      <Badge
+                        className={cn(
+                          ntibyishyuye
+                            ? "bg-red-400 hover:bg-red-500 py-1 px-2  text-white"
+                            : "bg-gray-400 hover:bg-gray-700 py-1 px-2 text-black hover:text-white"
+                        )}
                         onClick={() => {
                           setwishyuye(false);
                           setntibyishyuye(!ntibyishyuye);
                           field.onChange(false);
                         }}
-                      />
-                      <Badge className="bg-red-400 hover:bg-red-500 py-1 text-pretty font-semibold px-2 ">
-                        Ntibyishyuwe
+                      >
+                        Nideni
                       </Badge>
                     </div>
                   </div>
@@ -233,7 +263,7 @@ export function PurchaseForm({
             name="uzishyuraAngahe"
             render={({ field }) => (
               <FormItem className="w-full ">
-                <FormLabel className="text-black">Wishyuye Angahe</FormLabel>
+                <FormLabel className="text-black">Wishyuye</FormLabel>
                 <FormControl>
                   <Input
                     disabled
@@ -258,7 +288,7 @@ export function PurchaseForm({
             name="uzishyuraAngahe"
             render={({ field }) => (
               <FormItem className="w-full ">
-                <FormLabel className="text-black">Uzishyura Angahe</FormLabel>
+                <FormLabel className="text-black">Uzishyura</FormLabel>
                 <FormControl>
                   <Input
                     disabled

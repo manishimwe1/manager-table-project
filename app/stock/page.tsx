@@ -11,6 +11,9 @@ const StockPage = () => {
   const data: PurchaseType[] | undefined = useQuery(api.product.getProduct);
   return (
     <section className="w-full mt-2">
+      <h1 className="lg:text-2xl mb-4 text-lg font-semibold">
+        Ibicuruzwa biri muri Stock
+      </h1>
       <DataTable columns={columns} data={data || []} />
     </section>
   );
