@@ -1,19 +1,24 @@
-import { BadgeDollarSign, Home, PackagePlus } from "lucide-react";
+import { BadgeDollarSign, BaggageClaim, Home, PackagePlus } from "lucide-react";
 
 export const navLink = [
   {
     label: "Stock",
     route: "/",
-    Icon: <Home className="text-gray-500 h-5 w-5" />,
+    Icon: <Home className="text-gray-500 h-4 w-4" />,
   },
   {
     label: "Curuza",
     route: "/curuza",
-    Icon: <BadgeDollarSign className="text-gray-500 h-5 w-5" />,
+    Icon: <BadgeDollarSign className="text-gray-500 h-4 w-4" />,
   },
   {
     label: "Rangura ",
     route: "/rangura",
-    Icon: <PackagePlus className="text-gray-500 h-5 w-5" />,
+    Icon: <PackagePlus className="text-gray-500 h-4 w-4" />,
+  },
+  {
+    label: "Ibyagurishijwe ",
+    route: "/ibyagurishijwe",
+    Icon: <BaggageClaim className="text-gray-500 h-4 w-4" />,
   },
 ];

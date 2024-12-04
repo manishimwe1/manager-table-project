@@ -16,14 +16,14 @@ export const columns: ColumnDef<PurchaseType>[] = [
     header: "",
     cell: () => null,
   },
-  {
-    accessorKey: "_creationTime",
-    header: "Tariki",
-    cell: ({ row }) => {
-      const tariki = row.getValue("_creationTime") as number;
-      return <p className="w-fit text-xs">{formatReadableDate(tariki)}</p>;
-    },
-  },
+  // {
+  //   accessorKey: "_creationTime",
+  //   header: "Tariki",
+  //   cell: ({ row }) => {
+  //     const tariki = row.getValue("_creationTime") as number;
+  //     return <p className="w-fit text-xs">{formatReadableDate(tariki)}</p>;
+  //   },
+  // },
   {
     accessorKey: "igicuruzwa",
     header: "Igicuruzwa",

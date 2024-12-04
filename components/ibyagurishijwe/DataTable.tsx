@@ -59,7 +59,9 @@ export function DataTable<Client, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 className={cn(
-                  row.getValue("nideni") === true ? "bg-red-200" : null
+                  row.getValue("nideni") === true
+                    ? "bg-red-200 font-bold"
+                    : null
                 )}
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}

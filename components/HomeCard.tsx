@@ -30,7 +30,7 @@ const HomeCard = ({
         )}
       >
         <CardHeader className="!p-2">
-          <CardTitle className="text-balance tracking-wider font-bold text-stone-900 text-sm capitalize !p-0">
+          <CardTitle className="text-balance tracking-wider font-bold text-stone-900 text-sm capitalize !p-0 line-clamp-1">
             {title}
           </CardTitle>
         </CardHeader>

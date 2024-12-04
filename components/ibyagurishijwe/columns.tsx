@@ -9,6 +9,7 @@ import { Badge } from "../ui/badge";
 import React from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { HandCoins } from "lucide-react";
 
 function ShowUkonyiranguza({ productId }: { productId: Id<"product"> }) {
   const product = useQuery(api.product.getProductById, { id: productId });
@@ -81,19 +82,32 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: "yishyuyeAngahe",
-    header: "Ayo Arimo",
+    header: () => <p className="text-right">Ayo Arimo</p>,
     cell: ({ row }) => {
       const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as number;
       const nideni = row.getValue("nideni") as boolean;
       return (
-        <p
-          className={cn(
-            "text-left  font-semibold",
-            nideni ? "text-red-400" : "text-green-500"
-          )}
-        >
-          {yishyuyeAngahe.toLocaleString()} Rwf
-        </p>
+        <div className="flex gap-1 items-center  justify-end">
+          <p
+            className={cn(
+              "text-left  font-semibold space-x-2",
+              nideni ? "text-red-400" : "text-green-500"
+            )}
+          ></p>
+          <Badge
+            className={cn(
+              " flex items-center  space-x-1 !text-[10px] !px-1",
+              nideni
+                ? "bg-red-500 hover:bg-red-700 cursor-pointer"
+                : "bg-green-500 hover:bg-green-700 cursor-pointer"
+            )}
+          >
+            {nideni
+              ? `afite ideni : ${yishyuyeAngahe.toLocaleString()} Rwf`
+              : `Yishyuye: ${yishyuyeAngahe.toLocaleString()} Rwf`}
+            <HandCoins className="h-4 w-4 text-slate-300" />
+          </Badge>
+        </div>
       );
     },
   },
