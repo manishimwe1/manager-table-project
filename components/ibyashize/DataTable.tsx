@@ -4,7 +4,6 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  RowSelectionState,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -19,24 +18,18 @@ import {
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-interface DataTableProps<TableRowType, TValue> {
-  columns: ColumnDef<TableRowType, TValue>[];
-  data: TableRowType[];
+interface DataTableProps<outOfStock, TValue> {
+  columns: ColumnDef<outOfStock, TValue>[];
+  data: outOfStock[];
 }
 
-export function DataTable<TableRowType, TValue>({
+export function DataTable<outOfStock, TValue>({
   columns,
   data,
-}: DataTableProps<TableRowType, TValue>) {
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+}: DataTableProps<outOfStock, TValue>) {
   const table = useReactTable({
     data,
     columns,
-    state: {
-      rowSelection,
-    },
-    enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -65,9 +58,13 @@ export function DataTable<TableRowType, TValue>({
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
+                className={cn(
+                  row.getValue("status") === true
+                    ? "bg-red-200 font-bold"
+                    : null
+                )}
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
-                className={cn(row.getIsSelected() && "!bg-blue-50")}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell

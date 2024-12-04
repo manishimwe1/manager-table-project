@@ -1,27 +1,51 @@
 import React, { ReactNode } from "react";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "./ui/button";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
 
-const ActionComponents = ({ children }: { children: ReactNode }) => {
+const ActionComponents = ({
+  children,
+  id,
+}: {
+  children: ReactNode;
+  id: Id<"product">;
+}) => {
+  const updatePayedClient = useMutation(api.clientName.updatePayedClient);
+  function handleClick() {
+    console.log("here");
+
+    updatePayedClient({ id: id });
+  }
   return (
-    <div className="border text-right relative">
-      <DropdownMenu>
-        <DropdownMenuTrigger>{children}</DropdownMenuTrigger>
-        <DropdownMenuContent side="right">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
-          <DropdownMenuItem>Team</DropdownMenuItem>
-          <DropdownMenuItem>Subscription</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+    <div className=" text-right relative">
+      <Popover>
+        <PopoverTrigger>{children}</PopoverTrigger>
+        <PopoverContent asChild className="!p-0 !py-2 !px-2">
+          <div className="flex items-start justify-center flex-col gap-2 !w-full">
+            <Button
+              className="w-full !text-start  !items-start flex justify-start "
+              variant={"ghost"}
+              onClick={() => {
+                handleClick();
+              }}
+            >
+              Yishyuye
+            </Button>
+            <Button
+              className="w-full !text-start !items-start flex justify-start "
+              variant={"ghost"}
+            >
+              Mwoherereze sms
+            </Button>
+          </div>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };

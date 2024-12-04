@@ -10,12 +10,13 @@ import { Row } from "@tanstack/react-table";
 const TakeInputValue = ({
   value,
   ukonyigurisha,
-  id,
   activeRow,
+  stock,
 }: {
   value?: "arashaka" | "sale" | "name" | "phone"; // Indicates the type of input field
   ukonyigurisha: number; // Unit price for calculation
   id: Id<"product">;
+  stock?: number;
   activeRow: Row<TableRowType>;
 }) => {
   // Local states for managing inputs
@@ -107,6 +108,7 @@ const TakeInputValue = ({
               ? String(calculatedValue)
               : ""
       }
+      max={value === "arashaka" && stock ? stock : undefined}
     />
   );
 };

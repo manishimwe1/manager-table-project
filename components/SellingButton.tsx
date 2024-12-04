@@ -15,9 +15,14 @@ import { useToast } from "@/hooks/use-toast";
 interface SellingButtonProps {
   id: Id<"product">;
   activeRow: Row<TableRowType>;
+  stock?: number;
 }
 
-const SellingButton: React.FC<SellingButtonProps> = ({ id, activeRow }) => {
+const SellingButton: React.FC<SellingButtonProps> = ({
+  id,
+  activeRow,
+  stock,
+}) => {
   const router = useRouter();
   const [ideni, setIdeni] = useState<"Yego" | "Oya" | undefined>();
   const [loading, setLoading] = useState(false);
@@ -37,6 +42,15 @@ const SellingButton: React.FC<SellingButtonProps> = ({ id, activeRow }) => {
 
   const handleSales = (value: string) => {
     setLoading(!loading);
+    const inStock = stock ? stock : 0;
+    if (aratwaraZingahe > inStock) {
+      setisSubmiting(true);
+      setLoading(false);
+      return toast({
+        title: "Ushyizemo product nyinshi kuruta iziri muri stock",
+        variant: "destructive",
+      });
+    }
     if (value === "Yego" && aratwaraZingahe) {
       setIdeni("Yego");
       newClient({

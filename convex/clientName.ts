@@ -1,5 +1,11 @@
+import { Client } from "@/types";
 import { api, internal } from "./_generated/api";
-import { mutation, query } from "./_generated/server";
+import {
+  internalMutation,
+  internalQuery,
+  mutation,
+  query,
+} from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 
 export const createClient = mutation({
@@ -106,5 +112,50 @@ export const getSaledProductInDeni = query({
       console.error("Error fetching products:", error);
       return []; // Return an empty array in case of an error
     }
+  },
+});
+
+export const getClientByProductId = internalQuery({
+  args: { id: v.id("product") },
+  handler: async (ctx, args) => {
+    try {
+      const product = await ctx.db
+        .query("client")
+        .filter((q) => q.gte(q.field("productId"), args.id))
+        .first();
+
+      return product;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      return []; // Return an empty array in case of an error
+    }
+  },
+});
+
+export const updateClient = internalMutation({
+  args: { productId: v.id("product") },
+  handler: async (ctx, args) => {
+    const client: Client | null = await ctx.runQuery(
+      internal.clientName.getClientByProductId,
+      { id: args.productId }
+    );
+    if (!client) {
+      new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT");
+    }
+    console.log("CLIENT", client);
+
+    const id = client?._id;
+    await ctx.db.patch(id, {
+      nideni: false,
+    });
+  },
+});
+
+export const updatePayedClient = mutation({
+  args: { id: v.id("product") },
+  handler: async (ctx, args) => {
+    const { id } = args;
+
+    await ctx.db.patch(id, { status: false });
   },
 });

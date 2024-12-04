@@ -11,8 +11,8 @@ import CollapsibleComponents from "@/components/collapsibleComponents";
 
 const SalesPage = () => {
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
-  const data: ProductType = useQuery(api.product.getProduct);
-  const dataByDate: ProductType = useQuery(
+  const data: ProductType[] | undefined = useQuery(api.product.getProduct);
+  const dataByDate: ProductType[] | undefined = useQuery(
     api.product.getProductByDate,
     selectedDate ? { date: selectedDate } : "skip" // Pass date only if available
   );

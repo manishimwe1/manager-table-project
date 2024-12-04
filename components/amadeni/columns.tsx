@@ -80,9 +80,10 @@ export const columns: ColumnDef<Client>[] = [
   {
     accessorKey: "action",
     header: "",
-    cell: () => {
+    cell: ({ row }) => {
+      const rowId = row.getValue("_id") as Id<"product">;
       return (
-        <ActionComponents>
+        <ActionComponents id={rowId}>
           <p className="text-right  flex justify-end ">
             <MoreVertical className="text-right cursor-pointer" />
           </p>

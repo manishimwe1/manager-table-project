@@ -1,15 +1,11 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
 import { ColumnDef } from "@tanstack/react-table";
-import { useMutation } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
-import AddCustomerName from "../addCustomerName";
 import SellingButton from "../SellingButton";
 import TakeInputValue from "../TakeInputValue";
 import { TableRowType } from "@/types";
 import { Loader2 } from "lucide-react";
-import { Checkbox } from "../ui/checkbox";
 
 export const columns: ColumnDef<TableRowType>[] = [
   {
@@ -86,6 +82,7 @@ export const columns: ColumnDef<TableRowType>[] = [
     cell: ({ row }) => {
       const ukonyigurisha = row.getValue("ukonyigurisha") as number;
       const id = row.getValue("_id") as Id<"product">;
+
       return (
         <TakeInputValue
           activeRow={row}
@@ -119,8 +116,8 @@ export const columns: ColumnDef<TableRowType>[] = [
     header: "Yishyuye",
     cell: ({ row }) => {
       const id = row.getValue("_id") as Id<"product">;
-
-      return <SellingButton id={id} activeRow={row} />;
+      const stock = row.getValue("ingano") as number;
+      return <SellingButton id={id} activeRow={row} stock={stock} />;
     },
   },
 ];

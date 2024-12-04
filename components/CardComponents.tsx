@@ -27,7 +27,7 @@ const CardComponents = () => {
         <HomeCard
           title="Ibyashize muri stock"
           content={outOfStock.length}
-          link="/"
+          link="/ibyashize"
         />
         <HomeCard
           title="Ibicuruzwa bya gurishijwe"

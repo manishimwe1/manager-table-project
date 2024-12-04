@@ -74,3 +74,16 @@ export interface Client {
   yishyuyeAngahe: number;
   nideni: boolean;
 }
+
+export interface outOfStock {
+  _id: Id<"product">;
+  _creationTime: number;
+  igicuruzwa: string;
+  ikiranguzo: number;
+  ingano: number;
+  uzishyuraAngahe: number;
+  status: boolean;
+  ukonyigurisha: number;
+  inyungu: number;
+  ndanguyeZingahe: number;
+}
