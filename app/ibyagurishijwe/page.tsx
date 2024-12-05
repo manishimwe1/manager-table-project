@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/collapsible";
 import { DataTable } from "@/components/ibyagurishijwe/DataTable";
 import { columns } from "@/components/ibyagurishijwe/columns";
+import EmptyPlaceholder from "@/components/EmptyPlaceholder";
 
 const IbyagurishijwePage = () => {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -41,6 +42,10 @@ const IbyagurishijwePage = () => {
     setOpenState((prev) => ({ ...prev, [date]: !prev[date] })); // Toggle open state
     setSelectedDate(date); // Set the selected date
   };
+
+  if (!saledProduct?.length) {
+    return <EmptyPlaceholder title="Curuza" />;
+  }
 
   return (
     <section className="w-full">

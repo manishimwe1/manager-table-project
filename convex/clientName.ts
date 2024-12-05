@@ -135,7 +135,7 @@ export const getClientByProductId = internalQuery({
 export const updateClient = internalMutation({
   args: { productId: v.id("product") },
   handler: async (ctx, args) => {
-    const client: Client | null = await ctx.runQuery(
+    const client = await ctx.runQuery(
       internal.clientName.getClientByProductId,
       { id: args.productId }
     );
@@ -152,10 +152,10 @@ export const updateClient = internalMutation({
 });
 
 export const updatePayedClient = mutation({
-  args: { id: v.id("product") },
+  args: { id: v.id("client") },
   handler: async (ctx, args) => {
     const { id } = args;
 
-    await ctx.db.patch(id, { status: false });
+    await ctx.db.patch(id, { nideni: false });
   },
 });

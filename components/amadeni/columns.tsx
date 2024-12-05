@@ -10,6 +10,7 @@ import React from "react";
 import DisplayBadge from "../DisplayBadge";
 import { MoreVertical } from "lucide-react";
 import ActionComponents from "../ActionComponents";
+import ShowUkonyigurishije from "../ShowUkonyigurishije";
 
 function displayBadge() {}
 
@@ -54,6 +55,14 @@ export const columns: ColumnDef<Client>[] = [
     },
   },
   {
+    accessorKey: "productId",
+    header: "Ukonyigurisha",
+    cell: ({ row }) => {
+      const ukonyigurisha = row.getValue("productId") as Id<"product">;
+      return <ShowUkonyigurishije productId={ukonyigurisha} />;
+    },
+  },
+  {
     accessorKey: "aratwaraZingahe",
     header: () => {
       return <p className="text-right">Yatwaye</p>;
@@ -68,7 +77,7 @@ export const columns: ColumnDef<Client>[] = [
   {
     accessorKey: "yishyuyeAngahe",
     header: () => {
-      return <p className="text-right">Ideni</p>;
+      return <p className="text-center">Ideni</p>;
     },
     size: 20,
     cell: ({ row }) => {
@@ -81,7 +90,7 @@ export const columns: ColumnDef<Client>[] = [
     accessorKey: "action",
     header: "",
     cell: ({ row }) => {
-      const rowId = row.getValue("_id") as Id<"product">;
+      const rowId = row.getValue("_id") as Id<"client">;
       return (
         <ActionComponents id={rowId}>
           <p className="text-right  flex justify-end ">

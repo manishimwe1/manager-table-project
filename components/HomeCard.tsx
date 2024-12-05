@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-
+import NumberFlow from "@number-flow/react";
 const HomeCard = ({
   title,
   content,
@@ -35,6 +35,7 @@ const HomeCard = ({
           </CardTitle>
         </CardHeader>
         <CardContent className="flex justify-end !p-0 mr-3 text-3xl font-bold">
+          {/* <NumberFlow value={123} /> */}
           <p>{content}</p>
         </CardContent>
         {/* <CardFooter>

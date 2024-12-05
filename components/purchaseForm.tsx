@@ -69,7 +69,7 @@ export function PurchaseForm({
       ikiranguzo: values.ikiranguzo,
       ingano: values.ingano,
       status: values.birishyuwe,
-      uzishyuraAngahe: uzishyuraAngahe,
+      uzishyuraAngahe: values.birishyuwe ? 0 : uzishyuraAngahe,
       ukonyigurisha: values.ukonyigurisha,
       inyungu: inyungu,
       ndanguyeZingahe: values.ingano,

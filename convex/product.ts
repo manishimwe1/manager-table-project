@@ -145,3 +145,17 @@ export const updateProdut = internalMutation({
     });
   },
 });
+export const getProdutByName = query({
+  args: { value: v.string() },
+  handler: async (ctx, args) => {
+    const product = await ctx.db
+      .query("product")
+      .withIndex("by_igicuruzwa", (q) => q.eq("igicuruzwa", args.value))
+      .collect();
+    if (!product) {
+      new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT");
+      return [];
+    }
+    return product;
+  },
+});

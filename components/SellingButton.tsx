@@ -47,7 +47,7 @@ const SellingButton: React.FC<SellingButtonProps> = ({
       setisSubmiting(true);
       setLoading(false);
       return toast({
-        title: "Ushyizemo product nyinshi kuruta iziri muri stock",
+        title: "Ushyizemo ibicuruzwa byinshi kuruta ibiri muri stock",
         variant: "destructive",
       });
     }

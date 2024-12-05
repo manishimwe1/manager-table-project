@@ -1,6 +1,5 @@
 import CardComponents from "@/components/CardComponents";
 import CollapsibleItem from "@/components/CollapsibleItem";
-import CreateProduct from "@/components/Create-product";
 import DataComponents from "@/components/DataComponents";
 import HomeCard from "@/components/HomeCard";
 import { DataTable } from "@/components/saleTable/DataTable";
