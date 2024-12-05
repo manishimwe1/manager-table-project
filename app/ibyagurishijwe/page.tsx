@@ -92,13 +92,16 @@ const IbyagurishijwePage = () => {
                       Ideni bakurimo:{" "}
                       <span className="text-lg ml-2 text-red-300">
                         {saledProductInDENI ? (
-                          saledProductInDENI.reduce(
-                            (a, item) => a + (item?.yishyuyeAngahe || 0),
-                            0
-                          )
+                          saledProductInDENI
+                            .reduce(
+                              (a, item) => a + (item?.yishyuyeAngahe || 0),
+                              0
+                            )
+                            .toLocaleString()
                         ) : (
                           <Loader2 className="animate-spin" />
-                        )}
+                        )}{" "}
+                        Rwf
                       </span>
                     </p>
                   </div>

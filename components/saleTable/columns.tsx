@@ -6,6 +6,7 @@ import SellingButton from "../SellingButton";
 import TakeInputValue from "../TakeInputValue";
 import { TableRowType } from "@/types";
 import { Loader2 } from "lucide-react";
+import NumberFlow, { Format } from "@number-flow/react";
 
 export const columns: ColumnDef<TableRowType>[] = [
   {
@@ -43,6 +44,15 @@ export const columns: ColumnDef<TableRowType>[] = [
   {
     accessorKey: "ukonyigurisha",
     header: "Uko Nyigurisha",
+    cell: ({ row }) => {
+      const format: Format = {
+        notation: "compact",
+        compactDisplay: "short",
+        roundingMode: "trunc",
+      };
+      const ukonyigurisha = row.getValue("ukonyigurisha") as number;
+      return <p>{ukonyigurisha.toLocaleString()} Rwf</p>;
+    },
   },
   {
     accessorKey: "customerName",

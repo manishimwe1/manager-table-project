@@ -35,12 +35,13 @@ const HomeCard = ({
           </CardTitle>
         </CardHeader>
         <CardContent className="flex justify-end !p-0 mr-3 text-3xl font-bold">
-          {/* <NumberFlow value={123} /> */}
-          <p>{content}</p>
+          <NumberFlow
+            value={content ? content : 0}
+            transformTiming={{ duration: 750, easing: "ease-out" }}
+            spinTiming={{ duration: 750, easing: "ease-out" }}
+            opacityTiming={{ duration: 350, easing: "ease-out" }}
+          />
         </CardContent>
-        {/* <CardFooter>
-        <p>Card Footer</p>
-      </CardFooter> */}
       </Card>
     </Link>
   );

@@ -74,20 +74,31 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
             <CollapsibleTrigger
               className={cn(
                 "flex items-center justify-between w-full text-lg text-balance border-b-2 border-blue-200 shadow-sm shadow-blue-200 py-2 px-3 rounded-xl",
-                className ? className : "lg:w-1/2 ",
+                className ? className : "w-full ",
                 openState[date] ? "text-blue-300" : "text-black"
               )}
               onClick={() => handleToggle(date)}
             >
               Urutonde rw'ibyaranguwe {getTranslatedDay(date)}
-              <ChevronsDownUp
-                className={cn(
-                  "text-gray-400 transition-transform",
-                  openState[date]
-                    ? "rotate-180 transition-all duration-200"
-                    : "rotate-0"
-                )}
-              />
+              <div className="flex items-center justify-end lg:gap-3 gap-1">
+                <p className="font-semibold text-stone-400 italic text-xs uppercase flex justify-end items-center gap-1">
+                  Ideni ririmo:{" "}
+                  <span className="text-lg ml-2 text-red-300">
+                    {items
+                      ?.reduce((a, item) => a + (item.uzishyuraAngahe || 0), 0)
+                      .toLocaleString()}
+                  </span>{" "}
+                  Rwf
+                </p>
+                <ChevronsDownUp
+                  className={cn(
+                    "text-gray-400 transition-transform",
+                    openState[date]
+                      ? "rotate-180 transition-all duration-200"
+                      : "rotate-0"
+                  )}
+                />
+              </div>
             </CollapsibleTrigger>
             <CollapsibleContent
               className={cn(
