@@ -105,7 +105,7 @@ export const columns: ColumnDef<PurchaseType>[] = [
       const id = row.getValue("_id") as Id<"product">;
 
       const total = row.getValue("inyungu") as number;
-      return <DisplayBadge value={total} />;
+      return <DisplayBadge value={total} bishyuye={true} />;
     },
   },
 ];

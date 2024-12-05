@@ -77,6 +77,9 @@ export const updateProduct = mutation({
       ikiranguzo: v.optional(v.number()),
       uzishyuraAngahe: v.optional(v.number()),
       status: v.optional(v.boolean()),
+      ukonyigurisha: v.optional(v.number()),
+      inyungu: v.optional(v.number()),
+      ndanguyeZingahe: v.optional(v.number()),
     }),
   },
 

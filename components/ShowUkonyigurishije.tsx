@@ -8,7 +8,7 @@ const ShowUkonyigurishije = ({ productId }: { productId: Id<"product"> }) => {
   const product = useQuery(api.product.getProductById, { id: productId });
 
   if (!product) return;
-  return <p>{product.ikiranguzo}</p>;
+  return <p>{product.ikiranguzo ?? 0} Rwf</p>;
 };
 
 export default ShowUkonyigurishije;

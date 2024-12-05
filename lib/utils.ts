@@ -116,3 +116,88 @@ export function calculateTotal(
   if (!data || data.length === 0) return 0; // Handle undefined or empty array
   return data.reduce((total, item) => total + item.uzishyuraAngahe, 0);
 }
+
+export function printData(
+  data: { name: string; igicuruzwa: string; yishyuyeAngahe: number }[],
+  title: string = "Print Preview"
+) {
+  // Create a new window
+  const printWindow = window.open("", "_blank");
+
+  if (!printWindow) {
+    console.error("Unable to open print dialog.");
+    return;
+  }
+
+  // Build HTML content for the print window
+  const printContent = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>${data[0].igicuruzwa}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.5;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+          }
+          table, th, td {
+            border: 1px solid #000;
+          }
+          th, td {
+            padding: 8px;
+            text-align: left;
+          }
+          th {
+            background-color: #f4f4f4;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>${title}</h1>
+        ${Array.isArray(data) ? generateTable(data) : `<pre>${JSON.stringify(data, null, 2)}</pre>`}
+      </body>
+    </html>
+  `;
+
+  // Write content to the new window
+  printWindow.document.open();
+  printWindow.document.write(printContent);
+  printWindow.document.close();
+
+  // Automatically trigger the print dialog
+  printWindow.print();
+
+  // Close the print window after printing
+  printWindow.onafterprint = () => {
+    printWindow.close();
+  };
+}
+
+// Helper function to generate a table from an array of objects
+function generateTable(data: any[]) {
+  if (!data.length) return "<p>No data to display.</p>";
+
+  const headers = Object.keys(data[0]);
+  const headerRow = headers.map((header) => `<th>${header}</th>`).join("");
+  const rows = data
+    .map(
+      (item) =>
+        `<tr>${headers.map((header) => `<td>${item[header] || ""}</td>`).join("")}</tr>`
+    )
+    .join("");
+
+  return `
+    <table>
+      <thead><tr>${headerRow}</tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+// Example Usage

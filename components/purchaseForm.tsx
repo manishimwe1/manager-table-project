@@ -26,31 +26,38 @@ import { Badge } from "./ui/badge";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
+import { ProductType } from "@/types";
 // import { toast } from "sonner";
 // import { Textarea } from "./ui/textarea";
 
 export function PurchaseForm({
   setOpen,
   className,
+  product,
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
   className?: string;
+  product: ProductType | null | undefined;
 }) {
   const [submitting, setsubmitting] = useState(false);
 
-  const [wishyuye, setwishyuye] = useState(false);
-  const [ntibyishyuye, setntibyishyuye] = useState(false);
+  const [wishyuye, setwishyuye] = useState(product ? product.status : false);
+  const [ntibyishyuye, setntibyishyuye] = useState(
+    product ? product.status : false
+  );
+  console.log(product);
 
   const createProduct = useMutation(api.product.createTask);
+  const updateProduct = useMutation(api.product.updateProduct);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      igicuruzwa: "",
-      ikiranguzo: 0,
-      ingano: 0,
-      birishyuwe: undefined,
-      ukonyigurisha: 0,
+      igicuruzwa: product ? product.igicuruzwa : "",
+      ikiranguzo: product ? product.ikiranguzo : 0,
+      ingano: product ? product.ingano : 0,
+      birishyuwe: product ? product.status : undefined,
+      ukonyigurisha: product ? product.ukonyigurisha : 0,
     },
   });
 
@@ -64,16 +71,32 @@ export function PurchaseForm({
       uzishyuraAngahe;
     setsubmitting(true);
 
-    createProduct({
-      igicuruzwa: values.igicuruzwa,
-      ikiranguzo: values.ikiranguzo,
-      ingano: values.ingano,
-      status: values.birishyuwe,
-      uzishyuraAngahe: values.birishyuwe ? 0 : uzishyuraAngahe,
-      ukonyigurisha: values.ukonyigurisha,
-      inyungu: inyungu,
-      ndanguyeZingahe: values.ingano,
-    });
+    if (product?._id) {
+      updateProduct({
+        id: product._id,
+        fields: {
+          igicuruzwa: values.igicuruzwa,
+          ikiranguzo: values.ikiranguzo,
+          ingano: values.ingano,
+          status: values.birishyuwe,
+          uzishyuraAngahe: values.birishyuwe ? 0 : uzishyuraAngahe,
+          ukonyigurisha: values.ukonyigurisha,
+          inyungu: inyungu,
+          ndanguyeZingahe: values.ingano,
+        },
+      });
+    } else {
+      createProduct({
+        igicuruzwa: values.igicuruzwa,
+        ikiranguzo: values.ikiranguzo,
+        ingano: values.ingano,
+        status: values.birishyuwe,
+        uzishyuraAngahe: values.birishyuwe ? 0 : uzishyuraAngahe,
+        ukonyigurisha: values.ukonyigurisha,
+        inyungu: inyungu,
+        ndanguyeZingahe: values.ingano,
+      });
+    }
     setOpen(false);
     form.reset();
     setsubmitting(false);

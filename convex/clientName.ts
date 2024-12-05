@@ -1,11 +1,5 @@
-import { Client } from "@/types";
-import { api, internal } from "./_generated/api";
-import {
-  internalMutation,
-  internalQuery,
-  mutation,
-  query,
-} from "./_generated/server";
+import { internal } from "./_generated/api";
+import { internalQuery, mutation, query } from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 
 export const createClient = mutation({
@@ -132,30 +126,49 @@ export const getClientByProductId = internalQuery({
   },
 });
 
-export const updateClient = internalMutation({
-  args: { productId: v.id("product") },
-  handler: async (ctx, args) => {
-    const client = await ctx.runQuery(
-      internal.clientName.getClientByProductId,
-      { id: args.productId }
-    );
-    if (!client) {
-      new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT");
-    }
-    console.log("CLIENT", client);
-
-    const id = client?._id;
-    await ctx.db.patch(id, {
-      nideni: false,
-    });
-  },
-});
-
 export const updatePayedClient = mutation({
   args: { id: v.id("client") },
   handler: async (ctx, args) => {
     const { id } = args;
 
     await ctx.db.patch(id, { nideni: false });
+  },
+});
+
+export const getClientWhoPaid = query({
+  handler: async (ctx) => {
+    const Product = await ctx.db
+      .query("client")
+      .filter((q) => q.eq(q.field("nideni"), false))
+      .order("desc")
+      .collect();
+
+    if (!Product) {
+      console.log(
+        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT")
+      );
+      return [];
+    }
+    return Product;
+  },
+});
+export const getClientWhoPaidById = query({
+  args: { id: v.id("client") },
+  handler: async (ctx, args) => {
+    const Product = await ctx.db
+      .query("client")
+      .filter(
+        (q) => q.eq(q.field("nideni"), false) && q.eq(q.field("_id"), args.id)
+      )
+      .order("desc")
+      .collect();
+
+    if (!Product) {
+      console.log(
+        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT")
+      );
+      return [];
+    }
+    return Product;
   },
 });

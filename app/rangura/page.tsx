@@ -3,9 +3,19 @@
 import CollapsibleItem from "@/components/CollapsibleItem";
 import HeaderSection from "@/components/HeaderSection";
 import { PurchaseForm } from "@/components/purchaseForm";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import { useQuery } from "convex/react";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 const RanguraPage = () => {
+  const searchParams = useSearchParams();
+  const query = searchParams.get("q") as Id<"product">;
+  console.log(query, "!!!!!!!!!!!!!1");
+
+  const product =
+    query !== null ? useQuery(api.product.getProductById, { id: query }) : null;
   const [isOpen, setIsOpen] = useState(true);
   return (
     <div className="w-full overflow-hidden min-h-screen ">
@@ -14,6 +24,7 @@ const RanguraPage = () => {
           <HeaderSection title="Ogera ibicuruzwa muri Stock" />
           <div className="w-full ">
             <PurchaseForm
+              product={product}
               setOpen={setIsOpen}
               className="flex flex-col w-full h-fit"
             />

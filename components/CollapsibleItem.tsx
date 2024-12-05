@@ -80,7 +80,7 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
               onClick={() => handleToggle(date)}
             >
               Urutonde rw'ibyaranguwe {getTranslatedDay(date)}
-              <div className="flex items-center justify-end lg:gap-3 gap-1">
+              <div className="lg:flex items-center justify-end lg:gap-3 gap-1 hidden ">
                 <p className="font-semibold text-stone-400 italic text-xs uppercase flex justify-end items-center gap-1">
                   Ideni ririmo:{" "}
                   <span className="text-lg ml-2 text-red-300">

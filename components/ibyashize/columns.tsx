@@ -89,7 +89,7 @@ export const columns: ColumnDef<outOfStock>[] = [
       console.log(rowId);
 
       return (
-        <ActionComponents ibyashize={true}>
+        <ActionComponents ibyashize={true} id={rowId}>
           <MoreVertical className="h-4 w-4" />
         </ActionComponents>
       );

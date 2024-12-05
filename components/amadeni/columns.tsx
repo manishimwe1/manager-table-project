@@ -77,22 +77,23 @@ export const columns: ColumnDef<Client>[] = [
   {
     accessorKey: "yishyuyeAngahe",
     header: () => {
-      return <p className="text-center">Ideni</p>;
+      return <p className="text-center">Bishyuye</p>;
     },
     size: 20,
     cell: ({ row }) => {
       const total = row.getValue("yishyuyeAngahe") as number;
-
-      return <DisplayBadge value={total} />;
+      const bishyuye = row.getValue("nideni") as boolean;
+      return <DisplayBadge bishyuye={bishyuye} value={total} />;
     },
   },
   {
-    accessorKey: "action",
+    accessorKey: "nideni",
     header: "",
     cell: ({ row }) => {
       const rowId = row.getValue("_id") as Id<"client">;
+      const bishyuye = row.getValue("nideni") as boolean;
       return (
-        <ActionComponents id={rowId}>
+        <ActionComponents id={rowId} ibyashize={false} bishyuye={bishyuye}>
           <p className="text-right  flex justify-end ">
             <MoreVertical className="text-right cursor-pointer" />
           </p>
