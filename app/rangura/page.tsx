@@ -6,10 +6,21 @@ import { PurchaseForm } from "@/components/purchaseForm";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
+import { Loader2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 const RanguraPage = () => {
+  return (
+    <Suspense fallback={<Loader2 />}>
+      <RanguraComponents />
+    </Suspense>
+  );
+};
+
+export default RanguraPage;
+
+const RanguraComponents = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") as Id<"product">;
   console.log(query, "!!!!!!!!!!!!!1");
@@ -37,5 +48,3 @@ const RanguraPage = () => {
     </div>
   );
 };
-
-export default RanguraPage;
