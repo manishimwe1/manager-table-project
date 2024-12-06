@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
 import MobileMenu from "./MobileMenu";
+import Link from "next/link";
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -29,9 +30,12 @@ const Header = () => {
       )}
     >
       {/* Brand Logo */}
-      <div className="text-lg font-bold text-gray-800 dark:text-gray-200 lg:pl-44">
+      <Link
+        href="/"
+        className="text-lg font-bold text-gray-800 dark:text-gray-200 lg:pl-44"
+      >
         Stock Manager
-      </div>
+      </Link>
 
       {/* Actions: Dark Mode Toggle + Mobile Menu */}
       <div className="flex items-center gap-4 px-3">
