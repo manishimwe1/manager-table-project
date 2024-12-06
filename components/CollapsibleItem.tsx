@@ -73,7 +73,7 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
           <Collapsible>
             <CollapsibleTrigger
               className={cn(
-                "flex items-center justify-between w-full text-lg text-balance border-b-2 border-blue-200 shadow-sm shadow-blue-200 py-2 px-3 rounded-xl",
+                "flex items-center justify-between w-full text-lg text-balance border-b-2 border-blue-200 dark:border-stone-700 shadow-sm text-gray-800 dark:text-gray-200 shadow-background py-2 px-3 rounded-xl bg-background  dark:shadow-black/70",
                 className ? className : "w-full ",
                 openState[date] ? "text-blue-300" : "text-black"
               )}
@@ -81,7 +81,7 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
             >
               Urutonde rw'ibyaranguwe {getTranslatedDay(date)}
               <div className="lg:flex items-center justify-end lg:gap-3 gap-1 hidden ">
-                <p className="font-semibold text-stone-400 italic text-xs uppercase flex justify-end items-center gap-1">
+                <p className="font-semibold text-gray-800 dark:text-gray-50 italic text-xs uppercase flex justify-end items-center gap-1">
                   Ideni ririmo:{" "}
                   <span className="text-lg ml-2 text-red-300">
                     {items
@@ -92,7 +92,7 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
                 </p>
                 <ChevronsDownUp
                   className={cn(
-                    "text-gray-400 transition-transform",
+                    "text-gray-800 dark:text-gray-200 transition-transform",
                     openState[date]
                       ? "rotate-180 transition-all duration-200"
                       : "rotate-0"
