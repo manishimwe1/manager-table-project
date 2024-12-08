@@ -5,6 +5,7 @@ import { ConvexError, v } from "convex/values";
 export const createClient = mutation({
   args: {
     productId: v.id("product"),
+    userId: v.string(),
     name: v.string(),
     phone: v.number(),
     aratwaraZingahe: v.number(),
@@ -19,6 +20,7 @@ export const createClient = mutation({
 
     const newClient = await ctx.db.insert("client", {
       productId: args.productId,
+      userId: args.userId,
       name: args.name,
       phone: args.phone,
       igicuruzwa: product.igicuruzwa,

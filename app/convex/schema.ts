@@ -20,6 +20,7 @@ export default defineSchema({
     yishyuyeAngahe: v.number(),
     nideni: v.boolean(),
     productId: v.id("product"),
+    userId: v.string(),
   }).index("by_name", ["name"]),
   user: defineTable({
     firstname: v.optional(v.string()),

@@ -40,7 +40,6 @@ export const getProduct = query({
   handler: async (ctx, args) => {
     const Product = await ctx.db
       .query("product")
-
       .withIndex("by_userId", (q) => q.eq("userId", args.userId!))
       .filter((q) => q.gt(q.field("ingano"), 0))
       .order("desc")

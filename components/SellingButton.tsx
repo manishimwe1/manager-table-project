@@ -5,11 +5,12 @@ import { useClientInfoStore } from "@/lib/store/zustand";
 import { Purchase, TableRowType } from "@/types";
 import { Row } from "@tanstack/react-table";
 import { useMutation, useQuery } from "convex/react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useSession } from "next-auth/react";
 
 // Define props interface
 interface SellingButtonProps {
@@ -35,7 +36,9 @@ const SellingButton: React.FC<SellingButtonProps> = ({
     setisSubmiting,
     setReset,
   } = useClientInfoStore();
-
+  const session = useSession();
+  const userId = session.data?.user?.id;
+  if (!userId) redirect("/login");
   const { toast } = useToast();
 
   const productId = useQuery(api.product.getProductById, { id: id });
@@ -55,6 +58,7 @@ const SellingButton: React.FC<SellingButtonProps> = ({
       setIdeni("Yego");
       newClient({
         productId: id,
+        userId: userId,
         name,
         phone: phone ?? 0,
         aratwaraZingahe,
@@ -77,6 +81,7 @@ const SellingButton: React.FC<SellingButtonProps> = ({
       setIdeni("Oya");
 
       newClient({
+        userId: userId,
         productId: id,
         name,
         phone,

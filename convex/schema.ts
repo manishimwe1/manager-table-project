@@ -22,6 +22,7 @@ export default defineSchema({
     aratwaraZingahe: v.number(),
     yishyuyeAngahe: v.number(),
     nideni: v.boolean(),
+    userId: v.string(),
     productId: v.id("product"),
   }).index("by_name", ["name"]),
   user: defineTable({
