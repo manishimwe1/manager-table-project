@@ -7,6 +7,7 @@ import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/toaster";
 import MobileMenu from "@/components/MobileMenu";
 import Header from "@/components/Hearder";
+import { SessionProvider } from "next-auth/react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,24 +34,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex h-full w-full scroll-smooth relative transition-all duration-200 ease-in-out`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full w-full scroll-smooth  transition-all duration-200 ease-in-out  `}
       >
-        <div className="md:flex flex-col min-h-screen px-2  w-fit bg-background  dark:text-gray-800 hidden z-50">
-          <Sidebar />
-        </div>
-        <div className="w-fit h-fit  left-3 top-5 shadow-sm shadow-black/20 px-1  fixed z-30">
-          <Header />
-        </div>
-        <div className="flex items-start mt-20 flex-col justify-center w-full min-h-screen ">
-          <ConvexClientProvider>
-            {" "}
-            <NextTopLoader showSpinner={false} />
-            <div className="flex flex-col h-full w-full  ">
-              {children}
-              <Toaster />
-            </div>
-          </ConvexClientProvider>
-        </div>
+        <ConvexClientProvider>
+          <div className="w-full  h-full ">
+            <SessionProvider>{children}</SessionProvider>
+          </div>
+          <Toaster />
+        </ConvexClientProvider>
       </body>
     </html>
   );

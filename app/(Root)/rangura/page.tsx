@@ -41,7 +41,7 @@ const RanguraComponents = () => {
             />
           </div>
         </div>
-        <div className=" w-full bg-slate-50 p-2 lg:p-4 rounded-md shadow-md shadow-black/10">
+        <div className=" w-full bg-background p-2 lg:p-4 rounded-md shadow-md shadow-black/10 dark:shadow-gray-400/10 h-full">
           <CollapsibleItem className="flex w-full h-full" />
         </div>
       </div>

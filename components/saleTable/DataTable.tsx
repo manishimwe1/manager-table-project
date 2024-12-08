@@ -67,12 +67,15 @@ export function DataTable<TableRowType, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
-                className={cn(row.getIsSelected() && "!bg-blue-50")}
+                className={cn(
+                  row.getIsSelected() &&
+                    "dark:!bg-gray-500 !bg-blue-100 text-black/90 dark:text-gray-100"
+                )}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
                     key={cell.id}
-                    className="relative overscroll-y-auto"
+                    className="relative dark:text-gray-100 overscroll-y-auto"
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>

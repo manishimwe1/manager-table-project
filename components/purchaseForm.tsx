@@ -119,7 +119,9 @@ export function PurchaseForm({
             name="igicuruzwa"
             render={({ field }) => (
               <FormItem className=" w-full flex-1">
-                <FormLabel className="text-black">Igicuruzwa</FormLabel>
+                <FormLabel className="text-black dark:text-gray-100 ">
+                  Igicuruzwa
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Enter product title"
@@ -137,7 +139,9 @@ export function PurchaseForm({
             name="ingano"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-black">Ingano</FormLabel>
+                <FormLabel className="text-black dark:text-gray-100 ">
+                  Ingano
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -158,7 +162,9 @@ export function PurchaseForm({
             name="ikiranguzo"
             render={({ field }) => (
               <FormItem className="w-full ">
-                <FormLabel className="text-black">Ikiranguzo</FormLabel>
+                <FormLabel className="text-black dark:text-gray-100 ">
+                  Ikiranguzo
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="eg:100"
@@ -178,7 +184,9 @@ export function PurchaseForm({
             name="ukonyigurisha"
             render={({ field }) => (
               <FormItem className="w-full ">
-                <FormLabel className="text-black">Uko Nyigurisha</FormLabel>
+                <FormLabel className="text-black dark:text-gray-100 ">
+                  Uko Nyigurisha
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="eg:100"
@@ -200,7 +208,7 @@ export function PurchaseForm({
             name="hasigayeAngahe"
             render={({ field }) => (
               <FormItem className="w-full ">
-                <FormLabel className="text-black">Hasigaye Angahe</FormLabel>
+                <FormLabel className="text-black dark:text-gray-100 ">Hasigaye Angahe</FormLabel>
                 <FormControl>
                   <Input
                     disabled
@@ -225,7 +233,7 @@ export function PurchaseForm({
             name="birishyuwe"
             render={({ field }) => (
               <FormItem className=" w-full">
-                <FormLabel className="text-black"></FormLabel>
+                <FormLabel className="text-black dark:text-gray-100 "></FormLabel>
                 <FormControl className="w-full ">
                   <div className="flex items-center gap-3">
                     <div
@@ -239,7 +247,7 @@ export function PurchaseForm({
                         className={cn(
                           wishyuye
                             ? "bg-green-400 hover:bg-green-500 py-1 px-2 text-white"
-                            : "bg-gray-400 hover:bg-gray-700 py-1 px-2 text-black hover:text-white"
+                            : "bg-gray-400 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100  hover:text-white"
                         )}
                         onClick={() => {
                           setntibyishyuye(false);
@@ -261,7 +269,7 @@ export function PurchaseForm({
                         className={cn(
                           ntibyishyuye
                             ? "bg-red-400 hover:bg-red-500 py-1 px-2  text-white"
-                            : "bg-gray-400 hover:bg-gray-700 py-1 px-2 text-black hover:text-white"
+                            : "bg-gray-400 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100  hover:text-white"
                         )}
                         onClick={() => {
                           setwishyuye(false);
@@ -287,7 +295,9 @@ export function PurchaseForm({
             name="uzishyuraAngahe"
             render={({ field }) => (
               <FormItem className="w-full ">
-                <FormLabel className="text-black">Wishyuye</FormLabel>
+                <FormLabel className="text-black dark:text-gray-100 ">
+                  Wishyuye
+                </FormLabel>
                 <FormControl>
                   <Input
                     disabled

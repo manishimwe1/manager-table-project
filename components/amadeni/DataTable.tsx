@@ -62,7 +62,7 @@ export function DataTable<Client, TValue>({
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
                     key={cell.id}
-                    className="relative overscroll-y-auto"
+                    className="relative dark:text-gray-100  overscroll-y-auto"
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
