@@ -14,9 +14,11 @@ export const createTask = mutation({
     ukonyigurisha: v.number(),
     inyungu: v.number(),
     ndanguyeZingahe: v.number(),
-    userId: v.string(),
+    userId: v.id("user"),
   },
   handler: async (ctx, args) => {
+    console.log(args.userId, "userID..............");
+
     const newProduct = await ctx.db.insert("product", {
       userId: args.userId,
       igicuruzwa: args.igicuruzwa,
@@ -36,7 +38,7 @@ export const createTask = mutation({
 });
 
 export const getProduct = query({
-  args: { userId: v.string() },
+  args: { userId: v.id("user") },
   handler: async (ctx, args) => {
     const Product = await ctx.db
       .query("product")

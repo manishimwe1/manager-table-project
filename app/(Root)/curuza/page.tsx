@@ -16,12 +16,13 @@ import { useMemo, useState } from "react";
 const SalesPage = () => {
   const [searchValue, setSearchValue] = useState("");
   const session = useSession();
-  const userId = session.data?.user?.id;
+  const userId = session.data?.user;
   if (!userId) redirect("/login");
 
   // Fetch all products
+  const user = useQuery(api.user.getUserIndb, { email: userId.email! });
   const data: ProductType[] | undefined = useQuery(api.product.getProduct, {
-    userId: userId,
+    userId: user?._id!,
   });
 
   // Filter data based on search input

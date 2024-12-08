@@ -51,6 +51,7 @@ export function PurchaseForm({
   if (!user?.id) redirect("/login");
   const createProduct = useMutation(api.product.createTask);
   const updateProduct = useMutation(api.product.updateProduct);
+  const getUser = useQuery(api.user.getUserIndb, { email: user.email! });
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -89,7 +90,7 @@ export function PurchaseForm({
       });
     } else {
       createProduct({
-        userId: user?.id ?? "",
+        userId: getUser?._id!,
         igicuruzwa: values.igicuruzwa,
         ikiranguzo: values.ikiranguzo,
         ingano: values.ingano,

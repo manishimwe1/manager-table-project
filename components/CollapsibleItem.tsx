@@ -24,12 +24,13 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
 
   // Fetch all products
   const session = useSession();
-  const userId = session.data?.user?.id;
+  const userId = session.data?.user;
   if (!userId) redirect("/login");
 
   // Fetch all products
+  const user = useQuery(api.user.getUserIndb, { email: userId.email! });
   const data: ProductType[] | undefined = useQuery(api.product.getProduct, {
-    userId: userId,
+    userId: user?._id!,
   });
 
   // Fetch products by selected date
