@@ -1,5 +1,7 @@
+import { auth } from "@/auth";
 import { internalMutation, mutation, query } from "./_generated/server";
 import { ConvexError, v } from "convex/values";
+import { redirect } from "next/navigation";
 
 // Create a new task with the given text
 export const createTask = mutation({
@@ -12,9 +14,11 @@ export const createTask = mutation({
     ukonyigurisha: v.number(),
     inyungu: v.number(),
     ndanguyeZingahe: v.number(),
+    userId: v.string(),
   },
   handler: async (ctx, args) => {
     const newProduct = await ctx.db.insert("product", {
+      userId: args.userId,
       igicuruzwa: args.igicuruzwa,
       ikiranguzo: args.ikiranguzo,
       ingano: args.ingano,
@@ -32,9 +36,12 @@ export const createTask = mutation({
 });
 
 export const getProduct = query({
-  handler: async (ctx) => {
+  args: { userId: v.string() },
+  handler: async (ctx, args) => {
     const Product = await ctx.db
       .query("product")
+
+      .withIndex("by_userId", (q) => q.eq("userId", args.userId!))
       .filter((q) => q.gt(q.field("ingano"), 0))
       .order("desc")
       .collect();

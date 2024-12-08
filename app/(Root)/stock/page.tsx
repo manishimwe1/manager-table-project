@@ -7,11 +7,20 @@ import SearchBox from "@/components/SearchBox";
 import { api } from "@/convex/_generated/api";
 import { PurchaseType } from "@/types";
 import { useQuery } from "convex/react";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 import React, { useMemo, useState } from "react";
 
 const StockPage = () => {
   const [searchValue, setSearchValue] = useState("");
-  const data: PurchaseType[] | undefined = useQuery(api.product.getProduct);
+  const session = useSession();
+  const userId = session.data?.user?.id;
+  if (!userId) redirect("/login");
+
+  // Fetch all products
+  const data: PurchaseType[] | undefined = useQuery(api.product.getProduct, {
+    userId: userId,
+  });
 
   const filteredData = useMemo(() => {
     if (!searchValue) return data;

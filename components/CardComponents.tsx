@@ -4,10 +4,20 @@ import HomeCard from "./HomeCard";
 import CreateProduct from "./Create-product";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { ProductType } from "@/types";
 
 const CardComponents = () => {
+  const session = useSession();
+  const userId = session.data?.user?.id;
+  if (!userId) redirect("/login");
+
+  // Fetch all products
+  const product: ProductType[] | undefined = useQuery(api.product.getProduct, {
+    userId: userId,
+  });
   const outOfStock = useQuery(api.product.getProductOutOfStock);
-  const product = useQuery(api.product.getProduct);
   const Client = useQuery(api.clientName.getClientByIden);
 
   const saledProduct = useQuery(api.clientName.getSaledProduct);

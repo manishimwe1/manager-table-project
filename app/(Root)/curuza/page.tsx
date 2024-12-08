@@ -9,13 +9,20 @@ import { formatToday, getTranslatedDay } from "@/lib/utils";
 import { ProductType } from "@/types";
 import { useQuery } from "convex/react";
 import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 import { useMemo, useState } from "react";
 
 const SalesPage = () => {
   const [searchValue, setSearchValue] = useState("");
+  const session = useSession();
+  const userId = session.data?.user?.id;
+  if (!userId) redirect("/login");
 
   // Fetch all products
-  const data: ProductType[] | undefined = useQuery(api.product.getProduct);
+  const data: ProductType[] | undefined = useQuery(api.product.getProduct, {
+    userId: userId,
+  });
 
   // Filter data based on search input
   const filteredData = useMemo(() => {
@@ -31,7 +38,13 @@ const SalesPage = () => {
   }
 
   if (data.length === 0) {
-    return <EmptyPlaceholder title="Ntagicuruzwa kiri muri stock" />;
+    return (
+      <EmptyPlaceholder
+        title="Ntagicuruzwa kiri muri stock"
+        link="/rangura"
+        label="Rangura"
+      />
+    );
   }
 
   return (

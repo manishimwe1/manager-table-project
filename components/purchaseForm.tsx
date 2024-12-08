@@ -18,7 +18,7 @@ import { formSchema } from "@/lib/validations";
 
 import { Loader } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Textarea } from "./ui/textarea";
 import { Checkbox } from "./ui/checkbox";
@@ -27,6 +27,7 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
 import { ProductType } from "@/types";
+import { useSession } from "next-auth/react";
 // import { toast } from "sonner";
 // import { Textarea } from "./ui/textarea";
 
@@ -45,8 +46,9 @@ export function PurchaseForm({
   const [ntibyishyuye, setntibyishyuye] = useState(
     product ? product.status : false
   );
-  console.log(product);
-
+  const session = useSession();
+  const user = session.data?.user;
+  if (!user?.id) redirect("/login");
   const createProduct = useMutation(api.product.createTask);
   const updateProduct = useMutation(api.product.updateProduct);
   const router = useRouter();
@@ -87,6 +89,7 @@ export function PurchaseForm({
       });
     } else {
       createProduct({
+        userId: user?.id ?? "",
         igicuruzwa: values.igicuruzwa,
         ikiranguzo: values.ikiranguzo,
         ingano: values.ingano,
@@ -202,30 +205,7 @@ export function PurchaseForm({
             )}
           />
         </div>
-        <div className="flex items-center justify-between w-full gap-4">
-          {/* <FormField
-            control={form.control}
-            name="hasigayeAngahe"
-            render={({ field }) => (
-              <FormItem className="w-full ">
-                <FormLabel className="text-black dark:text-gray-100 ">Hasigaye Angahe</FormLabel>
-                <FormControl>
-                  <Input
-                    disabled
-                    placeholder="eg:100"
-                    type="number"
-                    className="text-sm placeholder:text-xs bg-dark-1 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1"
-                    min={0}
-                    {...field}
-                    value={Number(form.getValues("total") - Number(inputValue))}
-                  />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
-        </div>
+        <div className="flex items-center justify-between w-full gap-4"></div>
 
         <div className="flex items-center justify-between w-full gap-4">
           <FormField
@@ -322,13 +302,15 @@ export function PurchaseForm({
             name="uzishyuraAngahe"
             render={({ field }) => (
               <FormItem className="w-full ">
-                <FormLabel className="text-black">Uzishyura</FormLabel>
+                <FormLabel className="text-black dark:text-gray-200">
+                  Uzishyura
+                </FormLabel>
                 <FormControl>
                   <Input
                     disabled
                     placeholder="eg:100"
                     type="number"
-                    className="text-sm placeholder:text-xs bg-dark-1 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1"
+                    className="text-sm placeholder:text-xs bg-dark-1 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1 disabled:dark:text-gray-100"
                     value={
                       Number(form.getValues("ikiranguzo")) *
                       Number(form.getValues("ingano"))

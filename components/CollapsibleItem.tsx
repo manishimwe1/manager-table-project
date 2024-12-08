@@ -14,13 +14,23 @@ import { useState } from "react";
 import { DataTable } from "./ibyaranguwe/DataTable";
 import { columns } from "./ibyaranguwe/columns";
 import { Skeleton } from "./ui/skeleton";
+import EmptyPlaceholder from "./EmptyPlaceholder";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 const CollapsibleItem = ({ className }: { className?: string }) => {
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [openState, setOpenState] = useState<{ [key: string]: boolean }>({});
 
   // Fetch all products
-  const data: PurchaseType[] | undefined = useQuery(api.product.getProduct);
+  const session = useSession();
+  const userId = session.data?.user?.id;
+  if (!userId) redirect("/login");
+
+  // Fetch all products
+  const data: ProductType[] | undefined = useQuery(api.product.getProduct, {
+    userId: userId,
+  });
 
   // Fetch products by selected date
   const dataByDate: PurchaseType[] | undefined = useQuery(
@@ -35,7 +45,7 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
     setSelectedDate(Number(date)); // Set the selected date
   };
 
-  if (!data || data.length === 0) {
+  if (!data) {
     return (
       <div className="flex w-full flex-col gap-4">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4  w-full ">
@@ -62,6 +72,16 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
             <Skeleton className="w-[200px] h-[30px] rounded-md" />
           </div>
         </div>
+      </div>
+    );
+  } else if (data.length === 0) {
+    return (
+      <div className="h-full w-full">
+        <EmptyPlaceholder
+          title="Ntabicuruzwa ufite muri stock"
+          label="Rangura"
+          link="/rangura"
+        />
       </div>
     );
   }

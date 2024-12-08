@@ -34,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full w-full scroll-smooth  transition-all duration-200 ease-in-out  `}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full w-full scroll-smooth  transition-all duration-200 ease-in-out  overflow-x-hidden`}
       >
         <ConvexClientProvider>
           <div className="w-full  h-full ">

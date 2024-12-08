@@ -44,7 +44,13 @@ const IbyagurishijwePage = () => {
   };
 
   if (!saledProduct?.length) {
-    return <EmptyPlaceholder title="Curuza" />;
+    return (
+      <EmptyPlaceholder
+        title="Ntagicuruzwa uracuruza uyumunsi"
+        link="/curuza"
+        label="Curuza"
+      />
+    );
   }
 
   return (

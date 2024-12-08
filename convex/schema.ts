@@ -11,7 +11,10 @@ export default defineSchema({
     ukonyigurisha: v.number(),
     inyungu: v.number(),
     ndanguyeZingahe: v.number(),
-  }).index("by_igicuruzwa", ["igicuruzwa"]),
+    userId: v.string(),
+  })
+    .index("by_igicuruzwa", ["igicuruzwa"])
+    .index("by_userId", ["userId"]),
   client: defineTable({
     name: v.string(),
     phone: v.number(),
