@@ -37,10 +37,11 @@ const SellingButton: React.FC<SellingButtonProps> = ({
     setReset,
   } = useClientInfoStore();
   const session = useSession();
-  const userId = session.data?.user?.id;
+  const userId = session.data?.user;
   if (!userId) redirect("/login");
   const { toast } = useToast();
 
+  const user = useQuery(api.user.getUserIndb, { email: userId.email! });
   const productId = useQuery(api.product.getProductById, { id: id });
 
   const handleSales = (value: string) => {
@@ -58,7 +59,7 @@ const SellingButton: React.FC<SellingButtonProps> = ({
       setIdeni("Yego");
       newClient({
         productId: id,
-        userId: userId,
+        userId: user?._id!,
         name,
         phone: phone ?? 0,
         aratwaraZingahe,
@@ -81,7 +82,7 @@ const SellingButton: React.FC<SellingButtonProps> = ({
       setIdeni("Oya");
 
       newClient({
-        userId: userId,
+        userId: user?._id!,
         productId: id,
         name,
         phone,

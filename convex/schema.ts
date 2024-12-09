@@ -24,7 +24,9 @@ export default defineSchema({
     nideni: v.boolean(),
     userId: v.string(),
     productId: v.id("product"),
-  }).index("by_name", ["name"]),
+  })
+    .index("by_name", ["name"])
+    .index("by_userId", ["userId"]),
   user: defineTable({
     firstname: v.optional(v.string()),
     lastname: v.optional(v.string()),

@@ -5,7 +5,7 @@ import { ConvexError, v } from "convex/values";
 export const createClient = mutation({
   args: {
     productId: v.id("product"),
-    userId: v.string(),
+    userId: v.id("user"),
     name: v.string(),
     phone: v.number(),
     aratwaraZingahe: v.number(),

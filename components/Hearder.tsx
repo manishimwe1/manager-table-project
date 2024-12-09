@@ -34,7 +34,7 @@ const Header = () => {
     <header
       className={cn(
         "fixed top-0 w-full bg-background dark:bg-black/90 shadow-sm shadow-gray-200 dark:shadow-gray-900",
-        "flex items-center justify-between px-4 py-2 inset-x-0 z-50 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-0 "
+        "flex items-center justify-between px-4 py-2 inset-x-0 z-50 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-0 overflow-x-hidden"
       )}
     >
       {/* Brand Logo */}
@@ -46,7 +46,7 @@ const Header = () => {
       </Link>
 
       {/* Actions: Dark Mode Toggle + Mobile Menu */}
-      <div className="flex items-center gap-4 px-3">
+      <div className="flex items-center lg:gap-4 px-3">
         {user ? (
           <UserButton user={user} />
         ) : session.status === "unauthenticated" ? (
