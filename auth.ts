@@ -205,7 +205,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     // Enhanced sign-in callback with user creation for OAuth
     async signIn({ user, account }) {
       try {
-        // Handle Google OAuth sign-in
         if (account?.provider === "google") {
           const { email, name: firstname, image } = user;
 
@@ -222,7 +221,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           );
 
           // Create user if not exists
-          if (existingUser.error === "User not found") {
+          if (!existingUser) {
             const newUser = await safeFetch(
               `${process.env.CONVEX_SITE_URL}/createUser`,
               {
