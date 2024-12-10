@@ -4,27 +4,98 @@ import Google from "next-auth/providers/google";
 import NextAuth, { CredentialsSignin } from "next-auth";
 import { DefaultSession } from "@auth/core/types";
 
+// Extend the default session types
 declare module "next-auth" {
   interface Session {
     user: {
       id?: string;
       role: string;
+      firstName?: string;
+      lastName?: string;
     } & DefaultSession["user"];
+  }
+}
+
+// Custom error for authentication failures
+class AuthenticationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "AuthenticationError";
+  }
+}
+
+// Types for better type safety
+interface ConvexUser {
+  _id: string;
+  email: string;
+  firstname?: string;
+  lastname?: string;
+  password?: string;
+  role: string;
+  image?: string;
+}
+
+// Centralized logging utility
+const logger = {
+  error: (context: string, error: unknown) => {
+    console.error(
+      `[AUTH ERROR - ${context}]`,
+      error instanceof Error
+        ? { message: error.message, stack: error.stack }
+        : error
+    );
+  },
+  info: (context: string, message: string) => {
+    console.log(`[AUTH INFO - ${context}]`, message);
+  },
+};
+
+// Utility for safe fetch with improved error handling
+async function safeFetch(
+  url: string,
+  options: RequestInit = {},
+  context: string = "Fetch"
+): Promise<any> {
+  try {
+    const response = await fetch(url, {
+      ...options,
+      cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.text();
+      throw new AuthenticationError(
+        `${context} failed: ${response.status} ${errorBody}`
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    logger.error(context, error);
+    throw error;
   }
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
+    // Google OAuth Provider
     Google({
       clientId: process.env.AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
       authorization: {
         params: {
-          prompt: "select_account", // To avoid repeated consent screen
+          prompt: "select_account", // Avoid repeated consent screen
           access_type: "offline",
+          scope: "openid profile email", // Explicit scopes
         },
       },
     }),
+
+    // Credentials Provider with Enhanced Security
     Credentials({
       name: "credentials",
       credentials: {
@@ -32,164 +103,179 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        // Validate input
+        if (!credentials?.email || !credentials?.password) {
+          logger.error("Authorize", "Missing email or password");
+          throw new CredentialsSignin("Email and password are required");
+        }
+
         try {
-          const email = credentials?.email;
-          const password = credentials?.password as string;
-
-          if (!email || !password) {
-            throw new CredentialsSignin("Please provide email and password");
-          }
-
-          const response = await fetch(
-            `${process.env.CONVEX_SITE_URL}/getUserByEmail?email=${email}`,
-            {
-              cache: "no-store",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
+          // Fetch user by email
+          const user: ConvexUser = await safeFetch(
+            `${process.env.CONVEX_SITE_URL}/getUserByEmail?email=${credentials.email}`,
+            {},
+            "User Lookup"
           );
 
-          if (!response.ok) {
-            throw new Error("Failed to fetch user");
-          }
-
-          const user = await response.json();
-
+          // Validate user existence and password
           if (!user) {
-            throw new CredentialsSignin("Invalid email and password");
-          }
-          if (!user.password) {
-            throw new CredentialsSignin("Invalid password");
+            throw new CredentialsSignin("Invalid credentials");
           }
 
-          const isMatched = await compare(password, user.password);
-          if (!isMatched) {
-            throw new CredentialsSignin("Invalid password");
+          // Secure password comparison
+          const isPasswordValid = await compare(
+            credentials.password as string,
+            user.password || ""
+          );
+
+          if (!isPasswordValid) {
+            throw new CredentialsSignin("Invalid credentials");
           }
 
+          // Return user info for session
           return {
             id: user._id,
+            email: user.email,
             firstName: user.firstname,
             lastName: user.lastname,
-            email: user.email,
-            role: user.role,
+            role: user.role || "user",
           };
         } catch (error) {
-          console.error("Authorization error:", error);
+          // Log detailed error while returning null to prevent information leakage
+          logger.error("Authorize", error);
           return null;
         }
       },
     }),
   ],
+
+  // Custom pages for authentication flow
   pages: {
     signIn: "/login",
     error: "/error",
+    signOut: "/logout",
   },
+
+  // Advanced callbacks for token and session management
   callbacks: {
+    // Enhance JWT with user information
     async jwt({ token, user }) {
-      // On initial sign-in, attach user data to the token
-      if (user) {
-        token.sub = user.id;
-        //@ts-ignore
-        token.role = user.role;
-        token.email = user.email;
-      } else {
-        // Fetch the latest role from the database on subsequent requests
-        try {
-          const response = await fetch(
+      try {
+        // Initial sign-in: attach user data
+        if (user) {
+          token.sub = user.id;
+          token.role = "user";
+          token.email = user.email;
+          token.firstName = user.name;
+          token.lastName = user.name;
+        }
+        // On subsequent requests: refresh token data
+        else if (token.email) {
+          const updatedUser = await safeFetch(
             `${process.env.CONVEX_SITE_URL}/getUserByEmail?email=${token.email}`,
-            {
-              cache: "no-store",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
+            {},
+            "Token Refresh"
           );
 
-          if (response.ok) {
-            const updatedUser = await response.json();
-            token.role = updatedUser?.role || "user"; // Default to 'user' if no role found
+          // Update token with fresh user info
+          if (updatedUser) {
+            token.role = updatedUser.role || token.role;
           }
-        } catch (error) {
-          console.error("Error fetching user role:", error);
         }
-      }
 
-      return token;
+        return token;
+      } catch (error) {
+        logger.error("JWT Callback", error);
+        return token;
+      }
     },
 
+    // Populate session with token data
     async session({ session, token }) {
-      // Pass token data to the session object
       if (token && session.user) {
         session.user.id = token.sub as string;
         session.user.role = token.role as string;
         session.user.email = token.email as string;
+        session.user.firstName = token.firstName as string;
+        session.user.lastName = token.lastName as string;
       }
       return session;
     },
 
+    // Enhanced sign-in callback with user creation for OAuth
     async signIn({ user, account }) {
       try {
+        // Handle Google OAuth sign-in
         if (account?.provider === "google") {
           const { email, name: firstname, image } = user;
 
-          if (!email) return false;
+          if (!email) {
+            logger.error("SignIn", "No email provided by Google");
+            return false;
+          }
 
-          const response = await fetch(
+          // Check if user exists
+          const existingUser = await safeFetch(
             `${process.env.CONVEX_SITE_URL}/getUserByEmail?email=${encodeURIComponent(email)}`,
-            {
-              cache: "no-store",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
+            {},
+            "Google User Lookup"
           );
 
-          const existingUser = await response.json();
-          console.log(existingUser, "existing user");
-
+          // Create user if not exists
           if (existingUser.error === "User not found") {
-            const createResponse = await fetch(
+            const newUser = await safeFetch(
               `${process.env.CONVEX_SITE_URL}/createUser`,
               {
                 method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
                 body: JSON.stringify({
                   email,
                   firstname,
                   role: "user",
                   image,
                 }),
-              }
+              },
+              "Create Google User"
             );
 
-            if (!createResponse.ok) {
-              throw new Error("Failed to create user");
-            }
+            logger.info("SignIn", `Created new user: ${email}`);
           }
+
           return true;
         }
 
-        return Boolean(account?.provider === "credentials");
+        // For credentials provider, return true if provider is credentials
+        return account?.provider === "credentials";
       } catch (error) {
-        console.error("Sign in error:", error);
+        logger.error("SignIn Callback", error);
         return false;
       }
     },
 
+    // Redirect handling with logging
     async redirect({ url, baseUrl }) {
-      console.log("Redirecting to:", url, "Base URL:", baseUrl);
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
-      if (new URL(url).origin === baseUrl) return url;
-      return baseUrl;
+      logger.info("Redirect", `Attempting redirect: ${url}, Base: ${baseUrl}`);
+
+      try {
+        // Ensure redirect is within the same domain
+        if (url.startsWith("/")) return `${baseUrl}${url}`;
+        if (new URL(url).origin === baseUrl) return url;
+        return baseUrl;
+      } catch (error) {
+        logger.error("Redirect", error);
+        return baseUrl;
+      }
     },
   },
+
+  // Session and security configurations
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+
+  // Use a strong, environment-based secret
   secret: process.env.NEXTAUTH_SECRET,
+
+  // Optional: Debug mode for development
+  debug: process.env.NODE_ENV === "development",
 });
