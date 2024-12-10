@@ -41,7 +41,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           }
 
           const response = await fetch(
-            `${process.env.CONVEX_SITE_URL}getUserByEmail?email=${email}`,
+            `${process.env.CONVEX_SITE_URL}/getUserByEmail?email=${email}`,
             {
               cache: "no-store",
               headers: {
@@ -98,7 +98,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // Fetch the latest role from the database on subsequent requests
         try {
           const response = await fetch(
-            `${process.env.CONVEX_SITE_URL}getUserByEmail?email=${token.email}`,
+            `${process.env.CONVEX_SITE_URL}/getUserByEmail?email=${token.email}`,
             {
               cache: "no-store",
               headers: {
@@ -137,7 +137,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (!email) return false;
 
           const response = await fetch(
-            `${process.env.CONVEX_SITE_URL}getUserByEmail?email=${encodeURIComponent(email)}`,
+            `${process.env.CONVEX_SITE_URL}/getUserByEmail?email=${encodeURIComponent(email)}`,
             {
               cache: "no-store",
               headers: {
@@ -151,7 +151,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           if (existingUser.error === "User not found") {
             const createResponse = await fetch(
-              `${process.env.CONVEX_SITE_URL}createUser`,
+              `${process.env.CONVEX_SITE_URL}/createUser`,
               {
                 method: "POST",
                 headers: {

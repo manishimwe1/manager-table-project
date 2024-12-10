@@ -4,6 +4,7 @@ import CollapsibleComponents from "@/components/collapsibleComponents";
 import DataComponents from "@/components/DataComponents";
 import EmptyPlaceholder from "@/components/EmptyPlaceholder";
 import SearchBox from "@/components/SearchBox";
+import SkeletonLoader from "@/components/SkeletonLoader";
 import { api } from "@/convex/_generated/api";
 import { formatToday, getTranslatedDay } from "@/lib/utils";
 import { ProductType } from "@/types";
@@ -16,15 +17,22 @@ import { useMemo, useState } from "react";
 const SalesPage = () => {
   const [searchValue, setSearchValue] = useState("");
   const session = useSession();
+
   const userId = session.data?.user;
-  if (!userId) redirect("/login");
 
   // Fetch all products
-  const user = useQuery(api.user.getUserIndb, { email: userId.email! });
+  const user = useQuery(api.user.getUserIndb, { email: userId?.email! });
   const data: ProductType[] | undefined = useQuery(api.product.getProduct, {
     userId: user?._id!,
   });
 
+  if (session.status === "loading") return <SkeletonLoader />;
+
+  // Handle unauthenticated state
+  if (!userId) {
+    redirect("/login");
+    return null; // Ensure React knows the component renders nothing
+  }
   // Filter data based on search input
   const filteredData = useMemo(() => {
     if (!searchValue) return data;

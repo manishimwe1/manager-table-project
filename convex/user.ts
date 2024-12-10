@@ -54,7 +54,7 @@ export const getUser = internalQuery({
 
 export const getUserIndb = query({
   args: {
-    email: v.string(),
+    email: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const User = await ctx.db

@@ -63,7 +63,7 @@ export const getUserIndb = query({
       .collect();
 
     if (!User) {
-      throw new ConvexError("something went wrong in creating user!");
+      throw new ConvexError("something went wrong in gettng user!");
     }
     return User[0];
   },

@@ -38,7 +38,7 @@ export const createTask = mutation({
 });
 
 export const getProduct = query({
-  args: { userId: v.id("user") },
+  args: { userId: v.optional(v.id("user")) },
   handler: async (ctx, args) => {
     const Product = await ctx.db
       .query("product")

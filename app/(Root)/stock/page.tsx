@@ -4,6 +4,7 @@ import HeaderSection from "@/components/HeaderSection";
 import { columns } from "@/components/ibyaranguwe/columns";
 import { DataTable } from "@/components/ibyaranguwe/DataTable";
 import SearchBox from "@/components/SearchBox";
+import SkeletonLoader from "@/components/SkeletonLoader";
 import { api } from "@/convex/_generated/api";
 import { PurchaseType } from "@/types";
 import { useQuery } from "convex/react";
@@ -15,14 +16,20 @@ const StockPage = () => {
   const [searchValue, setSearchValue] = useState("");
   const session = useSession();
   const userId = session.data?.user;
-  if (!userId) redirect("/login");
 
   // Fetch all products
-  const user = useQuery(api.user.getUserIndb, { email: userId.email! });
+  const user = useQuery(api.user.getUserIndb, { email: userId?.email! });
   const data: PurchaseType[] | undefined = useQuery(api.product.getProduct, {
     userId: user?._id!,
   });
 
+  if (session.status === "loading") return <SkeletonLoader />;
+
+  // Handle unauthenticated state
+  if (!userId) {
+    redirect("/login");
+    return null; // Ensure React knows the component renders nothing
+  }
   const filteredData = useMemo(() => {
     if (!searchValue) return data;
     return data?.filter((item) =>

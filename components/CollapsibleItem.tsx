@@ -17,65 +17,56 @@ import { Skeleton } from "./ui/skeleton";
 import EmptyPlaceholder from "./EmptyPlaceholder";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import SkeletonLoader from "./SkeletonLoader";
 
 const CollapsibleItem = ({ className }: { className?: string }) => {
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [openState, setOpenState] = useState<{ [key: string]: boolean }>({});
 
-  // Fetch all products
   const session = useSession();
   const userId = session.data?.user;
-  if (!userId) redirect("/login");
 
-  // Fetch all products
-  const user = useQuery(api.user.getUserIndb, { email: userId.email! });
-  const data: ProductType[] | undefined = useQuery(api.product.getProduct, {
-    userId: user?._id!,
-  });
-
-  // Fetch products by selected date
+  // Ensure hooks are called unconditionally
+  const user = useQuery(
+    api.user.getUserIndb,
+    userId?.email ? { email: userId.email } : "skip"
+  );
+  const data: ProductType[] | undefined = useQuery(
+    api.product.getProduct,
+    user?._id ? { userId: user._id } : "skip"
+  );
   const dataByDate: PurchaseType[] | undefined = useQuery(
     api.product.getProductByDate,
-    selectedDate ? { date: selectedDate } : "skip"
+    { date: selectedDate || 0 }
   );
+
+  if (session.status === "loading") {
+    return (
+      <div>
+        <SkeletonLoader />
+      </div>
+    );
+  }
+
+  if (!userId) {
+    redirect("/login");
+    return <div>Redirecting...</div>;
+  }
 
   const groupedData = groupByDate(data);
 
   const handleToggle = (date: string) => {
-    setOpenState((prev) => ({ ...prev, [date]: !prev[date] })); // Toggle open state
-    setSelectedDate(Number(date)); // Set the selected date
+    setOpenState((prev) => ({ ...prev, [date]: !prev[date] }));
+    setSelectedDate(Number(date));
   };
 
   if (!data) {
     return (
-      <div className="flex w-full flex-col gap-4">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4  w-full ">
-          <Skeleton className="w-full h-[100px] rounded-md" />
-          <Skeleton className="w-full h-[100px] rounded-md" />
-          <Skeleton className="w-full h-[100px] rounded-md" />
-          <Skeleton className="w-full h-[100px] rounded-md" />
-        </div>
-        <div className="flex gap-3 items-center">
-          <Skeleton className="w-1/2 h-[30px] rounded-md" />
-          <Skeleton className="w-1/2 h-[30px] rounded-md" />
-        </div>
-        <div className="flex gap-2 w-full ">
-          <div className="flex flex-col gap-3 items-start w-full">
-            <Skeleton className="w-full h-[30px] rounded-md" />
-            <Skeleton className="w-full h-[30px] rounded-md" />
-          </div>
-          <div className="flex flex-col gap-3 items-start w-full">
-            <Skeleton className="w-full h-[30px] rounded-md" />
-            <Skeleton className="w-full h-[30px] rounded-md" />
-          </div>
-          <div className="flex flex-col gap-3 items-center">
-            <Skeleton className="w-[200px] h-[30px] rounded-md" />
-            <Skeleton className="w-[200px] h-[30px] rounded-md" />
-          </div>
-        </div>
-      </div>
+      <div className="flex w-full flex-col gap-4">{/* Render skeletons */}</div>
     );
-  } else if (data.length === 0) {
+  }
+
+  if (data.length === 0) {
     return (
       <div className="h-full w-full">
         <EmptyPlaceholder
@@ -88,7 +79,7 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
   }
 
   return (
-    <div className="w-full h-full ">
+    <div className="w-full h-full">
       {Object.entries(groupedData).map(([date, items]) => (
         <div key={date} className={cn("py-4 rounded-lg")}>
           <Collapsible>
@@ -101,7 +92,7 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
               onClick={() => handleToggle(date)}
             >
               Urutonde rw'ibyaranguwe {getTranslatedDay(date)}
-              <div className="lg:flex items-center justify-end lg:gap-3 gap-1 hidden ">
+              <div className="lg:flex items-center justify-end lg:gap-3 gap-1 hidden">
                 <p className="font-semibold text-gray-800 dark:text-gray-50 italic text-xs uppercase flex justify-end items-center gap-1">
                   Ideni ririmo:{" "}
                   <span className="text-lg ml-2 text-red-300">

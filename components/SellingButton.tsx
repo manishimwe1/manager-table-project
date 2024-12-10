@@ -11,6 +11,7 @@ import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useSession } from "next-auth/react";
+import SkeletonLoader from "./SkeletonLoader";
 
 // Define props interface
 interface SellingButtonProps {
@@ -38,10 +39,10 @@ const SellingButton: React.FC<SellingButtonProps> = ({
   } = useClientInfoStore();
   const session = useSession();
   const userId = session.data?.user;
-  if (!userId) redirect("/login");
+  if (!userId) return;
   const { toast } = useToast();
 
-  const user = useQuery(api.user.getUserIndb, { email: userId.email! });
+  const user = useQuery(api.user.getUserIndb, { email: userId?.email! });
   const productId = useQuery(api.product.getProductById, { id: id });
 
   const handleSales = (value: string) => {

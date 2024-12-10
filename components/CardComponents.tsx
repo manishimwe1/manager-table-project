@@ -7,24 +7,37 @@ import { api } from "@/convex/_generated/api";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { ProductType } from "@/types";
+import SkeletonLoader from "./SkeletonLoader";
+import { Id } from "@/convex/_generated/dataModel";
 
 const CardComponents = () => {
   const session = useSession();
   const userId = session.data?.user;
-  if (!userId) redirect("/login");
 
-  // Fetch all products
-  const user = useQuery(api.user.getUserIndb, { email: userId.email! });
+  // Fetch all queries (hooks must always be called)
+  const user = useQuery(
+    api.user.getUserIndb,
+    { email: userId?.email || "" } // Provide a fallback to avoid errors
+  );
   const product: ProductType[] | undefined = useQuery(api.product.getProduct, {
-    userId: user?._id!,
+    userId: user?._id as Id<"user">,
   });
   const outOfStock = useQuery(api.product.getProductOutOfStock);
   const Client = useQuery(api.clientName.getClientByIden);
-
   const saledProduct = useQuery(api.clientName.getSaledProduct);
   const ClientWhoPaid = useQuery(api.clientName.getClientWhoPaid);
 
-  if (!outOfStock) return;
+  // Handle loading state
+  if (session.status === "loading") return <SkeletonLoader />;
+
+  // Handle unauthenticated state
+  if (!userId) {
+    redirect("/login");
+    return null; // Ensure React knows the component renders nothing
+  }
+
+  if (!outOfStock) return null;
+
   return (
     <div className="flex items-center justify-between gap-4  md:flex-row flex-col-reverse ">
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4  w-full ">

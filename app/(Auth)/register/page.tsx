@@ -75,7 +75,7 @@ export default function SignIn() {
     if (success) {
       form.reset();
       setLoading(false);
-      router.push("/login");
+      router.push("/");
     }
   }
   return (
