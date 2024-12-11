@@ -36,10 +36,6 @@ const ActionComponents = ({
       updatePayedClient({ id: clientId });
     }
   }
-  const fakeData = [
-    { id: 1, name: "Product A", price: 25 },
-    { id: 2, name: "Product B", price: 35 },
-  ];
 
   console.log(bishyuye);
 

@@ -12,7 +12,7 @@ const SearchBox = ({
   setSearchValue: Dispatch<SetStateAction<string>>;
 }) => {
   return (
-    <div className=" bg-background  shadow-md shadow-white dark:shadow-black/70 flex justify-end items-center w-full gap-2 rounded-lg">
+    <div className=" bg-background  shadow-md shadow-white dark:shadow-black/70 flex justify-end items-center w-full gap-2 rounded-lg dark:bg-stone-900 dark:text-gray-200">
       <Input
         placeholder={placeholder ? placeholder : "Shakisha ibicuruzwa..."}
         className="w-full flex-1 bg-transparent border-none outline-none focus:outline-none focus-visible:ring-0"

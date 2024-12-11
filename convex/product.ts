@@ -57,10 +57,12 @@ export const getProduct = query({
   },
 });
 export const getProductOutOfStock = query({
-  handler: async (ctx) => {
+  args: { userId: v.optional(v.id("user")) },
+  handler: async (ctx, args) => {
     const Product = await ctx.db
       .query("product")
-      .filter((q) => q.lte(q.field("ingano"), 1))
+      .withIndex("by_userId", (q) => q.eq("userId", args.userId!))
+      .filter((q) => q.lte(q.field("ingano"), 0))
       .order("desc")
       .collect();
 

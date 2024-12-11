@@ -138,9 +138,11 @@ export const updatePayedClient = mutation({
 });
 
 export const getClientWhoPaid = query({
-  handler: async (ctx) => {
+  args: { userId: v.optional(v.id("user")) },
+  handler: async (ctx, args) => {
     const Product = await ctx.db
       .query("client")
+      .withIndex("by_userId", (q) => q.eq("userId", args.userId!))
       .filter((q) => q.eq(q.field("nideni"), false))
       .order("desc")
       .collect();

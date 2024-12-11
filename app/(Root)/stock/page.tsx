@@ -1,5 +1,6 @@
 "use client";
 
+import EmptyPlaceholder from "@/components/EmptyPlaceholder";
 import HeaderSection from "@/components/HeaderSection";
 import { columns } from "@/components/ibyaranguwe/columns";
 import { DataTable } from "@/components/ibyaranguwe/DataTable";
@@ -10,26 +11,28 @@ import { PurchaseType } from "@/types";
 import { useQuery } from "convex/react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 
 const StockPage = () => {
   const [searchValue, setSearchValue] = useState("");
   const session = useSession();
   const userId = session.data?.user;
 
-  // Fetch all products
-  const user = useQuery(api.user.getUserIndb, { email: userId?.email! });
+  // Move conditional routing logic before hooks
+  useEffect(() => {
+    if (session.status !== "loading" && !userId) {
+      redirect("/login");
+    }
+  }, [session.status, userId]);
+
+  // Always call hooks in the same order, regardless of conditions
+  const user = useQuery(api.user.getUserIndb, {
+    email: userId?.email ?? undefined,
+  });
   const data: PurchaseType[] | undefined = useQuery(api.product.getProduct, {
-    userId: user?._id!,
+    userId: user?._id,
   });
 
-  if (session.status === "loading") return <SkeletonLoader />;
-
-  // Handle unauthenticated state
-  if (!userId) {
-    redirect("/login");
-    return null; // Ensure React knows the component renders nothing
-  }
   const filteredData = useMemo(() => {
     if (!searchValue) return data;
     return data?.filter((item) =>
@@ -38,20 +41,31 @@ const StockPage = () => {
   }, [searchValue, data]);
 
   return (
-    <section className="w-full mt-2">
+    <section className="w-full mt-2 space-y-4">
       <HeaderSection title="Ibicuruzwa biri muri Stock" />
-      <div className=" flex items-center justify-between  w-full">
-        <p className="text-blue-400 text-nowrap hidden lg:flex ">
-          Byose hamwe: {data?.length}
-        </p>
-        <div className="lg:w-[600px] w-full">
-          <SearchBox
-            searchValue={searchValue}
-            setSearchValue={setSearchValue}
-          />
-        </div>
-      </div>
-      <DataTable columns={columns} data={filteredData || []} />
+
+      {data?.length === 0 ? (
+        <EmptyPlaceholder
+          label="Rangura"
+          link="/rangura"
+          title="Stock ntakintu kirimo "
+        />
+      ) : (
+        <>
+          <div className="flex items-center justify-between w-full">
+            <p className="text-blue-400 text-nowrap hidden lg:flex">
+              Byose hamwe: {data?.length}
+            </p>
+            <div className="lg:w-[600px] w-full">
+              <SearchBox
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+              />
+            </div>
+          </div>
+          <DataTable columns={columns} data={filteredData || []} />
+        </>
+      )}
     </section>
   );
 };

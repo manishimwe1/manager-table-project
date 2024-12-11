@@ -39,6 +39,14 @@ export const columns: ColumnDef<outOfStock>[] = [
     },
   },
   {
+    accessorKey: "ingano",
+    header: "Hasigaye",
+    cell: ({ row }) => {
+      const hasgaye = row.getValue("ingano") as number;
+      return <p className="text-blue-900/90 font-bold">{hasgaye}</p>;
+    },
+  },
+  {
     accessorKey: "ndanguyeZingahe",
     header: "Naranguye",
     cell: ({ row }) => {
@@ -81,18 +89,18 @@ export const columns: ColumnDef<outOfStock>[] = [
       );
     },
   },
-  {
-    accessorKey: "_id",
-    header: "",
-    cell: ({ row }) => {
-      const rowId = row.getValue("_id") as Id<"product">;
-      console.log(rowId);
+  // {
+  //   accessorKey: "_id",
+  //   header: "",
+  //   cell: ({ row }) => {
+  //     const rowId = row.getValue("_id") as Id<"product">;
+  //     console.log(rowId);
 
-      return (
-        <ActionComponents ibyashize={true} id={rowId}>
-          <MoreVertical className="h-4 w-4" />
-        </ActionComponents>
-      );
-    },
-  },
+  //     return (
+  //       <ActionComponents ibyashize={true} id={rowId}>
+  //         <MoreVertical className="h-4 w-4" />
+  //       </ActionComponents>
+  //     );
+  //   },
+  // },
 ];

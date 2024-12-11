@@ -4,13 +4,33 @@ import { columns } from "@/components/amadeni/columns";
 import { DataTable } from "@/components/amadeni/DataTable";
 import HeaderSection from "@/components/HeaderSection";
 import SearchBox from "@/components/SearchBox";
+import SkeletonLoader from "@/components/SkeletonLoader";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 import React, { useMemo, useState } from "react";
 
 const AbishyuyePage = () => {
   const [searchValue, setSearchValue] = useState("");
-  const Client = useQuery(api.clientName.getClientWhoPaid);
+
+  const session = useSession();
+  const userId = session.data?.user;
+
+  // Fetch all products
+  const user = useQuery(api.user.getUserIndb, { email: userId?.email! });
+
+  const Client = useQuery(api.clientName.getClientWhoPaid, {
+    userId: user?._id!,
+  });
+
+  if (session.status === "loading") return <SkeletonLoader />;
+
+  // Handle unauthenticated state
+  if (!userId) {
+    redirect("/login");
+    return null; // Ensure React knows the component renders nothing
+  }
 
   const filteredData = useMemo(() => {
     if (!searchValue) return Client;

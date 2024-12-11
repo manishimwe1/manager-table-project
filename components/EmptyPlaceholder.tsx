@@ -14,16 +14,19 @@ const EmptyPlaceholder = ({
   link: string;
 }) => {
   return (
-    <div className="flex items-center justify-center gap-4 flex-col w-full h-screen py-10">
+    <div className="flex items-center justify-center gap-4 flex-col w-full h-fit py-10 ">
       <Image
-        className=""
+        className="object-contain"
         src={"/empty.svg"}
         alt="empty"
-        height={300}
+        height={200}
         width={400}
       />
       <p className="text-xl text-center dark:text-gray-200">{title}</p>
-      <Button asChild className="shadow-md shadow-black">
+      <Button
+        asChild
+        className="shadow-md shadow-black dark:bg-stone-900 dark:text-gray-200"
+      >
         <Link href={link}>
           {label} <Send className="h-4 w-4" />
         </Link>
