@@ -213,12 +213,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             return false;
           }
 
-          // Check if user exists
-          const existingUser = await safeFetch(
-            `${process.env.CONVEX_SITE_URL}/getUserByEmail?email=${encodeURIComponent(email)}`,
-            {},
-            "Google User Lookup"
-          );
+          let existingUser;
+          try {
+            // Wrap the user lookup in a try-catch to handle 404 specifically
+            existingUser = await safeFetch(
+              `${process.env.CONVEX_SITE_URL}/getUserByEmail?email=${encodeURIComponent(email)}`,
+              {},
+              "Google User Lookup"
+            );
+          } catch (lookupError) {
+            // If the error is a 404 (user not found), set existingUser to null
+            if (
+              lookupError instanceof AuthenticationError &&
+              lookupError.message.includes("404")
+            ) {
+              existingUser = null;
+              logger.info(
+                "SignIn",
+                `No existing user found for ${email}, will create new user`
+              );
+            } else {
+              // For other errors, rethrow
+              throw lookupError;
+            }
+          }
 
           // Create user if not exists
           if (!existingUser) {
