@@ -123,13 +123,13 @@ export function PurchaseForm({
             name="igicuruzwa"
             render={({ field }) => (
               <FormItem className=" w-full flex-1">
-                <FormLabel className="text-black dark:text-gray-100 ">
+                <FormLabel className="text-black dark:text-gray-100 text-left ">
                   Igicuruzwa
                 </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Enter product title"
-                    className="text-sm placeholder:text-xs bg-dark-1 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20"
+                    className="text-sm placeholder:text-xs bg-dark-1 dark:bg-stone-900 dark:text-gray-200 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20"
                     {...field}
                   />
                 </FormControl>
@@ -143,14 +143,14 @@ export function PurchaseForm({
             name="ingano"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-black dark:text-gray-100 ">
+                <FormLabel className="text-black dark:text-gray-100 text-left ">
                   Ingano
                 </FormLabel>
                 <FormControl>
                   <Input
                     type="number"
                     placeholder="Enter product title"
-                    className="text-sm placeholder:text-xs bg-dark-1 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20"
+                    className="text-sm placeholder:text-xs bg-dark-1 dark:bg-stone-900 dark:text-gray-200 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20"
                     {...field}
                   />
                 </FormControl>
@@ -166,14 +166,14 @@ export function PurchaseForm({
             name="ikiranguzo"
             render={({ field }) => (
               <FormItem className="w-full ">
-                <FormLabel className="text-black dark:text-gray-100 ">
+                <FormLabel className="text-black dark:text-gray-100 text-left ">
                   Ikiranguzo
                 </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="eg:100"
                     type="number"
-                    className="text-sm placeholder:text-xs bg-dark-1 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1"
+                    className="text-sm placeholder:text-xs bg-dark-1 dark:bg-stone-900 dark:text-gray-200 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1"
                     min={0}
                     {...field}
                   />
@@ -188,14 +188,14 @@ export function PurchaseForm({
             name="ukonyigurisha"
             render={({ field }) => (
               <FormItem className="w-full ">
-                <FormLabel className="text-black dark:text-gray-100 ">
+                <FormLabel className="text-black dark:text-gray-100 text-left ">
                   Uko Nyigurisha
                 </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="eg:100"
                     type="number"
-                    className="text-sm placeholder:text-xs bg-dark-1 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1"
+                    className="text-sm placeholder:text-xs bg-dark-1 dark:bg-stone-900 dark:text-gray-200 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1"
                     min={0}
                     {...field}
                   />
@@ -214,7 +214,7 @@ export function PurchaseForm({
             name="birishyuwe"
             render={({ field }) => (
               <FormItem className=" w-full">
-                <FormLabel className="text-black dark:text-gray-100 "></FormLabel>
+                <FormLabel className="text-black dark:text-gray-100 text-left "></FormLabel>
                 <FormControl className="w-full ">
                   <div className="flex items-center gap-3">
                     <div
@@ -228,7 +228,7 @@ export function PurchaseForm({
                         className={cn(
                           wishyuye
                             ? "bg-green-400 hover:bg-green-500 py-1 px-2 text-white"
-                            : "bg-gray-400 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100  hover:text-white"
+                            : "bg-gray-400 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100 text-left  hover:text-white"
                         )}
                         onClick={() => {
                           setntibyishyuye(false);
@@ -250,7 +250,7 @@ export function PurchaseForm({
                         className={cn(
                           ntibyishyuye
                             ? "bg-red-400 hover:bg-red-500 py-1 px-2  text-white"
-                            : "bg-gray-400 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100  hover:text-white"
+                            : "bg-gray-400 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100 text-left  hover:text-white"
                         )}
                         onClick={() => {
                           setwishyuye(false);
@@ -276,7 +276,7 @@ export function PurchaseForm({
             name="uzishyuraAngahe"
             render={({ field }) => (
               <FormItem className="w-full ">
-                <FormLabel className="text-black dark:text-gray-100 ">
+                <FormLabel className="text-black dark:text-gray-100 text-left ">
                   Wishyuye
                 </FormLabel>
                 <FormControl>
@@ -284,7 +284,7 @@ export function PurchaseForm({
                     disabled
                     placeholder="eg:100"
                     type="number"
-                    className="text-sm placeholder:text-xs bg-dark-1 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1"
+                    className="text-sm placeholder:text-xs bg-dark-1 dark:bg-stone-900 dark:text-gray-200 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1"
                     value={
                       Number(form.getValues("ikiranguzo")) *
                       Number(form.getValues("ingano"))
@@ -311,7 +311,7 @@ export function PurchaseForm({
                     disabled
                     placeholder="eg:100"
                     type="number"
-                    className="text-sm placeholder:text-xs bg-dark-1 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1 disabled:dark:text-gray-100"
+                    className="text-sm placeholder:text-xs bg-dark-1 dark:bg-stone-900 dark:text-gray-200 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1 disabled:dark:text-gray-100"
                     value={
                       Number(form.getValues("ikiranguzo")) *
                       Number(form.getValues("ingano"))

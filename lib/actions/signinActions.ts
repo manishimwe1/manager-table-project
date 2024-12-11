@@ -2,6 +2,7 @@
 
 import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
+import { cookies } from "next/headers";
 
 export async function handleSignIn(email: string, password: string) {
   try {
@@ -57,9 +58,3 @@ export async function handleSignIn(email: string, password: string) {
 export async function handleSignInWithGoogle() {
   await signIn("google");
 }
-
-export const handleSignOut = async () => {
-  console.log("here");
-
-  await signOut();
-};

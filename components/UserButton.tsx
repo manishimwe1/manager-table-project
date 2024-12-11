@@ -3,11 +3,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { handleSignOut } from "@/lib/actions/signinActions";
 import { User2 } from "lucide-react";
 import { User } from "next-auth";
 import Image from "next/image";
@@ -34,7 +32,22 @@ const UserButton = ({ user }: { user: User }) => {
         <DropdownMenuItem>Setting</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <button onClick={() => signOut()}>Sign Out</button>
+          <button
+            onClick={async () => {
+              try {
+                await signOut({
+                  redirectTo: "/login",
+                  redirect: true,
+                });
+                localStorage.clear();
+                window.location.href = "/login";
+              } catch (error) {
+                console.error("Sign out error:", error);
+              }
+            }}
+          >
+            Sign Out
+          </button>
         </DropdownMenuItem>
         {/* <DropdownMenuItem>Team</DropdownMenuItem>
         <DropdownMenuItem>Subscription</DropdownMenuItem> */}
