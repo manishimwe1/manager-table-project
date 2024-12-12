@@ -14,10 +14,10 @@ const DisplayBadge = ({
       {" "}
       <Badge
         className={cn(
-          "cursor-pointer text-stone-900 shadow-sm shadow-black/15 ",
+          "cursor-pointer text-stone-900 shadow-sm shadow-black/15 text-nowrap",
           bishyuye
-            ? "bg-red-400 hover:bg-red-600 "
-            : "bg-green-400 hover:bg-green-600 "
+            ? " bg-green-600 hover:bg-green-500 text-black"
+            : "bg-red-600 hover:bg-red-500"
         )}
       >
         {value.toLocaleString()} Rwf

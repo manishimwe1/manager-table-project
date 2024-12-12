@@ -9,12 +9,12 @@ import { Row } from "@tanstack/react-table";
 
 const TakeInputValue = ({
   value,
-  ukonyigurisha,
+  ukonyigurishaKuriDetail,
   activeRow,
   stock,
 }: {
   value?: "arashaka" | "sale" | "name" | "phone"; // Indicates the type of input field
-  ukonyigurisha: number; // Unit price for calculation
+  ukonyigurishaKuriDetail: number; // Unit price for calculation
   id: Id<"product">;
   stock?: number;
   activeRow: Row<TableRowType>;
@@ -41,8 +41,8 @@ const TakeInputValue = ({
     switch (value) {
       case "arashaka": // Quantity requested
         setInputValue(Number(newValue));
-        if (ukonyigurisha && activeRow.getIsSelected()) {
-          const total = Number(newValue) * ukonyigurisha;
+        if (ukonyigurishaKuriDetail && activeRow.getIsSelected()) {
+          const total = Number(newValue) * ukonyigurishaKuriDetail;
 
           setCalculatedValue(total);
           setYishyuyeAngahe(total);

@@ -2,7 +2,7 @@
 
 import { Id } from "@/convex/_generated/dataModel";
 import { formatReadableDate } from "@/lib/utils";
-import { PurchaseType } from "@/types";
+import { ProductType, PurchaseType } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "../ui/badge";
 
@@ -10,20 +10,12 @@ import React from "react";
 import DisplayBadge from "../DisplayBadge";
 import { ArrowDownNarrowWide } from "lucide-react";
 
-export const columns: ColumnDef<PurchaseType>[] = [
+export const columns: ColumnDef<ProductType>[] = [
   {
     accessorKey: "_id",
     header: "",
     cell: () => null,
   },
-  // {
-  //   accessorKey: "_creationTime",
-  //   header: "Tariki",
-  //   cell: ({ row }) => {
-  //     const tariki = row.getValue("_creationTime") as number;
-  //     return <p className="w-fit text-xs">{formatReadableDate(tariki)}</p>;
-  //   },
-  // },
   {
     accessorKey: "igicuruzwa",
     header: "Igicuruzwa",
@@ -33,28 +25,54 @@ export const columns: ColumnDef<PurchaseType>[] = [
     },
   },
   {
+    accessorKey: "ibyoUranguyeType",
+    header: undefined,
+    cell: () => undefined,
+  },
+  {
     accessorKey: "ndanguyeZingahe",
     header: "Naranguye",
     cell: ({ row }) => {
+      const productType = row.getValue("ibyoUranguyeType") as string;
       const ndanguyeZingahe = row.getValue("ndanguyeZingahe") as number;
-      return <p>{ndanguyeZingahe}</p>;
+      return (
+        <>
+          {productType === "Ikesi x 12" || "Ikesi x 20" ? (
+            <p>
+              <span className="text-[12px] mr-1">ikesi </span>
+              {ndanguyeZingahe}
+            </p>
+          ) : (
+            ndanguyeZingahe
+          )}
+        </>
+      );
     },
   },
   {
+    accessorKey: "byoseHamwe",
+    header: undefined,
+    cell: () => undefined,
+  },
+  {
     accessorKey: "ingano",
-    header: " Stock hasigaye",
+    header: " hasigaye",
     cell: ({ row }) => {
       const ingano = row.getValue("ingano") as number;
+      const byoseHamwe = row.getValue("byoseHamwe") as number;
       const naranguye = row.getValue("ndanguyeZingahe") as number;
+      const productType = row.getValue("ibyoUranguyeType") as string;
       return (
-        <p className="flex gap-0.5 items-center">
-          {ingano}
-          {ingano < naranguye && (
-            <span>
-              <ArrowDownNarrowWide className="h-3 w-4 text-red-400" />
-            </span>
+        <>
+          {productType === "Ikesi x 12" || "Ikesi x 20" ? (
+            <p>
+              <span className="text-[12px] mr-1">amacupa</span>
+              {byoseHamwe}
+            </p>
+          ) : (
+            ingano
           )}
-        </p>
+        </>
       );
     },
   },
@@ -62,43 +80,76 @@ export const columns: ColumnDef<PurchaseType>[] = [
     accessorKey: "ikiranguzo",
     header: "Ikiranguzo",
     cell: ({ row }) => {
-      const iden = row.getValue("ikiranguzo") as number;
-      return <p className="text-left">{iden.toLocaleString()} Rwf</p>;
+      const ikiranguzo = row.getValue("ikiranguzo") as number;
+      const productType = row.getValue("ibyoUranguyeType") as string;
+      return (
+        <>
+          {productType === "Ikesi x 12" || "Ikesi x 20" ? (
+            <p className="text-left text-nowrap">
+              {ikiranguzo.toLocaleString()} Rwf{" "}
+              <span className="text-[11px] mr-1">Kw'ikesi</span>
+            </p>
+          ) : (
+            <span>{ikiranguzo.toLocaleString()} Rwf</span>
+          )}
+        </>
+      );
     },
   },
 
   {
-    accessorKey: "ukonyigurisha",
+    accessorKey: "ukonyigurishaKuriDetail",
     header: "Uko Nyigurisha",
     cell: ({ row }) => {
-      const iden = row.getValue("ukonyigurisha") as number;
-      return <p className="text-left">{iden.toLocaleString()} Rwf</p>;
+      const iden = row.getValue("ukonyigurishaKuriDetail") as number;
+      const productType = row.getValue("ibyoUranguyeType") as string;
+      return (
+        <>
+          {productType === "Ikesi x 12" || "Ikesi x 20" ? (
+            <p className="text-left text-nowrap">
+              {iden.toLocaleString()} Rwf{" "}
+              <span className="text-[11px] mr-1">Kw'icupa</span>
+            </p>
+          ) : (
+            <span>{iden.toLocaleString()} Rwf</span>
+          )}
+        </>
+      );
     },
   },
 
   {
     accessorKey: "uzishyuraAngahe",
-    header: "Ideni mfite",
+    header: () => {
+      return <p className="text-nowrap">Ideni mfite</p>;
+    },
     cell: ({ row }) => {
       const iden = row.getValue("uzishyuraAngahe") as string;
-      return <p className="text-left">{iden.toLocaleString()} Rwf</p>;
+      return <DisplayBadge value={iden} bishyuye={false} />;
     },
   },
   {
     accessorKey: "status",
-    header: "Ayo maze Gucuruza",
+
+    header: () => {
+      return <p className="text-nowrap">Ayo maze Gucuruza</p>;
+    },
     cell: ({ row }) => {
       const naranguye = row.getValue("ndanguyeZingahe") as number;
       const nsigaje = row.getValue("ingano") as number;
-      const ukonyigurisha = row.getValue("ukonyigurisha") as number;
-      const ayoMazeKunguka = (naranguye - nsigaje) * ukonyigurisha;
-      return <p className="text-left">{ayoMazeKunguka.toLocaleString()} Rwf</p>;
+      const ukonyigurishaKuriDetail = row.getValue(
+        "ukonyigurishaKuriDetail"
+      ) as number;
+      const ayoMazeKunguka = (naranguye - nsigaje) * ukonyigurishaKuriDetail;
+      return (
+        <p className="text-center">{ayoMazeKunguka.toLocaleString()} Rwf</p>
+      );
     },
   },
   {
     accessorKey: "inyungu",
     header: () => {
-      return <p className="text-right">Inyungu Niteze</p>;
+      return <p className="text-right text-nowrap">Inyungu Niteze byashize</p>;
     },
 
     cell: ({ row }) => {

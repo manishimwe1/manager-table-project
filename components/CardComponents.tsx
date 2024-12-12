@@ -22,18 +22,19 @@ const CardComponents = () => {
   const product: ProductType[] | undefined = useQuery(api.product.getProduct, {
     userId: user?._id as Id<"user">,
   });
-  const outOfStock = useQuery(api.product.getProductOutOfStock);
+  const outOfStock = useQuery(api.product.getProductOutOfStock, {
+    userId: user?._id as Id<"user">,
+  });
   const Client = useQuery(api.clientName.getClientByIden);
   const saledProduct = useQuery(api.clientName.getSaledProduct);
-  const ClientWhoPaid = useQuery(api.clientName.getClientWhoPaid);
+  const ClientWhoPaid = useQuery(api.clientName.getClientWhoPaid, {
+    userId: user?._id as Id<"user">,
+  });
 
-  // Handle loading state
   if (session.status === "loading") return <SkeletonLoader />;
 
-  // Handle unauthenticated state
   if (!userId) {
     redirect("/login");
-    return null; // Ensure React knows the component renders nothing
   }
 
   if (!outOfStock) return null;

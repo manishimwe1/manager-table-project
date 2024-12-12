@@ -16,15 +16,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-interface DataTableProps<PurchaseType, TValue> {
-  columns: ColumnDef<PurchaseType, TValue>[];
-  data: PurchaseType[];
+interface DataTableProps<ProductType, TValue> {
+  columns: ColumnDef<ProductType, TValue>[];
+  data: ProductType[];
 }
 
-export function DataTable<PurchaseType, TValue>({
+export function DataTable<ProductType, TValue>({
   columns,
   data,
-}: DataTableProps<PurchaseType, TValue>) {
+}: DataTableProps<ProductType, TValue>) {
   const table = useReactTable({
     data,
     columns,
@@ -33,13 +33,13 @@ export function DataTable<PurchaseType, TValue>({
 
   return (
     <div className="rounded-md border">
-      <Table>
+      <Table className="dark:bg-stone-900">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className="dark:text-gray-500">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -58,6 +58,7 @@ export function DataTable<PurchaseType, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                className="dark:text-gray-200"
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell

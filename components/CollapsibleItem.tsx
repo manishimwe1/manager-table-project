@@ -35,7 +35,7 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
     api.product.getProduct,
     user?._id ? { userId: user._id } : "skip"
   );
-  const dataByDate: PurchaseType[] | undefined = useQuery(
+  const dataByDate: ProductType[] | undefined = useQuery(
     api.product.getProductByDate,
     { date: selectedDate || 0 }
   );
@@ -94,7 +94,7 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
               Urutonde rw'ibyaranguwe {getTranslatedDay(date)}
               <div className="lg:flex items-center justify-end lg:gap-3 gap-1 hidden">
                 <p className="font-semibold text-gray-800 dark:text-gray-50 italic text-xs uppercase flex justify-end items-center gap-1">
-                  Ideni ririmo:{" "}
+                  Ideni ufitemo:{" "}
                   <span className="text-lg ml-2 text-red-300">
                     {items
                       ?.reduce((a, item) => a + (item.uzishyuraAngahe || 0), 0)
@@ -114,26 +114,17 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
             </CollapsibleTrigger>
             <CollapsibleContent
               className={cn(
-                "flex flex-col h-fit w-full ",
+                "flex flex-col h-fit w-full mt-2 lg:mt-4",
                 openState[date]
-                  ? "bg-blue-50/20 rounded-lg transition-all duration-200 "
+                  ? "bg-blue-50/20 dark:bg-stone-900 rounded-lg transition-all duration-200 "
                   : "rotate-0"
               )}
             >
-              <div className="flex items-center gap-2 py-2 justify-end">
-                <p className="font-bold pr-10">
+              <div className="flex items-center gap-2  justify-center lg:justify-end px-4 ">
+                <p className="lg:font-bold pr-10 text-nowrap text-xs lg:text-sm dark:text-gray-200">
                   Byose hamwe by'aranguwe:{" "}
                   <span className="text-lg ml-2 text-blue-800">
                     {items?.length}
-                  </span>
-                </p>
-                <p className="font-bold pr-10">
-                  Ideni ufite:{" "}
-                  <span className="text-lg ml-2 text-red-300">
-                    {items?.reduce(
-                      (a, item) => a + (item.uzishyuraAngahe || 0),
-                      0
-                    )}
                   </span>
                 </p>
               </div>

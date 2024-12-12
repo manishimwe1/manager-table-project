@@ -7,7 +7,7 @@ import { DataTable } from "@/components/ibyaranguwe/DataTable";
 import SearchBox from "@/components/SearchBox";
 import SkeletonLoader from "@/components/SkeletonLoader";
 import { api } from "@/convex/_generated/api";
-import { PurchaseType } from "@/types";
+import { ProductType, PurchaseType } from "@/types";
 import { useQuery } from "convex/react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
@@ -29,7 +29,7 @@ const StockPage = () => {
   const user = useQuery(api.user.getUserIndb, {
     email: userId?.email ?? undefined,
   });
-  const data: PurchaseType[] | undefined = useQuery(api.product.getProduct, {
+  const data: ProductType[] | undefined = useQuery(api.product.getProduct, {
     userId: user?._id,
   });
 
@@ -39,9 +39,9 @@ const StockPage = () => {
       item.igicuruzwa.toLowerCase().includes(searchValue.toLowerCase())
     );
   }, [searchValue, data]);
-
+  console.log(data);
   return (
-    <section className="w-full mt-2 space-y-4">
+    <section className="w-full mt-2 space-y-4 px-2">
       <HeaderSection title="Ibicuruzwa biri muri Stock" />
 
       {data?.length === 0 ? (

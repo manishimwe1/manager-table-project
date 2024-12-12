@@ -2,9 +2,8 @@
 
 import { Id } from "@/convex/_generated/dataModel";
 import { formatReadableDate } from "@/lib/utils";
-import { Client, PurchaseType } from "@/types";
+import { Client } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "../ui/badge";
 
 import React from "react";
 import DisplayBadge from "../DisplayBadge";
@@ -56,10 +55,12 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: "productId",
-    header: "Ukonyigurisha",
+    header: "ukonyigurishaKuriDetail",
     cell: ({ row }) => {
-      const ukonyigurisha = row.getValue("productId") as Id<"product">;
-      return <ShowUkonyigurishije productId={ukonyigurisha} />;
+      const ukonyigurishaKuriDetail = row.getValue(
+        "productId"
+      ) as Id<"product">;
+      return <ShowUkonyigurishije productId={ukonyigurishaKuriDetail} />;
     },
   },
   {

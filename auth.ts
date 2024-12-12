@@ -270,8 +270,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     // Redirect handling with logging
     async redirect({ url, baseUrl }) {
-      logger.info("Redirect", `Attempting redirect: ${url}, Base: ${baseUrl}`);
-
       try {
         // Ensure redirect is within the same domain
         if (url.startsWith("/")) return `${baseUrl}${url}`;

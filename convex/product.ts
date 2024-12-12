@@ -11,10 +11,12 @@ export const createTask = mutation({
     ingano: v.number(),
     uzishyuraAngahe: v.number(),
     status: v.boolean(),
-    ukonyigurisha: v.number(),
+    ukonyigurishaKuriDetailKuriDetail: v.number(),
     inyungu: v.number(),
     ndanguyeZingahe: v.number(),
     userId: v.id("user"),
+    ibyoUranguyeType: v.string(),
+    byoseHamwe: v.number(),
   },
   handler: async (ctx, args) => {
     console.log(args.userId, "userID..............");
@@ -26,9 +28,11 @@ export const createTask = mutation({
       ingano: args.ingano,
       uzishyuraAngahe: args.uzishyuraAngahe,
       status: args.status,
-      ukonyigurisha: args.ukonyigurisha,
+      ukonyigurishaKuriDetailKuriDetail: args.ukonyigurishaKuriDetailKuriDetail,
       inyungu: args.inyungu,
       ndanguyeZingahe: args.ndanguyeZingahe,
+      ibyoUranguyeType: args.ibyoUranguyeType,
+      byoseHamwe: args.byoseHamwe,
     });
     if (!newProduct) {
       return new ConvexError("SOMETHING WENT WRONNG WHILE CREATING ");
@@ -87,9 +91,11 @@ export const updateProduct = mutation({
       ikiranguzo: v.optional(v.number()),
       uzishyuraAngahe: v.optional(v.number()),
       status: v.optional(v.boolean()),
-      ukonyigurisha: v.optional(v.number()),
+      ukonyigurishaKuriDetailKuriDetail: v.optional(v.number()),
       inyungu: v.optional(v.number()),
       ndanguyeZingahe: v.optional(v.number()),
+      byoseHamwe: v.optional(v.number()),
+      ibyoUranguyeType: v.optional(v.string()),
     }),
   },
 

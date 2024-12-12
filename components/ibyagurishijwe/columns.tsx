@@ -16,7 +16,7 @@ function ShowUkonyiranguza({ productId }: { productId: Id<"product"> }) {
 
   return (
     <p className="text-left">
-      {product ? product.ukonyigurisha.toLocaleString() : 0} Rwf
+      {product ? product.ukonyigurishaKuriDetail.toLocaleString() : 0} Rwf
     </p>
   );
 }

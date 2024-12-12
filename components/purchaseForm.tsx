@@ -15,21 +15,19 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { formSchema } from "@/lib/validations";
-
-import { Loader } from "lucide-react";
-import Link from "next/link";
+import { Loader, Send } from "lucide-react";
 import { redirect, useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
-import { Textarea } from "./ui/textarea";
-import { Checkbox } from "./ui/checkbox";
+import { Dispatch, SetStateAction, useState, useEffect, useMemo } from "react";
 import { Badge } from "./ui/badge";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
 import { ProductType } from "@/types";
 import { useSession } from "next-auth/react";
-// import { toast } from "sonner";
-// import { Textarea } from "./ui/textarea";
+import SelectPurchaseType from "./SelectPurchaseType";
+import SkeletonLoader from "./SkeletonLoader";
+import { Label } from "./ui/label";
+import { useToast } from "@/hooks/use-toast";
 
 export function PurchaseForm({
   setOpen,
@@ -40,78 +38,131 @@ export function PurchaseForm({
   className?: string;
   product: ProductType | null | undefined;
 }) {
-  const [submitting, setsubmitting] = useState(false);
-
-  const [wishyuye, setwishyuye] = useState(product ? product.status : false);
-  const [ntibyishyuye, setntibyishyuye] = useState(
-    product ? product.status : false
-  );
   const session = useSession();
-  const user = session.data?.user;
-  if (!user?.id) redirect("/login");
+  const router = useRouter();
+  const { toast } = useToast();
+
   const createProduct = useMutation(api.product.createTask);
   const updateProduct = useMutation(api.product.updateProduct);
-  const getUser = useQuery(api.user.getUserIndb, { email: user.email! });
-  const router = useRouter();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      igicuruzwa: product ? product.igicuruzwa : "",
-      ikiranguzo: product ? product.ikiranguzo : 0,
-      ingano: product ? product.ingano : 0,
-      birishyuwe: product ? product.status : undefined,
-      ukonyigurisha: product ? product.ukonyigurisha : 0,
-    },
+  const user = session.data?.user;
+  const getUser = useQuery(api.user.getUserIndb, {
+    email: user?.email!,
+    // Add a condition to prevent unnecessary queries
   });
 
+  // State hooks
+  const [submitting, setSubmitting] = useState(false);
+  const [wishyuye, setWishyuye] = useState(false);
+  const [ntibyishyuye, setNtibyishyuye] = useState(false);
+  const [ibyoUranguyeType, setIbyoUranguye] = useState<
+    | "Kuri detail"
+    | "Ibiro"
+    | "Ikesi x 12"
+    | "Ikesi x 20"
+    | "Amakarito"
+    | "Imifuka"
+  >("Kuri detail");
+  const [byoseHamwe, setByoseHamwe] = useState<number>(0);
+
+  // Form initialization
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: useMemo(
+      () => ({
+        igicuruzwa: product ? product.igicuruzwa : "",
+        ikiranguzo: product ? product.ikiranguzo : 0,
+        ikiranguzoKuriDetail: product ? product.ikiranguzo : 0,
+        ingano: product ? product.ingano : 0,
+        birishyuwe: product ? product.status : undefined,
+        ukonyigurishaKuriDetailKuriDetail: product
+          ? product.ukonyigurishaKuriDetailKuriDetail
+          : 0,
+
+        byoseHamwe: byoseHamwe,
+      }),
+      [product, byoseHamwe]
+    ),
+  });
+
+  useEffect(() => {
+    if (product) {
+      setWishyuye(product.status);
+      setNtibyishyuye(!product.status);
+    }
+  }, [product]);
+
+  useEffect(() => {
+    if (ibyoUranguyeType === "Ikesi x 12") {
+      setByoseHamwe(form.getValues("ingano") * 12);
+    } else if (ibyoUranguyeType === "Ikesi x 20") {
+      setByoseHamwe(form.getValues("ingano") * 20);
+    } else {
+      setByoseHamwe(form.getValues("ingano"));
+    }
+  }, [ibyoUranguyeType]);
+
+  if (session.status === "loading") return <SkeletonLoader />;
+  if (!session.data?.user && session.status === "unauthenticated") {
+    redirect("/login");
+  }
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setSubmitting(true);
+    console.log({ values, byoseHamwe, ibyoUranguyeType });
+
     const uzishyuraAngahe =
       Number(form.getValues("ikiranguzo")) * Number(form.getValues("ingano"));
-
     const inyungu =
-      Number(form.getValues("ukonyigurisha")) *
-        Number(form.getValues("ingano")) -
+      Number(form.getValues("ukonyigurishaKuriDetailKuriDetail")) *
+        Number(byoseHamwe) -
       uzishyuraAngahe;
-    setsubmitting(true);
 
     if (product?._id) {
-      updateProduct({
+      await updateProduct({
         id: product._id,
         fields: {
           igicuruzwa: values.igicuruzwa,
           ikiranguzo: values.ikiranguzo,
           ingano: values.ingano,
           status: values.birishyuwe,
-          uzishyuraAngahe: values.birishyuwe ? 0 : uzishyuraAngahe,
-          ukonyigurisha: values.ukonyigurisha,
+          uzishyuraAngahe: uzishyuraAngahe,
+          ukonyigurishaKuriDetailKuriDetail:
+            values.ukonyigurishaKuriDetailKuriDetail,
           inyungu: inyungu,
           ndanguyeZingahe: values.ingano,
+          ibyoUranguyeType: ibyoUranguyeType,
+          byoseHamwe: byoseHamwe,
         },
       });
     } else {
-      createProduct({
+      await createProduct({
         userId: getUser?._id!,
         igicuruzwa: values.igicuruzwa,
         ikiranguzo: values.ikiranguzo,
         ingano: values.ingano,
         status: values.birishyuwe,
-        uzishyuraAngahe: values.birishyuwe ? 0 : uzishyuraAngahe,
-        ukonyigurisha: values.ukonyigurisha,
+        uzishyuraAngahe: uzishyuraAngahe,
+        ukonyigurishaKuriDetailKuriDetail:
+          values.ukonyigurishaKuriDetailKuriDetail,
         inyungu: inyungu,
         ndanguyeZingahe: values.ingano,
+        ibyoUranguyeType: ibyoUranguyeType,
+        byoseHamwe: byoseHamwe,
       });
     }
     setOpen(false);
     form.reset();
-    setsubmitting(false);
-    router.push("/curuza");
+    setSubmitting(false);
+    toast({
+      title: `Wongereye ${values.igicuruzwa} muri stock`,
+      variant: "success",
+    });
   }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 max-w-2xl w-full h-fit transition-all duration-200 delay-500 ease-in-out rounded-md px-2 lg:px-0 py-4 "
+        className="space-y-6 max-w-2xl w-full h-fit transition-all duration-200 delay-500 ease-in-out rounded-md px-2 lg:px-0 py-4 "
       >
         <div
           className={cn(
@@ -122,8 +173,8 @@ export function PurchaseForm({
             control={form.control}
             name="igicuruzwa"
             render={({ field }) => (
-              <FormItem className=" w-full flex-1">
-                <FormLabel className="text-black dark:text-gray-100 text-left ">
+              <FormItem className="w-full flex-1">
+                <FormLabel className="text-black dark:text-gray-100 text-left">
                   Igicuruzwa
                 </FormLabel>
                 <FormControl>
@@ -133,40 +184,60 @@ export function PurchaseForm({
                     {...field}
                   />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="ingano"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-black dark:text-gray-100 text-left ">
-                  Ingano
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Enter product title"
-                    className="text-sm placeholder:text-xs bg-dark-1 dark:bg-stone-900 dark:text-gray-200 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20"
-                    {...field}
-                  />
-                </FormControl>
+          <div className="h-fit flex items-center justify-between w-full gap-2 lg:gap-4 lg:flex-row dark:text-gray-200 bg-background rounded-sm">
+            <FormField
+              control={form.control}
+              name="ingano"
+              render={({ field }) => (
+                <FormItem className="!w-full">
+                  <FormLabel className="text-black dark:text-gray-100 text-left">
+                    Ingano
+                  </FormLabel>
+                  <FormControl className="!w-full">
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      className="text-sm placeholder:text-xs bg-dark-1 dark:bg-stone-900 dark:text-gray-200 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 !w-full"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <div className="w-full ">
+              <SelectPurchaseType
+                ibyoUranguyeType={ibyoUranguyeType}
+                setIbyoUranguye={setIbyoUranguye}
+              />
+            </div>
+          </div>
         </div>
-        <div className="flex items-center justify-between w-full gap-4 flex-col lg:flex-row">
+        <div className="w-full justify-between items-center gap-4">
+          <div className="w-full flex flex-col">
+            <Label className="text-left dark:text-gray-200">Byose hamwe</Label>
+            <Input
+              type="number"
+              placeholder="0"
+              value={byoseHamwe}
+              onChange={() => byoseHamwe}
+              disabled
+              className="text-sm placeholder:text-xs bg-dark-1 dark:bg-stone-900 dark:text-gray-200 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 disabled:!text-black disabled:!bg-blue-100 disabled:dark:!bg-stone-900 disabled:dark:!text-gray-100"
+            />
+          </div>
+        </div>
+        <div className="flex items-center justify-between w-full gap-4">
           <FormField
             control={form.control}
             name="ikiranguzo"
             render={({ field }) => (
-              <FormItem className="w-full ">
-                <FormLabel className="text-black dark:text-gray-100 text-left ">
+              <FormItem className="w-full">
+                <FormLabel className="text-black dark:text-gray-100 text-left">
                   Ikiranguzo
                 </FormLabel>
                 <FormControl>
@@ -178,18 +249,17 @@ export function PurchaseForm({
                     {...field}
                   />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name="ukonyigurisha"
+            name="ukonyigurishaKuriDetailKuriDetail"
             render={({ field }) => (
-              <FormItem className="w-full ">
-                <FormLabel className="text-black dark:text-gray-100 text-left ">
-                  Uko Nyigurisha
+              <FormItem className="w-full">
+                <FormLabel className="text-black dark:text-gray-100 text-left">
+                  Uko Ngurisha detail
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -200,83 +270,69 @@ export function PurchaseForm({
                     {...field}
                   />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-        <div className="flex items-center justify-between w-full gap-4"></div>
-
+        {/* <div className="flex items-center justify-between w-full gap-4">
+          
+        </div> */}
         <div className="flex items-center justify-between w-full gap-4">
           <FormField
             control={form.control}
             name="birishyuwe"
             render={({ field }) => (
-              <FormItem className=" w-full">
-                <FormLabel className="text-black dark:text-gray-100 text-left "></FormLabel>
-                <FormControl className="w-full ">
+              <FormItem className="w-full">
+                <FormLabel className="text-black dark:text-gray-100 text-left">
+                  Ndanguye gute
+                </FormLabel>
+                <FormControl className="w-full">
                   <div className="flex items-center gap-3">
-                    <div
+                    <Badge
                       className={cn(
+                        "w-full rounded-full !p-2 text-sm cursor-pointer",
                         wishyuye
-                          ? "bg-green-400 hover:bg-green-500 py-1 px-2  rounded-full cursor-pointer"
-                          : "bg-gray-400 hover:bg-gray-700 py-1 px-2  rounded-full cursor-pointer"
+                          ? "bg-green-600 hover:bg-green-500 py-1 px-2 dark:text-white"
+                          : "bg-gray-200 dark:bg-stone-900 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100 text-left hover:text-white"
                       )}
+                      onClick={() => {
+                        setNtibyishyuye(false);
+                        setWishyuye(!wishyuye);
+                        field.onChange(true);
+                      }}
                     >
-                      <Badge
-                        className={cn(
-                          wishyuye
-                            ? "bg-green-400 hover:bg-green-500 py-1 px-2 text-white"
-                            : "bg-gray-400 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100 text-left  hover:text-white"
-                        )}
-                        onClick={() => {
-                          setntibyishyuye(false);
-                          setwishyuye(!wishyuye);
-                          field.onChange(true);
-                        }}
-                      >
-                        Ndishyuye
-                      </Badge>
-                    </div>
-                    <div
+                      Nishyuye cash
+                    </Badge>
+                    <Badge
                       className={cn(
+                        "w-full rounded-full !p-2 text-sm cursor-pointer",
                         ntibyishyuye
-                          ? "bg-red-400 hover:bg-red-500 py-1 px-2 rounded-full cursor-pointer"
-                          : "bg-gray-400 hover:bg-gray-700 py-1 px-2 rounded-full cursor-pointer"
+                          ? "bg-red-400 hover:bg-red-500 py-1 px-2 text-white"
+                          : "bg-gray-300 dark:bg-stone-900 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100 text-left hover:text-white"
                       )}
+                      onClick={() => {
+                        setWishyuye(false);
+                        setNtibyishyuye(!ntibyishyuye);
+                        field.onChange(false);
+                      }}
                     >
-                      <Badge
-                        className={cn(
-                          ntibyishyuye
-                            ? "bg-red-400 hover:bg-red-500 py-1 px-2  text-white"
-                            : "bg-gray-400 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100 text-left  hover:text-white"
-                        )}
-                        onClick={() => {
-                          setwishyuye(false);
-                          setntibyishyuye(!ntibyishyuye);
-                          field.onChange(false);
-                        }}
-                      >
-                        Nideni
-                      </Badge>
-                    </div>
+                      Mfashe ideni
+                    </Badge>
                   </div>
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-
         {wishyuye && (
           <FormField
             control={form.control}
             name="uzishyuraAngahe"
             render={({ field }) => (
-              <FormItem className="w-full ">
-                <FormLabel className="text-black dark:text-gray-100 text-left ">
+              <FormItem className="w-full">
+                <FormLabel className="text-black dark:text-gray-100 text-left">
                   Wishyuye
                 </FormLabel>
                 <FormControl>
@@ -291,7 +347,6 @@ export function PurchaseForm({
                     }
                   />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
@@ -302,7 +357,7 @@ export function PurchaseForm({
             control={form.control}
             name="uzishyuraAngahe"
             render={({ field }) => (
-              <FormItem className="w-full ">
+              <FormItem className="w-full">
                 <FormLabel className="text-black dark:text-gray-200">
                   Uzishyura
                 </FormLabel>
@@ -318,7 +373,6 @@ export function PurchaseForm({
                     }
                   />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
@@ -330,13 +384,13 @@ export function PurchaseForm({
             asChild
             type="button"
             onClick={() => setOpen(false)}
-            className="text-white font-bold hover:bg-destructive border border-white/10 bg-destructive hover:transition-all duration-200 hover:ease-in-out "
+            className="text-white font-bold hover:bg-destructive border border-white/10 bg-destructive hover:transition-all duration-200 hover:ease-in-out"
           >
             cancel
           </Button>
           <Button
             type="submit"
-            className="text-white font-bold hover:bg-[#141416] bg-[#212124] "
+            className="text-white font-bold w-full rounded-full capitalize hover:bg-[#141416] bg-[#212124] !py-3 hover:transition-all duration-200 hover:ease-in-out"
             disabled={submitting}
           >
             {submitting ? (
@@ -344,7 +398,10 @@ export function PurchaseForm({
                 <p>Ongera...</p> <Loader className="animate-spin h-5 w-5" />
               </div>
             ) : (
-              <p>Ongera</p>
+              <div className="flex items-center gap-0.5 justify-center">
+                <p>Ongera muri stock</p>
+                <Send className="h-4 w-4" />
+              </div>
             )}
           </Button>
         </div>

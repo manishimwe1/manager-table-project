@@ -42,7 +42,7 @@ export const columns: ColumnDef<TableRowType>[] = [
     header: "Ikiranguzo",
   },
   {
-    accessorKey: "ukonyigurisha",
+    accessorKey: "ukonyigurishaKuriDetail",
     header: "Uko Nyigurisha",
     cell: ({ row }) => {
       const format: Format = {
@@ -50,20 +50,24 @@ export const columns: ColumnDef<TableRowType>[] = [
         compactDisplay: "short",
         roundingMode: "trunc",
       };
-      const ukonyigurisha = row.getValue("ukonyigurisha") as number;
-      return <p>{ukonyigurisha.toLocaleString()} Rwf</p>;
+      const ukonyigurishaKuriDetail = row.getValue(
+        "ukonyigurishaKuriDetail"
+      ) as number;
+      return <p>{ukonyigurishaKuriDetail.toLocaleString()} Rwf</p>;
     },
   },
   {
     accessorKey: "customerName",
     header: "Izina ry'umukiriya",
     cell: ({ row, table }) => {
-      const ukonyigurisha = row.getValue("ukonyigurisha") as number;
+      const ukonyigurishaKuriDetail = row.getValue(
+        "ukonyigurishaKuriDetail"
+      ) as number;
       const rowId = row.getValue("_id") as Id<"product">;
       return (
         <TakeInputValue
           value={"name"}
-          ukonyigurisha={ukonyigurisha}
+          ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
           id={rowId}
           activeRow={row}
         />
@@ -74,13 +78,15 @@ export const columns: ColumnDef<TableRowType>[] = [
     accessorKey: "customerPhone",
     header: "Phone / TIN",
     cell: ({ row }) => {
-      const ukonyigurisha = row.getValue("ukonyigurisha") as number;
+      const ukonyigurishaKuriDetail = row.getValue(
+        "ukonyigurishaKuriDetail"
+      ) as number;
       const rowId = row.getValue("_id") as Id<"product">;
       return (
         <TakeInputValue
           activeRow={row}
           value={"phone"}
-          ukonyigurisha={ukonyigurisha}
+          ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
           id={rowId}
         />
       );
@@ -90,14 +96,16 @@ export const columns: ColumnDef<TableRowType>[] = [
     accessorKey: "arashaka",
     header: "Aratwara z'ingahe",
     cell: ({ row }) => {
-      const ukonyigurisha = row.getValue("ukonyigurisha") as number;
+      const ukonyigurishaKuriDetail = row.getValue(
+        "ukonyigurishaKuriDetail"
+      ) as number;
       const id = row.getValue("_id") as Id<"product">;
 
       return (
         <TakeInputValue
           activeRow={row}
           value={"arashaka"}
-          ukonyigurisha={ukonyigurisha}
+          ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
           id={id}
         />
       );
@@ -107,13 +115,15 @@ export const columns: ColumnDef<TableRowType>[] = [
     accessorKey: "yishyuyeAngahe",
     header: "Arishyura Angahe",
     cell: ({ row }) => {
-      const ukonyigurisha = row.getValue("ukonyigurisha") as number;
+      const ukonyigurishaKuriDetail = row.getValue(
+        "ukonyigurishaKuriDetail"
+      ) as number;
       const id = row.getValue("_id") as Id<"product">;
-      return ukonyigurisha ? (
+      return ukonyigurishaKuriDetail ? (
         <TakeInputValue
           activeRow={row}
           value={"sale"}
-          ukonyigurisha={ukonyigurisha}
+          ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
           id={id}
         />
       ) : (

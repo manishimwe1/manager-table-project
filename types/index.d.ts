@@ -15,7 +15,7 @@ export interface TableRowType {
   igicuruzwa: string;
   ingano: number;
   ikiranguzo: number;
-  ukonyigurisha: number;
+  ukonyigurishaKuriDetail: number;
   customerName?: string;
   customerPhone: number;
   arashaka?: string;
@@ -35,7 +35,7 @@ export interface PurchaseType {
   ingano: number;
   uzishyuraAngahe: number;
   status: boolean;
-  ukonyigurisha: number;
+  ukonyigurishaKuriDetail: number;
   inyungu: number;
   ndanguyeZingahe: number;
 }
@@ -48,7 +48,7 @@ export interface Purchase {
   ingano: number;
   uzishyuraAngahe: number;
   status: boolean;
-  ukonyigurisha: number;
+  ukonyigurishaKuriDetail: number;
   inyungu: number;
 }
 export type ProductType = {
@@ -58,9 +58,13 @@ export type ProductType = {
   ikiranguzo: number;
   ingano: number;
   uzishyuraAngahe: number;
-  ukonyigurisha: number;
   status: boolean;
+  ukonyigurishaKuriDetailKuriDetail: number;
+  byoseHamwe: number;
   inyungu: number;
+  ndanguyeZingahe: number;
+  userId: string;
+  ibyoUranguyeType: string;
 };
 
 export interface Client {
@@ -83,7 +87,7 @@ export interface outOfStock {
   ingano: number;
   uzishyuraAngahe: number;
   status: boolean;
-  ukonyigurisha: number;
+  ukonyigurishaKuriDetail: number;
   inyungu: number;
   ndanguyeZingahe: number;
 }
