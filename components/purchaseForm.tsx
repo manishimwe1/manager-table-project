@@ -96,6 +96,8 @@ export function PurchaseForm({
       setByoseHamwe(form.getValues("ingano") * 12);
     } else if (ibyoUranguyeType === "Ikesi x 20") {
       setByoseHamwe(form.getValues("ingano") * 20);
+    } else if (ibyoUranguyeType === "Kuri detail") {
+      setByoseHamwe(form.getValues("ingano"));
     } else {
       setByoseHamwe(form.getValues("ingano"));
     }

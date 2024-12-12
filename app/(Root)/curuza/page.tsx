@@ -6,34 +6,38 @@ import EmptyPlaceholder from "@/components/EmptyPlaceholder";
 import SearchBox from "@/components/SearchBox";
 import SkeletonLoader from "@/components/SkeletonLoader";
 import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
 import { formatToday, getTranslatedDay } from "@/lib/utils";
 import { ProductType } from "@/types";
 import { useQuery } from "convex/react";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useMemo, useState, useEffect } from "react";
 
 const SalesPage = () => {
-  const [searchValue, setSearchValue] = useState("");
+  const router = useRouter();
   const session = useSession();
+  const [searchValue, setSearchValue] = useState("");
 
   const userId = session.data?.user;
 
-  // Fetch all products
-  const user = useQuery(api.user.getUserIndb, { email: userId?.email! });
-  const data: ProductType[] | undefined = useQuery(api.product.getProduct, {
-    userId: user?._id!,
+  // Always call hooks in the same order
+  const user = useQuery(api.user.getUserIndb, {
+    email: userId?.email || "",
   });
 
-  if (session.status === "loading") return <SkeletonLoader />;
+  const data: ProductType[] | undefined = useQuery(api.product.getProduct, {
+    userId: user?._id as Id<"user">,
+  });
 
-  // Handle unauthenticated state
-  if (!userId) {
-    redirect("/login");
-    return null; // Ensure React knows the component renders nothing
-  }
-  // Filter data based on search input
+  useEffect(() => {
+    // Handle unauthenticated state
+    if (session.status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [session.status, router]);
+
   const filteredData = useMemo(() => {
     if (!searchValue) return data;
     return data?.filter((item) =>
@@ -41,7 +45,12 @@ const SalesPage = () => {
     );
   }, [searchValue, data]);
 
-  // Handle cases where data is empty or undefined
+  // Early return for loading state
+  if (session.status === "loading") {
+    return <SkeletonLoader />;
+  }
+
+  // Handle cases where data is loading or empty
   if (!data) {
     return <Loader2 className="animate-spin mx-auto my-20" />;
   }
@@ -62,26 +71,23 @@ const SalesPage = () => {
         title={`Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())}`}
       >
         <div className="w-full flex items-center justify-end">
-          <div className="flex justify-end items-end gap-4 py-4 w-[600px]">
-            {/* Search Input */}
+          <div className="flex justify-end items-end gap-4 p-4 w-[600px]">
             <SearchBox
               searchValue={searchValue}
               setSearchValue={setSearchValue}
             />
-            <p className="w-fit whitespace-nowrap text-sm flex justify-end items-center text-blue-700 font-bold pr-10">
-              Number of items:{" "}
+            <p className="w-fit whitespace-nowrap text-sm md:flex justify-end items-center text-blue-700 font-bold pr-10 hidden ">
+              Byose hamwe:{" "}
               <span className="text-lg ml-2">{filteredData?.length}</span>
             </p>
           </div>
         </div>
-        {/* Data Display */}
         <div>
           {filteredData && filteredData.length > 0 ? (
-            //@ts-ignore
             <DataComponents dataByDate={filteredData} />
           ) : (
             <p className="text-center text-gray-500">
-              Nta bicuruzwa bibonetse.
+              Nta bicuruzwa biri muri stock.
             </p>
           )}
         </div>

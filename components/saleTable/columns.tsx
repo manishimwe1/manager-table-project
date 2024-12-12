@@ -17,11 +17,6 @@ export const columns: ColumnDef<TableRowType>[] = [
     }, // Hidden column for internal use
   },
   {
-    accessorKey: "_creationTime",
-    header: "",
-    cell: () => null, // Hidden column for internal use
-  },
-  {
     accessorKey: "igicuruzwa",
     header: "Igicuruzwa",
     cell: ({ row }) => {
@@ -30,30 +25,76 @@ export const columns: ColumnDef<TableRowType>[] = [
     },
   },
   {
+    accessorKey: "byoseHamwe",
+    header: undefined,
+    cell: () => undefined,
+  },
+  {
     accessorKey: "ingano",
-    header: "Muri Stock",
+    header: () => {
+      return <p className="text-nowrap">Muri Stock</p>;
+    },
     cell: ({ row }) => {
       const ingano = row.getValue("ingano") as number;
-      return <p>{ingano}</p>;
+      const byoseHamwe = row.getValue("byoseHamwe") as number;
+      const productType = row.getValue("ibyoUranguyeType") as string;
+      return (
+        <>
+          {productType === "Ikesi x 12" || "Ikesi x 20" ? (
+            <p>
+              <span className="text-[12px] mr-1">amacupa</span>
+              {byoseHamwe}
+            </p>
+          ) : (
+            ingano
+          )}
+        </>
+      );
     },
+  },
+  {
+    accessorKey: "ibyoUranguyeType",
+    header: undefined,
+    cell: () => undefined,
   },
   {
     accessorKey: "ikiranguzo",
     header: "Ikiranguzo",
+    cell: ({ row }) => {
+      const ikiranguzo = row.getValue("ikiranguzo") as number;
+      const productType = row.getValue("ibyoUranguyeType") as string;
+      return (
+        <>
+          {productType === "Ikesi x 12" || "Ikesi x 20" ? (
+            <p className="text-left text-nowrap">
+              {ikiranguzo.toLocaleString()} Rwf{" "}
+              <span className="text-[11px] mr-1">Kw'ikesi</span>
+            </p>
+          ) : (
+            <span>{ikiranguzo.toLocaleString()} Rwf</span>
+          )}
+        </>
+      );
+    },
   },
   {
     accessorKey: "ukonyigurishaKuriDetail",
-    header: "Uko Nyigurisha",
+    header: "Uko Ngurisha",
     cell: ({ row }) => {
-      const format: Format = {
-        notation: "compact",
-        compactDisplay: "short",
-        roundingMode: "trunc",
-      };
-      const ukonyigurishaKuriDetail = row.getValue(
-        "ukonyigurishaKuriDetail"
-      ) as number;
-      return <p>{ukonyigurishaKuriDetail.toLocaleString()} Rwf</p>;
+      const iden = row.getValue("ukonyigurishaKuriDetail") as number;
+      const productType = row.getValue("ibyoUranguyeType") as string;
+      return (
+        <>
+          {productType === "Ikesi x 12" || "Ikesi x 20" ? (
+            <p className="text-left text-nowrap">
+              {iden.toLocaleString()} Rwf{" "}
+              <span className="text-[11px] mr-1">Kw'icupa</span>
+            </p>
+          ) : (
+            <span>{iden.toLocaleString()} Rwf</span>
+          )}
+        </>
+      );
     },
   },
   {
@@ -113,7 +154,7 @@ export const columns: ColumnDef<TableRowType>[] = [
   },
   {
     accessorKey: "yishyuyeAngahe",
-    header: "Arishyura Angahe",
+    header: "Yishyura Angahe",
     cell: ({ row }) => {
       const ukonyigurishaKuriDetail = row.getValue(
         "ukonyigurishaKuriDetail"
@@ -133,7 +174,7 @@ export const columns: ColumnDef<TableRowType>[] = [
   },
   {
     accessorKey: "status",
-    header: "Yishyuye",
+    header: "Afashe ideni",
     cell: ({ row }) => {
       const id = row.getValue("_id") as Id<"product">;
       const stock = row.getValue("ingano") as number;

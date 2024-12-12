@@ -36,7 +36,7 @@ const CollapsibleComponents = ({
             )}
           />
         </CollapsibleTrigger>
-        <CollapsibleContent className="flex flex-col bg-blue-50/20 rounded-lg mt-4">
+        <CollapsibleContent className="flex flex-col bg-blue-50/20 dark:bg-stone-900 rounded-lg mt-4">
           {subtitle && (
             <p className="w-full text-sm flex justify-end items-center text-blue-700 font-bold pr-10">
               {subtitle}:{" "}

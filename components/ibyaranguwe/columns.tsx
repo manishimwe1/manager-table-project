@@ -60,7 +60,6 @@ export const columns: ColumnDef<ProductType>[] = [
     cell: ({ row }) => {
       const ingano = row.getValue("ingano") as number;
       const byoseHamwe = row.getValue("byoseHamwe") as number;
-      const naranguye = row.getValue("ndanguyeZingahe") as number;
       const productType = row.getValue("ibyoUranguyeType") as string;
       return (
         <>
