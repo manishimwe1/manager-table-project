@@ -69,7 +69,7 @@ export function DataTable<TableRowType, TValue>({
                 data-state={row.getIsSelected() && "selected"}
                 className={cn(
                   row.getIsSelected() &&
-                    "dark:!bg-gray-500 !bg-blue-100 text-black/90 dark:text-gray-100"
+                    "dark:!bg-stone-700 !bg-blue-100 text-black/90 dark:text-gray-100"
                 )}
               >
                 {row.getVisibleCells().map((cell) => (

@@ -10,7 +10,7 @@ const DisplayBadge = ({
   bishyuye?: boolean;
 }) => {
   return (
-    <div className="text-center">
+    <div className="text-right">
       {" "}
       <Badge
         className={cn(

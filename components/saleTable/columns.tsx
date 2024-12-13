@@ -21,7 +21,7 @@ export const columns: ColumnDef<TableRowType>[] = [
     header: "Igicuruzwa",
     cell: ({ row }) => {
       const igicuruzwa = row.getValue("igicuruzwa") as string;
-      return <p>{igicuruzwa}</p>;
+      return <p className="text-nowrap">{igicuruzwa}</p>;
     },
   },
   {
@@ -35,20 +35,18 @@ export const columns: ColumnDef<TableRowType>[] = [
       return <p className="text-nowrap">Muri Stock</p>;
     },
     cell: ({ row }) => {
-      const ingano = row.getValue("ingano") as number;
       const byoseHamwe = row.getValue("byoseHamwe") as number;
       const productType = row.getValue("ibyoUranguyeType") as string;
       return (
-        <>
-          {productType === "Ikesi x 12" || "Ikesi x 20" ? (
-            <p>
-              <span className="text-[12px] mr-1">amacupa</span>
-              {byoseHamwe}
-            </p>
-          ) : (
-            ingano
+        <p className="text-nowrap">
+          {productType === "Ikesi x 12" && (
+            <span className="text-[12px] mr-1">amacupa </span>
           )}
-        </>
+          {productType === "Ikesi x 20" && (
+            <span className="text-[12px] mr-1">amacupa </span>
+          )}
+          {byoseHamwe}
+        </p>
       );
     },
   },
@@ -64,16 +62,15 @@ export const columns: ColumnDef<TableRowType>[] = [
       const ikiranguzo = row.getValue("ikiranguzo") as number;
       const productType = row.getValue("ibyoUranguyeType") as string;
       return (
-        <>
-          {productType === "Ikesi x 12" || "Ikesi x 20" ? (
-            <p className="text-left text-nowrap">
-              {ikiranguzo.toLocaleString()} Rwf{" "}
-              <span className="text-[11px] mr-1">Kw'ikesi</span>
-            </p>
-          ) : (
-            <span>{ikiranguzo.toLocaleString()} Rwf</span>
+        <p className="text-nowrap">
+          {ikiranguzo.toLocaleString()} Rwf{" "}
+          {productType === "Ikesi x 12" && (
+            <span className="text-[12px] mr-1">Kw'ikesi </span>
           )}
-        </>
+          {productType === "Ikesi x 20" && (
+            <span className="text-[12px] mr-1">Kw'ikesi </span>
+          )}
+        </p>
       );
     },
   },
@@ -84,16 +81,15 @@ export const columns: ColumnDef<TableRowType>[] = [
       const iden = row.getValue("ukonyigurishaKuriDetail") as number;
       const productType = row.getValue("ibyoUranguyeType") as string;
       return (
-        <>
-          {productType === "Ikesi x 12" || "Ikesi x 20" ? (
-            <p className="text-left text-nowrap">
-              {iden.toLocaleString()} Rwf{" "}
-              <span className="text-[11px] mr-1">Kw'icupa</span>
-            </p>
-          ) : (
-            <span>{iden.toLocaleString()} Rwf</span>
+        <p className="text-nowrap">
+          {iden.toLocaleString()} Rwf{" "}
+          {productType === "Ikesi x 12" && (
+            <span className="text-[12px] mr-1">Kw'icupa </span>
           )}
-        </>
+          {productType === "Ikesi x 20" && (
+            <span className="text-[12px] mr-1">Kw'icupa </span>
+          )}
+        </p>
       );
     },
   },
@@ -174,11 +170,21 @@ export const columns: ColumnDef<TableRowType>[] = [
   },
   {
     accessorKey: "status",
-    header: "Afashe ideni",
+    header: "Arashyuye",
     cell: ({ row }) => {
+      const byoseHamwe = row.getValue("byoseHamwe") as number;
+      const productType = row.getValue("ibyoUranguyeType") as string;
       const id = row.getValue("_id") as Id<"product">;
       const stock = row.getValue("ingano") as number;
-      return <SellingButton id={id} activeRow={row} stock={stock} />;
+      return (
+        <SellingButton
+          id={id}
+          activeRow={row}
+          stock={stock}
+          productType={productType}
+          byoseHamwe={byoseHamwe}
+        />
+      );
     },
   },
 ];

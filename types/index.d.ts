@@ -23,6 +23,8 @@ export interface TableRowType {
   yishyuyeAngahe?: number;
   status?: boolean;
   arashyuye: boolean;
+  ibyoUranguyeType: string;
+  byoseHamwe: number;
 }
 
 uzishyuraAngahe: 15000;
@@ -59,7 +61,7 @@ export type ProductType = {
   ingano: number;
   uzishyuraAngahe: number;
   status: boolean;
-  ukonyigurishaKuriDetailKuriDetail: number;
+  ukonyigurishaKuriDetail: number;
   byoseHamwe: number;
   inyungu: number;
   ndanguyeZingahe: number;

@@ -17,13 +17,17 @@ import SkeletonLoader from "./SkeletonLoader";
 interface SellingButtonProps {
   id: Id<"product">;
   activeRow: Row<TableRowType>;
-  stock?: number;
+  stock: number;
+  byoseHamwe: number;
+  productType: string;
 }
 
 const SellingButton: React.FC<SellingButtonProps> = ({
   id,
   activeRow,
   stock,
+  byoseHamwe,
+  productType,
 }) => {
   const router = useRouter();
   const [ideni, setIdeni] = useState<"Yego" | "Oya" | undefined>();
@@ -47,7 +51,10 @@ const SellingButton: React.FC<SellingButtonProps> = ({
 
   const handleSales = (value: string) => {
     setLoading(!loading);
-    const inStock = stock ? stock : 0;
+    const inStock =
+      productType === "Ikesi x 20" || productType === "Ikesi x 12"
+        ? byoseHamwe
+        : stock;
     if (aratwaraZingahe > inStock) {
       setisSubmiting(true);
       setLoading(false);
@@ -58,7 +65,8 @@ const SellingButton: React.FC<SellingButtonProps> = ({
     }
     if (value === "Yego" && aratwaraZingahe) {
       setIdeni("Yego");
-      newClient({
+
+      console.log({
         productId: id,
         userId: user?._id!,
         name,
@@ -67,13 +75,22 @@ const SellingButton: React.FC<SellingButtonProps> = ({
         yishyuyeAngahe,
         nideni: false,
       });
-      setisSubmiting(true);
-      setLoading(false);
-      activeRow.toggleSelected(false);
-      toast({
-        title: `Ugurishije  ${productId?.igicuruzwa} kuri ${name ?? "unknown"}`,
-        variant: "success",
-      });
+      // newClient({
+      //   productId: id,
+      //   userId: user?._id!,
+      //   name,
+      //   phone: phone ?? 0,
+      //   aratwaraZingahe,
+      //   yishyuyeAngahe,
+      //   nideni: false,
+      // });
+      // setisSubmiting(true);
+      // setLoading(false);
+      // activeRow.toggleSelected(false);
+      // toast({
+      //   title: `Ugurishije  ${productId?.igicuruzwa} kuri ${name ?? "unknown"}`,
+      //   variant: "success",
+      // });
     } else if (
       value === "Oya" &&
       aratwaraZingahe &&
@@ -103,17 +120,17 @@ const SellingButton: React.FC<SellingButtonProps> = ({
       setisSubmiting(true);
       setLoading(false);
       toast({
-        title: "Garagaza ibyo atwaye cg Izina na Telephone by' umukiriya",
+        title:
+          "Garagaza ibyo atwaye cg Izina na Telephone by' umukiriya kubera afashe ideni",
         variant: "destructive",
       });
-      return console.log();
+      return;
     }
     setReset();
-    console.log(name, phone, aratwaraZingahe);
   };
 
   return (
-    <form className="flex space-x-2">
+    <form className="flex">
       <Button
         disabled={!activeRow.getIsSelected() || loading}
         type="button"

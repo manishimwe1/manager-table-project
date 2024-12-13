@@ -21,31 +21,28 @@ export const columns: ColumnDef<ProductType>[] = [
     header: "Igicuruzwa",
     cell: ({ row }) => {
       const igicuruzwa = row.getValue("igicuruzwa") as string;
-      return <p>{igicuruzwa}</p>;
+      return <p className="text-nowrap">{igicuruzwa}</p>;
     },
   },
-  {
-    accessorKey: "ibyoUranguyeType",
-    header: undefined,
-    cell: () => undefined,
-  },
+
   {
     accessorKey: "ndanguyeZingahe",
     header: "Naranguye",
     cell: ({ row }) => {
       const productType = row.getValue("ibyoUranguyeType") as string;
       const ndanguyeZingahe = row.getValue("ndanguyeZingahe") as number;
+
       return (
-        <>
-          {productType === "Ikesi x 12" || "Ikesi x 20" ? (
-            <p>
-              <span className="text-[12px] mr-1">ikesi </span>
-              {ndanguyeZingahe}
-            </p>
-          ) : (
-            ndanguyeZingahe
+        <p>
+          {productType === "Ikesi x 12" && (
+            <span className="text-[12px] mr-1">ikesi </span>
           )}
-        </>
+          {productType === "Ikesi x 20" && (
+            <span className="text-[12px] mr-1">ikesi </span>
+          )}
+
+          {ndanguyeZingahe}
+        </p>
       );
     },
   },
@@ -62,16 +59,16 @@ export const columns: ColumnDef<ProductType>[] = [
       const byoseHamwe = row.getValue("byoseHamwe") as number;
       const productType = row.getValue("ibyoUranguyeType") as string;
       return (
-        <>
-          {productType === "Ikesi x 12" || "Ikesi x 20" ? (
-            <p>
-              <span className="text-[12px] mr-1">amacupa</span>
-              {byoseHamwe}
-            </p>
-          ) : (
-            ingano
+        <p className=" text-nowrap">
+          {productType === "Ikesi x 12" && (
+            <span className="text-[12px] mr-1">amacupa </span>
           )}
-        </>
+          {productType === "Ikesi x 20" && (
+            <span className="text-[12px] mr-1">amacupa </span>
+          )}
+
+          {byoseHamwe}
+        </p>
       );
     },
   },
@@ -82,16 +79,15 @@ export const columns: ColumnDef<ProductType>[] = [
       const ikiranguzo = row.getValue("ikiranguzo") as number;
       const productType = row.getValue("ibyoUranguyeType") as string;
       return (
-        <>
-          {productType === "Ikesi x 12" || "Ikesi x 20" ? (
-            <p className="text-left text-nowrap">
-              {ikiranguzo.toLocaleString()} Rwf{" "}
-              <span className="text-[11px] mr-1">Kw'ikesi</span>
-            </p>
-          ) : (
-            <span>{ikiranguzo.toLocaleString()} Rwf</span>
+        <p className="text-nowrap">
+          {ikiranguzo.toLocaleString()} Rwf{" "}
+          {productType === "Ikesi x 12" && (
+            <span className="text-[12px] mr-1">Kw'ikesi </span>
           )}
-        </>
+          {productType === "Ikesi x 20" && (
+            <span className="text-[12px] mr-1">Kw'ikesi </span>
+          )}
+        </p>
       );
     },
   },
@@ -103,16 +99,15 @@ export const columns: ColumnDef<ProductType>[] = [
       const iden = row.getValue("ukonyigurishaKuriDetail") as number;
       const productType = row.getValue("ibyoUranguyeType") as string;
       return (
-        <>
-          {productType === "Ikesi x 12" || "Ikesi x 20" ? (
-            <p className="text-left text-nowrap">
-              {iden.toLocaleString()} Rwf{" "}
-              <span className="text-[11px] mr-1">Kw'icupa</span>
-            </p>
-          ) : (
-            <span>{iden.toLocaleString()} Rwf</span>
+        <p className="text-nowrap">
+          {iden.toLocaleString()} Rwf{" "}
+          {productType === "Ikesi x 12" && (
+            <span className="text-[12px] mr-1">Kw'icupa </span>
           )}
-        </>
+          {productType === "Ikesi x 20" && (
+            <span className="text-[12px] mr-1">Kw'icupa </span>
+          )}
+        </p>
       );
     },
   },
@@ -123,12 +118,12 @@ export const columns: ColumnDef<ProductType>[] = [
       return <p className="text-nowrap">Ideni mfite</p>;
     },
     cell: ({ row }) => {
-      const iden = row.getValue("uzishyuraAngahe") as string;
-      return <DisplayBadge value={iden} bishyuye={false} />;
+      const iden = row.getValue("uzishyuraAngahe") as number;
+      return <DisplayBadge value={iden} bishyuye={iden === 0 ? true : false} />;
     },
   },
   {
-    accessorKey: "status",
+    accessorKey: "ibyoUranguyeType",
 
     header: () => {
       return <p className="text-nowrap">Ayo maze Gucuruza</p>;

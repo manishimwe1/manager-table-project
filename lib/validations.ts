@@ -18,7 +18,7 @@ export const formSchema = z.object({
   // ukonyigurishaKuriDetail: z.coerce
   //   .number()
   //   .min(1, { message: "ukonyigurishaKuriDetail igomba kuba hejuru ya 0" }),
-  ukonyigurishaKuriDetailKuriDetail: z.coerce
+  ukonyigurishaKuriDetail: z.coerce
     .number()
     .min(1, { message: "ukonyigurishaKuriDetail igomba kuba hejuru ya 0" }),
   // ibyoUranguyeType: z.enum([

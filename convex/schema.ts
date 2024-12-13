@@ -8,7 +8,7 @@ export default defineSchema({
     ingano: v.number(),
     uzishyuraAngahe: v.number(),
     status: v.boolean(),
-    ukonyigurishaKuriDetailKuriDetail: v.number(),
+    ukonyigurishaKuriDetail: v.number(),
     byoseHamwe: v.number(),
     inyungu: v.number(),
     ndanguyeZingahe: v.number(),

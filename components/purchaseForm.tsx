@@ -52,6 +52,7 @@ export function PurchaseForm({
 
   // State hooks
   const [submitting, setSubmitting] = useState(false);
+  const [inganoValue, setInganoValue] = useState(0);
   const [wishyuye, setWishyuye] = useState(false);
   const [ntibyishyuye, setNtibyishyuye] = useState(false);
   const [ibyoUranguyeType, setIbyoUranguye] = useState<
@@ -74,9 +75,7 @@ export function PurchaseForm({
         ikiranguzoKuriDetail: product ? product.ikiranguzo : 0,
         ingano: product ? product.ingano : 0,
         birishyuwe: product ? product.status : undefined,
-        ukonyigurishaKuriDetailKuriDetail: product
-          ? product.ukonyigurishaKuriDetailKuriDetail
-          : 0,
+        ukonyigurishaKuriDetail: product ? product.ukonyigurishaKuriDetail : 0,
 
         byoseHamwe: byoseHamwe,
       }),
@@ -109,13 +108,12 @@ export function PurchaseForm({
   }
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setSubmitting(true);
-    console.log({ values, byoseHamwe, ibyoUranguyeType });
 
-    const uzishyuraAngahe =
-      Number(form.getValues("ikiranguzo")) * Number(form.getValues("ingano"));
+    const uzishyuraAngahe = wishyuye
+      ? 0
+      : Number(form.getValues("ikiranguzo")) * Number(form.getValues("ingano"));
     const inyungu =
-      Number(form.getValues("ukonyigurishaKuriDetailKuriDetail")) *
-        Number(byoseHamwe) -
+      Number(form.getValues("ukonyigurishaKuriDetail")) * Number(byoseHamwe) -
       uzishyuraAngahe;
 
     if (product?._id) {
@@ -127,8 +125,7 @@ export function PurchaseForm({
           ingano: values.ingano,
           status: values.birishyuwe,
           uzishyuraAngahe: uzishyuraAngahe,
-          ukonyigurishaKuriDetailKuriDetail:
-            values.ukonyigurishaKuriDetailKuriDetail,
+          ukonyigurishaKuriDetailKuriDetail: values.ukonyigurishaKuriDetail,
           inyungu: inyungu,
           ndanguyeZingahe: values.ingano,
           ibyoUranguyeType: ibyoUranguyeType,
@@ -143,8 +140,7 @@ export function PurchaseForm({
         ingano: values.ingano,
         status: values.birishyuwe,
         uzishyuraAngahe: uzishyuraAngahe,
-        ukonyigurishaKuriDetailKuriDetail:
-          values.ukonyigurishaKuriDetailKuriDetail,
+        ukonyigurishaKuriDetail: values.ukonyigurishaKuriDetail,
         inyungu: inyungu,
         ndanguyeZingahe: values.ingano,
         ibyoUranguyeType: ibyoUranguyeType,
@@ -153,6 +149,8 @@ export function PurchaseForm({
     }
     setOpen(false);
     form.reset();
+    setWishyuye(false);
+    setNtibyishyuye(false);
     setSubmitting(false);
     toast({
       title: `Wongereye ${values.igicuruzwa} muri stock`,
@@ -205,6 +203,12 @@ export function PurchaseForm({
                       placeholder="0"
                       className="text-sm placeholder:text-xs bg-dark-1 dark:bg-stone-900 dark:text-gray-200 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 !w-full"
                       {...field}
+                      onChange={(e) => {
+                        form.setValue("ingano", Number(e.target.value));
+                        if (ibyoUranguyeType === "Kuri detail") {
+                          setByoseHamwe(Number(e.target.value));
+                        }
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -257,7 +261,7 @@ export function PurchaseForm({
           />
           <FormField
             control={form.control}
-            name="ukonyigurishaKuriDetailKuriDetail"
+            name="ukonyigurishaKuriDetail"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel className="text-black dark:text-gray-100 text-left">
@@ -396,7 +400,7 @@ export function PurchaseForm({
             disabled={submitting}
           >
             {submitting ? (
-              <div className="flex items-center gap-2 w-full">
+              <div className="flex items-center gap-0.5 justify-center">
                 <p>Ongera...</p> <Loader className="animate-spin h-5 w-5" />
               </div>
             ) : (

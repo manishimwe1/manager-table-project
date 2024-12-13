@@ -29,7 +29,10 @@ const RanguraComponents = () => {
     <section className="w-full overflow-hidden min-h-screen ">
       <div className="w-full h-full flex gap-2 lg:gap-4">
         <div className="w-full h-full flex flex-col">
-          <HeaderSection title="Ogera ibicuruzwa muri Stock" />
+          <HeaderSection
+            title="Ogera ibicuruzwa muri Stock"
+            className="flex items-center justify-center w-full"
+          />
           <div className="w-full  flex items-center justify-center ">
             <div className="w-full flex items-center justify-center">
               <PurchaseForm

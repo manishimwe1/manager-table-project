@@ -47,7 +47,7 @@ const SelectPurchaseType = ({
           className="w-full dark:text-gray-200 dark:bg-stone-900"
           id="purchaseType"
         >
-          <SelectValue placeholder="Kuri detail" />
+          <SelectValue placeholder="Hitamo" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="Kuri detail">Kuri detail</SelectItem>
