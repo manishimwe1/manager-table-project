@@ -66,7 +66,7 @@ const SalesPage = () => {
   }
 
   return (
-    <section className="flex flex-col w-full h-full">
+    <section className="flex flex-col w-full h-full lg:pl-0 ">
       <CollapsibleComponents
         title={`Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())}`}
       >

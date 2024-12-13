@@ -1,7 +1,5 @@
-import { auth } from "@/auth";
 import { internalMutation, mutation, query } from "./_generated/server";
 import { ConvexError, v } from "convex/values";
-import { redirect } from "next/navigation";
 
 // Create a new task with the given text
 export const createTask = mutation({
@@ -151,19 +149,33 @@ export const getProductById = query({
 });
 
 export const updateProdut = internalMutation({
-  args: { id: v.id("product"), value: v.number() },
+  args: { id: v.id("product"), value: v.number(), productType: v.string() },
   handler: async (ctx, args) => {
     const { id } = args;
     const product = await ctx.db.get(id);
     if (!product) {
       new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT");
     }
-    await ctx.db.patch(id, {
-      ingano: Number(product?.ingano) - args.value,
-      inyungu: product?.inyungu,
-    });
+    console.log(args.productType);
+
+    if (
+      args.productType === "Ikesi x 12" ||
+      args.productType === "Ikesi x 20"
+    ) {
+      return await ctx.db.patch(id, {
+        byoseHamwe: Number(product?.byoseHamwe) - args.value,
+        inyungu: product?.inyungu,
+      });
+    } else if (args.productType === "Kuri detail") {
+      return await ctx.db.patch(id, {
+        ingano: Number(product?.ingano) - args.value,
+        byoseHamwe: Number(product?.byoseHamwe) - args.value,
+        inyungu: product?.inyungu,
+      });
+    }
   },
 });
+
 export const getProdutByName = query({
   args: { value: v.string() },
   handler: async (ctx, args) => {

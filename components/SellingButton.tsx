@@ -32,7 +32,7 @@ const SellingButton: React.FC<SellingButtonProps> = ({
   const router = useRouter();
   const [ideni, setIdeni] = useState<"Yego" | "Oya" | undefined>();
   const [loading, setLoading] = useState(false);
-  const newClient = useMutation(api.clientName.createClient);
+
   const {
     name,
     phone,
@@ -48,6 +48,7 @@ const SellingButton: React.FC<SellingButtonProps> = ({
 
   const user = useQuery(api.user.getUserIndb, { email: userId?.email! });
   const productId = useQuery(api.product.getProductById, { id: id });
+  const newClient = useMutation(api.clientName.createClient);
 
   const handleSales = (value: string) => {
     setLoading(!loading);
@@ -65,8 +66,7 @@ const SellingButton: React.FC<SellingButtonProps> = ({
     }
     if (value === "Yego" && aratwaraZingahe) {
       setIdeni("Yego");
-
-      console.log({
+      newClient({
         productId: id,
         userId: user?._id!,
         name,
@@ -74,23 +74,15 @@ const SellingButton: React.FC<SellingButtonProps> = ({
         aratwaraZingahe,
         yishyuyeAngahe,
         nideni: false,
+        productType,
       });
-      // newClient({
-      //   productId: id,
-      //   userId: user?._id!,
-      //   name,
-      //   phone: phone ?? 0,
-      //   aratwaraZingahe,
-      //   yishyuyeAngahe,
-      //   nideni: false,
-      // });
-      // setisSubmiting(true);
-      // setLoading(false);
-      // activeRow.toggleSelected(false);
-      // toast({
-      //   title: `Ugurishije  ${productId?.igicuruzwa} kuri ${name ?? "unknown"}`,
-      //   variant: "success",
-      // });
+      setisSubmiting(true);
+      setLoading(false);
+      activeRow.toggleSelected(false);
+      toast({
+        title: `Ugurishije  ${productId?.igicuruzwa} kuri ${name ?? "unknown"}`,
+        variant: "success",
+      });
     } else if (
       value === "Oya" &&
       aratwaraZingahe &&
@@ -107,6 +99,7 @@ const SellingButton: React.FC<SellingButtonProps> = ({
         aratwaraZingahe,
         yishyuyeAngahe,
         nideni: true,
+        productType,
       });
       setisSubmiting(true);
       setLoading(false);

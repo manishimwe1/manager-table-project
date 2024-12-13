@@ -103,6 +103,7 @@ export const columns: ColumnDef<TableRowType>[] = [
       const rowId = row.getValue("_id") as Id<"product">;
       return (
         <TakeInputValue
+          className="w-[120px] text-nowrap"
           value={"name"}
           ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
           id={rowId}
@@ -121,6 +122,7 @@ export const columns: ColumnDef<TableRowType>[] = [
       const rowId = row.getValue("_id") as Id<"product">;
       return (
         <TakeInputValue
+          className="w-[120px] text-nowrap"
           activeRow={row}
           value={"phone"}
           ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
@@ -140,6 +142,7 @@ export const columns: ColumnDef<TableRowType>[] = [
 
       return (
         <TakeInputValue
+          className="w-[90px] text-nowrap"
           activeRow={row}
           value={"arashaka"}
           ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
@@ -158,6 +161,7 @@ export const columns: ColumnDef<TableRowType>[] = [
       const id = row.getValue("_id") as Id<"product">;
       return ukonyigurishaKuriDetail ? (
         <TakeInputValue
+          className="w-[90px] text-nowrap"
           activeRow={row}
           value={"sale"}
           ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}

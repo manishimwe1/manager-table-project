@@ -85,7 +85,7 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
           <Collapsible>
             <CollapsibleTrigger
               className={cn(
-                "flex items-center justify-between w-full text-lg border-b-2 border-blue-200 dark:border-stone-700 shadow-sm text-gray-800 dark:text-gray-200 shadow-background py-2 px-3 rounded-xl bg-background  dark:shadow-black/70 text-nowrap",
+                "flex items-center justify-between w-full text-lg border-b-2 border-blue-200 dark:border-stone-700 shadow-sm text-gray-800 dark:text-gray-200 shadow-background py-2 px-3 rounded-xl bg-background  dark:shadow-black/70",
                 className ? className : "w-full ",
                 openState[date] ? "text-blue-300" : "text-black"
               )}

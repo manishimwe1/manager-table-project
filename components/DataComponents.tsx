@@ -15,7 +15,7 @@ const DataComponents = ({
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   return (
-    <div className="  py-3 h-full ">
+    <div className=" w-full  py-3 h-full ">
       {dataByDate ? (
         <>
           {

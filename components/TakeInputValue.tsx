@@ -6,18 +6,21 @@ import { ProductType, TableRowType } from "@/types";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Row } from "@tanstack/react-table";
+import { cn } from "@/lib/utils";
 
 const TakeInputValue = ({
   value,
   ukonyigurishaKuriDetail,
   activeRow,
   stock,
+  className,
 }: {
-  value?: "arashaka" | "sale" | "name" | "phone"; // Indicates the type of input field
-  ukonyigurishaKuriDetail: number; // Unit price for calculation
+  value?: "arashaka" | "sale" | "name" | "phone";
+  ukonyigurishaKuriDetail: number;
   id: Id<"product">;
   stock?: number;
   activeRow: Row<TableRowType>;
+  className: string;
 }) => {
   // Local states for managing inputs
 
@@ -71,12 +74,11 @@ const TakeInputValue = ({
         break;
     }
   };
-  console.log(isSubmiting);
 
   return (
     <Input
       disabled={value === "sale" ? true : false}
-      className="w-[120px] px-1 placeholder:text-xs"
+      className={cn(" px-1 placeholder:text-xs", className)}
       type={value === "name" ? "text" : "number"}
       value={
         value === "sale" && activeRow.getIsSelected()
