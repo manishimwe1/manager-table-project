@@ -58,6 +58,7 @@ export const getProduct = query({
     return Product;
   },
 });
+
 export const getProductOutOfStock = query({
   args: { userId: v.optional(v.id("user")) },
   handler: async (ctx, args) => {
@@ -188,5 +189,46 @@ export const getProdutByName = query({
       return [];
     }
     return product;
+  },
+});
+
+export const getProductByProductType = query({
+  args: { userId: v.optional(v.id("user")) },
+  handler: async (ctx, args) => {
+    const Product = await ctx.db
+      .query("product")
+      .withIndex("by_userId", (q) => q.eq("userId", args.userId!))
+      .filter((q) => q.gt(q.field("ingano"), 0))
+      .filter((q) => q.neq(q.field("ibyoUranguyeType"), "Kuri detail"))
+      .order("desc")
+      .collect();
+
+    if (!Product) {
+      console.log(
+        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT")
+      );
+      return [];
+    }
+    return Product;
+  },
+});
+export const getProductByKuriDetail = query({
+  args: { userId: v.optional(v.id("user")) },
+  handler: async (ctx, args) => {
+    const Product = await ctx.db
+      .query("product")
+      .withIndex("by_userId", (q) => q.eq("userId", args.userId!))
+      .filter((q) => q.gt(q.field("ingano"), 0))
+      .filter((q) => q.eq(q.field("ibyoUranguyeType"), "Kuri detail"))
+      .order("desc")
+      .collect();
+
+    if (!Product) {
+      console.log(
+        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT")
+      );
+      return [];
+    }
+    return Product;
   },
 });
