@@ -1,5 +1,6 @@
 "use client";
 
+import AddSereveye from "@/components/AddSereveye";
 import CollapsibleComponents from "@/components/collapsibleComponents";
 import DataComponents from "@/components/DataComponents";
 import EmptyPlaceholder from "@/components/EmptyPlaceholder";
@@ -12,7 +13,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { formatToday, getTranslatedDay } from "@/lib/utils";
 import { ProductType } from "@/types";
 import { useQuery } from "convex/react";
-import { Loader2 } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useEffect, ReactNode } from "react";
@@ -21,10 +22,10 @@ const SalesPage: React.FC = () => {
   const router = useRouter();
   const session = useSession();
   const [searchValue, setSearchValue] = useState<string>("");
-
-  // States for managing the open/collapse status of collapsible components
   const [isDetailOpen, setIsDetailOpen] = useState<boolean>(false);
-  const [isBulkOpen, setIsBulkOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [tableOpen, setTableOpen] = useState<boolean>(false);
+  const [addSereveye, setAddSereveye] = useState<number>(0);
 
   const userId = session.data?.user;
 
@@ -90,24 +91,49 @@ const SalesPage: React.FC = () => {
     title: string,
     data: ProductType[] | undefined,
     isOpen: boolean,
-    toggleOpen: () => void
+    toggleOpen: () => void,
+    isOpenInput?: boolean,
+    setIsOpenInput?: () => void
   ): ReactNode => (
     <CollapsibleComponents title={title} isOpen={isOpen} setIsOpen={toggleOpen}>
-      <div className="w-full flex items-center justify-end">
-        <div className="flex justify-end items-end gap-4 p-4 w-[600px]">
-          <SearchBox
-            searchValue={searchValue}
-            setSearchValue={setSearchValue}
-          />
-          <p className="w-fit whitespace-nowrap text-sm md:flex justify-end items-center text-blue-700 font-bold pr-10 hidden">
-            Byose hamwe:{" "}
-            <span className="text-lg ml-2">{filteredData?.length || 0}</span>
-          </p>
+      <div className="w-full flex items-center flex-col justify-end">
+        <div className="flex items-center w-full justify-end ">
+          <div className="flex justify-end items-end gap-4 p-4 w-[600px] ">
+            <SearchBox
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+            />
+            <p className="w-fit whitespace-nowrap text-sm md:flex justify-end items-center text-blue-700 font-bold pr-10 hidden">
+              Byose hamwe:{" "}
+              <span className="text-lg ml-2">{filteredData?.length || 0}</span>
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col gap-1 md:gap-2 lg:flex-row w-full h-full justify-between">
+          <div className="w-full h-full flex flex-col gap-2">
+            <div className="border w-full h-full ">
+              <AddSereveye
+                tableOpen={tableOpen}
+                setTableOpen={setTableOpen}
+                addSereveye={addSereveye}
+                setAddSereveye={setAddSereveye}
+              />
+            </div>
+            {addSereveye > 0 && (
+              <div className="border w-full h-full ">
+                <AddSereveye
+                  tableOpen={tableOpen}
+                  setTableOpen={setTableOpen}
+                  addSereveye={addSereveye}
+                  setAddSereveye={setAddSereveye}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
-      <div>
-        <DataComponents dataByDate={data} />
-      </div>
+
+      {tableOpen && <DataComponents dataByDate={data} />}
     </CollapsibleComponents>
   );
 
@@ -117,7 +143,7 @@ const SalesPage: React.FC = () => {
   }
 
   if (!data) {
-    return <SkeletonLoader />;
+    return <Loader2 className="animate-spin mx-auto my-20" />;
   }
 
   if (data.length === 0) {
@@ -133,16 +159,20 @@ const SalesPage: React.FC = () => {
   // Render multiple collapsible items with toggling functionality
   return (
     <section className="flex flex-col w-full h-full lg:pl-0">
+      {hasDetailProducts &&
+        renderCollapsible(
+          `Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())} (Kuri Detail)`,
+          productByDetail,
+          isDetailOpen,
+          () => setIsDetailOpen(!isDetailOpen)
+        )}
       {hasBulkProducts &&
         renderCollapsible(
           `Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())} (Bulk Products)`,
           productByType,
-          isBulkOpen,
-          () => setIsBulkOpen(!isBulkOpen)
+          isOpen,
+          () => setIsOpen(!isOpen)
         )}
-      <div>
-        <Label>Shyiraho izina ry'umuseriveyi:</Label> <Input />
-      </div>
     </section>
   );
 };
