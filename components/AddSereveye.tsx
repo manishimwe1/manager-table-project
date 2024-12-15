@@ -1,18 +1,28 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { Plus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
+import DataComponents from "./DataComponents";
+import { ProductType } from "@/types";
 
 const AddSereveye = ({
   tableOpen,
   setTableOpen,
   setAddSereveye,
   addSereveye,
+  showRemove,
+  data,
+  index,
 }: {
   tableOpen: boolean;
-  setTableOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setAddSereveye: Dispatch<SetStateAction<number>>;
-  addSereveye: number;
+  setTableOpen: (open: boolean) => void;
+  setAddSereveye: Dispatch<
+    SetStateAction<{ id: number; tableOpen: boolean }[]>
+  >;
+  addSereveye: { id: number; tableOpen: boolean }[];
+  showRemove?: boolean;
+  data: ProductType[] | undefined;
+  index: number;
 }) => {
   return (
     <div className="flex flex-col w-full h-full p-4">
@@ -27,7 +37,8 @@ const AddSereveye = ({
             </Label>
             <Input
               id="name"
-              onFocus={() => setTableOpen(!tableOpen)}
+              onFocus={() => setTableOpen(true)}
+              onBlur={() => setTableOpen(false)}
               className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2  outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
               autoFocus
             />
@@ -43,20 +54,40 @@ const AddSereveye = ({
             </Label>
             <Input
               id="table"
-              onFocus={() => setTableOpen(!tableOpen)}
+              onFocus={() => setTableOpen(true)}
+              onBlur={() => setTableOpen(false)}
               className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2  outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200 "
               autoFocus
             />
           </div>
         </div>
-        <div
-          className=" w-fit h-fit p-2 text-stone-950  text-nowrap text-sm lg:text-lg border-l-2 border-gray-200  bg-gray-100  shadow-md shadow-white dark:shadow-black/70  justify-end items-center rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer group"
-          onClick={() => {
-            setAddSereveye((prevAddSereveye: number) => prevAddSereveye + 1);
-          }}
-        >
-          <Plus className="group-hover:hover:text-stone-500 h-4 w-4" />
+        <div className="flex flex-col lg:flex-row w-fit h-full">
+          <div
+            className=" w-fit h-fit p-1 text-stone-950  text-nowrap text-sm lg:text-lg border-l-2 border-gray-200  bg-gray-100  shadow-md shadow-white dark:shadow-black/70  justify-end items-center rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer group"
+            onClick={() => {
+              setAddSereveye((prev) => [
+                ...prev,
+                { id: prev.length + 1, tableOpen: false },
+              ]);
+            }}
+          >
+            <Plus className="group-hover:hover:text-stone-500 h-4 w-4" />
+          </div>
+          {showRemove && (
+            <div
+              className=" w-fit h-fit p-1 text-stone-950  text-nowrap text-sm lg:text-lg border-l-2 border-gray-200  bg-gray-100  shadow-md shadow-white dark:shadow-black/70  justify-end items-center rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer group"
+              onClick={() => {
+                setAddSereveye((prev) => prev.slice(0, -1));
+              }}
+            >
+              <Minus className="group-hover:hover:text-stone-500 h-4 w-4" />
+            </div>
+          )}
         </div>
+      </div>
+
+      <div className="w-full h-full ">
+        {tableOpen && <DataComponents dataByDate={data} />}
       </div>
     </div>
   );

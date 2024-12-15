@@ -78,7 +78,10 @@ const TakeInputValue = ({
   return (
     <Input
       disabled={value === "sale" ? true : false}
-      className={cn(" px-1 placeholder:text-xs", className)}
+      className={cn(
+        " px-1 placeholder:text-xs border-stone-900 dark:border-stone-500",
+        className
+      )}
       type={value === "name" ? "text" : "number"}
       value={
         value === "sale" && activeRow.getIsSelected()

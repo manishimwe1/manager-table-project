@@ -6,8 +6,6 @@ import DataComponents from "@/components/DataComponents";
 import EmptyPlaceholder from "@/components/EmptyPlaceholder";
 import SearchBox from "@/components/SearchBox";
 import SkeletonLoader from "@/components/SkeletonLoader";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { formatToday, getTranslatedDay } from "@/lib/utils";
@@ -25,7 +23,9 @@ const SalesPage: React.FC = () => {
   const [isDetailOpen, setIsDetailOpen] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [tableOpen, setTableOpen] = useState<boolean>(false);
-  const [addSereveye, setAddSereveye] = useState<number>(0);
+  const [addSereveye, setAddSereveye] = useState<
+    { id: number; tableOpen: boolean }[]
+  >([]);
 
   const userId = session.data?.user;
 
@@ -59,6 +59,28 @@ const SalesPage: React.FC = () => {
     }
   }, [session.status, router]);
 
+  // Memoize the rendering of additional components for performance
+  const renderAddSereveye = useMemo(() => {
+    return addSereveye.map((item, index) => (
+      <AddSereveye
+        key={item.id}
+        index={index}
+        data={data}
+        tableOpen={item.tableOpen}
+        setTableOpen={(open) =>
+          setAddSereveye((prev) =>
+            prev.map((entry, i) =>
+              i === index ? { ...entry, tableOpen: open } : entry
+            )
+          )
+        }
+        addSereveye={addSereveye}
+        setAddSereveye={setAddSereveye}
+        showRemove={true}
+      />
+    ));
+  }, [addSereveye, data]);
+
   // Filter products based on search value
   const filteredData = useMemo(() => {
     if (!searchValue) return data;
@@ -91,14 +113,12 @@ const SalesPage: React.FC = () => {
     title: string,
     data: ProductType[] | undefined,
     isOpen: boolean,
-    toggleOpen: () => void,
-    isOpenInput?: boolean,
-    setIsOpenInput?: () => void
+    toggleOpen: () => void
   ): ReactNode => (
     <CollapsibleComponents title={title} isOpen={isOpen} setIsOpen={toggleOpen}>
       <div className="w-full flex items-center flex-col justify-end">
-        <div className="flex items-center w-full justify-end ">
-          <div className="flex justify-end items-end gap-4 p-4 w-[600px] ">
+        <div className="flex items-center w-full justify-end">
+          <div className="flex justify-end items-end gap-4 p-4 w-[600px]">
             <SearchBox
               searchValue={searchValue}
               setSearchValue={setSearchValue}
@@ -111,29 +131,22 @@ const SalesPage: React.FC = () => {
         </div>
         <div className="flex flex-col gap-1 md:gap-2 lg:flex-row w-full h-full justify-between">
           <div className="w-full h-full flex flex-col gap-2">
-            <div className="border w-full h-full ">
-              <AddSereveye
-                tableOpen={tableOpen}
-                setTableOpen={setTableOpen}
-                addSereveye={addSereveye}
-                setAddSereveye={setAddSereveye}
-              />
-            </div>
-            {addSereveye > 0 && (
-              <div className="border w-full h-full ">
+            <div className=" w-full flex flex-col h-full">
+              {addSereveye.length >= 0 && (
                 <AddSereveye
+                  index={0}
+                  data={data}
                   tableOpen={tableOpen}
                   setTableOpen={setTableOpen}
                   addSereveye={addSereveye}
                   setAddSereveye={setAddSereveye}
                 />
-              </div>
-            )}
+              )}
+            </div>
+            {renderAddSereveye}
           </div>
         </div>
       </div>
-
-      {tableOpen && <DataComponents dataByDate={data} />}
     </CollapsibleComponents>
   );
 
@@ -161,14 +174,14 @@ const SalesPage: React.FC = () => {
     <section className="flex flex-col w-full h-full lg:pl-0">
       {hasDetailProducts &&
         renderCollapsible(
-          `Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())} (Kuri Detail)`,
+          `Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())} `,
           productByDetail,
           isDetailOpen,
           () => setIsDetailOpen(!isDetailOpen)
         )}
       {hasBulkProducts &&
         renderCollapsible(
-          `Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())} (Bulk Products)`,
+          `Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())} `,
           productByType,
           isOpen,
           () => setIsOpen(!isOpen)
