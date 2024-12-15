@@ -14,21 +14,8 @@ import { useSession } from "next-auth/react";
 import SkeletonLoader from "./SkeletonLoader";
 
 // Define props interface
-interface SellingButtonProps {
-  id: Id<"product">;
-  activeRow: Row<TableRowType>;
-  stock: number;
-  byoseHamwe: number;
-  productType: string;
-}
 
-const SellingButton: React.FC<SellingButtonProps> = ({
-  id,
-  activeRow,
-  stock,
-  byoseHamwe,
-  productType,
-}) => {
+const SellingButton = ({}) => {
   const router = useRouter();
   const [ideni, setIdeni] = useState<"Yego" | "Oya" | undefined>();
   const [loading, setLoading] = useState(false);
@@ -40,6 +27,10 @@ const SellingButton: React.FC<SellingButtonProps> = ({
     yishyuyeAngahe,
     setisSubmiting,
     setReset,
+    storeId,
+    productType,
+    byoseHamwe,
+    stock,
   } = useClientInfoStore();
   const session = useSession();
   const userId = session.data?.user;
@@ -47,7 +38,7 @@ const SellingButton: React.FC<SellingButtonProps> = ({
   const { toast } = useToast();
 
   const user = useQuery(api.user.getUserIndb, { email: userId?.email! });
-  const productId = useQuery(api.product.getProductById, { id: id });
+  // const productId = useQuery(api.product.getProductById, { id: storeId });
   const newClient = useMutation(api.clientName.createClient);
 
   const handleSales = (value: string) => {
@@ -66,8 +57,18 @@ const SellingButton: React.FC<SellingButtonProps> = ({
     }
     if (value === "Yego" && aratwaraZingahe) {
       setIdeni("Yego");
-      newClient({
-        productId: id,
+      // newClient({
+      //   productId: storeId,
+      //   userId: user?._id!,
+      //   name,
+      //   phone: phone ?? 0,
+      //   aratwaraZingahe,
+      //   yishyuyeAngahe,
+      //   nideni: false,
+      //   productType,
+      // });
+      console.log({
+        productId: storeId,
         userId: user?._id!,
         name,
         phone: phone ?? 0,
@@ -76,11 +77,12 @@ const SellingButton: React.FC<SellingButtonProps> = ({
         nideni: false,
         productType,
       });
+
       setisSubmiting(true);
       setLoading(false);
-      activeRow.toggleSelected(false);
+      // activeRow.toggleSelected(false);
       toast({
-        title: `Ugurishije  ${productId?.igicuruzwa} kuri ${name ?? "unknown"}`,
+        title: `Ugurishije kuri ${name ?? "unknown"}`,
         variant: "success",
       });
     } else if (
@@ -90,22 +92,32 @@ const SellingButton: React.FC<SellingButtonProps> = ({
       phone !== 0
     ) {
       setIdeni("Oya");
-
-      newClient({
+      console.log({
+        productId: storeId,
         userId: user?._id!,
-        productId: id,
         name,
-        phone,
+        phone: phone ?? 0,
         aratwaraZingahe,
         yishyuyeAngahe,
-        nideni: true,
+        nideni: false,
         productType,
       });
+
+      // newClient({
+      //   userId: user?._id!,
+      //   productId: storeId,
+      //   name,
+      //   phone,
+      //   aratwaraZingahe,
+      //   yishyuyeAngahe,
+      //   nideni: true,
+      //   productType,
+      // });
       setisSubmiting(true);
       setLoading(false);
-      activeRow.toggleSelected(false);
+      // activeRow.toggleSelected(false);
       toast({
-        title: `Ugurishije  ${productId?.igicuruzwa} kuri ${name}`,
+        title: `Ugurishije   kuri ${name}`,
         variant: "success",
       });
       router.refresh();
@@ -125,7 +137,7 @@ const SellingButton: React.FC<SellingButtonProps> = ({
   return (
     <form className="flex">
       <Button
-        disabled={!activeRow.getIsSelected() || loading}
+        disabled={loading}
         type="button"
         onClick={() => {
           handleSales("Yego");
@@ -139,7 +151,7 @@ const SellingButton: React.FC<SellingButtonProps> = ({
         )}
       </Button>
       <Button
-        disabled={!activeRow.getIsSelected() || loading}
+        disabled={loading}
         type="button"
         onClick={() => handleSales("Oya")}
         className="bg-red-400 disabled:bg-gray-500 transition-all duration-150 text-white px-2 py-1 rounded"

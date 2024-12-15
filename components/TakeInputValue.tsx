@@ -7,6 +7,7 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Row } from "@tanstack/react-table";
 import { cn } from "@/lib/utils";
+import { set } from "zod";
 
 const TakeInputValue = ({
   value,
@@ -14,13 +15,18 @@ const TakeInputValue = ({
   activeRow,
   stock,
   className,
+  byoseHamwe,
+  productType,
+  id,
 }: {
-  value?: "arashaka" | "sale" | "name" | "phone";
+  value?: "arashaka" | "sale";
   ukonyigurishaKuriDetail: number;
   id: Id<"product">;
   stock?: number;
   activeRow: Row<TableRowType>;
   className: string;
+  byoseHamwe?: number;
+  productType?: string;
 }) => {
   // Local states for managing inputs
 
@@ -32,10 +38,12 @@ const TakeInputValue = ({
     setAratwaraZingahe,
     setYishyuyeAngahe,
     yishyuyeAngahe,
-    setName,
-    setPhone,
     isSubmiting,
     setisSubmiting,
+    addToStoreId,
+    setproductType,
+    setByoseHamwe,
+    setStock,
   } = useClientInfoStore();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,22 +58,15 @@ const TakeInputValue = ({
           setCalculatedValue(total);
           setYishyuyeAngahe(total);
           setAratwaraZingahe(Number(newValue));
+          addToStoreId(id); // Add product ID to storeId array
+          setproductType(productType as string);
+          setByoseHamwe(byoseHamwe as number);
+          setStock(stock as number);
         }
         break;
 
       case "sale": // Sale amount (calculated based on quantity * unit price)
         setInputValue(calculatedValue);
-
-        break;
-
-      case "name": // Client's name
-        setInputValue(newValue);
-        setName(newValue);
-        break;
-
-      case "phone": // Client's phone or TIN
-        setInputValue(newValue);
-        setPhone(Number(newValue));
         break;
 
       default: // Generic input handling
@@ -82,7 +83,7 @@ const TakeInputValue = ({
         " px-1 placeholder:text-xs border-stone-900 dark:border-stone-500",
         className
       )}
-      type={value === "name" ? "text" : "number"}
+      type={"number"}
       value={
         value === "sale" && activeRow.getIsSelected()
           ? yishyuyeAngahe
@@ -100,19 +101,11 @@ const TakeInputValue = ({
       onFocus={() => {
         activeRow.toggleSelected(true);
         if (isSubmiting) {
-          setInputValue(value === "name" ? "" : value === "phone" ? 0 : 0);
+          setInputValue(0);
           setisSubmiting(false);
         }
       }}
-      placeholder={
-        value === "name"
-          ? "Izina"
-          : value === "phone"
-            ? "Phone / TIN"
-            : value === "sale"
-              ? String(calculatedValue)
-              : ""
-      }
+      min={0}
       max={value === "arashaka" && stock ? stock : undefined}
     />
   );

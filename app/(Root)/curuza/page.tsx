@@ -19,7 +19,7 @@ import { useMemo, useState, useEffect, ReactNode } from "react";
 const SalesPage: React.FC = () => {
   const router = useRouter();
   const session = useSession();
-  const [searchValue, setSearchValue] = useState<string>("");
+
   const [isDetailOpen, setIsDetailOpen] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [tableOpen, setTableOpen] = useState<boolean>(false);
@@ -81,31 +81,22 @@ const SalesPage: React.FC = () => {
     ));
   }, [addSereveye, data]);
 
-  // Filter products based on search value
-  const filteredData = useMemo(() => {
-    if (!searchValue) return data;
-    return data?.filter((item) =>
-      item.igicuruzwa.toLowerCase().includes(searchValue.toLowerCase())
-    );
-  }, [searchValue, data]);
-
   // Helpers to identify product groups
   const hasDetailProducts = useMemo(
     () =>
-      filteredData?.some((item) =>
-        item.ibyoUranguyeType.includes("Kuri detail")
-      ) || false,
-    [filteredData]
+      data?.some((item) => item.ibyoUranguyeType.includes("Kuri detail")) ||
+      false,
+    [data]
   );
 
   const hasBulkProducts = useMemo(
     () =>
-      filteredData?.some(
+      data?.some(
         (item) =>
           item.ibyoUranguyeType.includes("Ikesi x 20") ||
           item.ibyoUranguyeType.includes("Ikesi x 12")
       ) || false,
-    [filteredData]
+    [data]
   );
 
   // Reusable collapsible component rendering function
@@ -119,13 +110,9 @@ const SalesPage: React.FC = () => {
       <div className="w-full flex items-center flex-col justify-end">
         <div className="flex items-center w-full justify-end">
           <div className="flex justify-end items-end gap-4 p-4 w-[600px]">
-            <SearchBox
-              searchValue={searchValue}
-              setSearchValue={setSearchValue}
-            />
             <p className="w-fit whitespace-nowrap text-sm md:flex justify-end items-center text-blue-700 font-bold pr-10 hidden">
               Byose hamwe:{" "}
-              <span className="text-lg ml-2">{filteredData?.length || 0}</span>
+              <span className="text-lg ml-2">{data?.length || 0}</span>
             </p>
           </div>
         </div>

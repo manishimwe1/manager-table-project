@@ -1,9 +1,11 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Minus, Plus } from "lucide-react";
 import DataComponents from "./DataComponents";
 import { ProductType } from "@/types";
+import { set } from "zod";
+import { useClientInfoStore } from "@/lib/store/zustand";
 
 const AddSereveye = ({
   tableOpen,
@@ -24,6 +26,9 @@ const AddSereveye = ({
   data: ProductType[] | undefined;
   index: number;
 }) => {
+  const [nameInput, setnameInput] = useState("");
+  const [phoneInput, setphoneInput] = useState("");
+  const { setName, setPhone } = useClientInfoStore();
   return (
     <div className="flex flex-col w-full h-full p-4">
       <div className="flex items-center justify-between lg:px-4 px-2  w-full">
@@ -33,14 +38,19 @@ const AddSereveye = ({
               className="text-stone-950  text-nowrap text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200  bg-gray-100  shadow-md shadow-white dark:shadow-black/70  justify-end items-center rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer"
               htmlFor="name"
             >
-              Izina ry'aserevelle
+              Umukiriya
             </Label>
             <Input
               id="name"
-              onFocus={() => setTableOpen(true)}
-              onBlur={() => setTableOpen(false)}
+              // onBlur={() => setTableOpen(false)}
               className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2  outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
               autoFocus
+              value={nameInput}
+              onChange={(e) => {
+                setnameInput(e.target.value);
+                setTableOpen(true);
+              }}
+              onBlur={() => setName(nameInput)}
             />
           </div>
 
@@ -48,14 +58,19 @@ const AddSereveye = ({
           <div className="flex items-center justify-between w-full">
             <Label
               className="text-stone-950  text-nowrap text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200  bg-gray-100  shadow-md shadow-white dark:shadow-black/70  justify-end items-center rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer"
-              htmlFor="table"
+              htmlFor="phone"
             >
-              Table no:
+              Phone no:
             </Label>
             <Input
-              id="table"
+              id="phone"
               onFocus={() => setTableOpen(true)}
-              onBlur={() => setTableOpen(false)}
+              value={phoneInput}
+              onChange={(e) => {
+                setphoneInput(e.target.value);
+                setTableOpen(true);
+              }}
+              onBlur={() => setPhone(parseInt(phoneInput))}
               className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2  outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200 "
               autoFocus
             />
@@ -87,7 +102,17 @@ const AddSereveye = ({
       </div>
 
       <div className="w-full h-full ">
-        {tableOpen && <DataComponents dataByDate={data} />}
+        {tableOpen && (
+          <DataComponents
+            dataByDate={data}
+            tableOpen={tableOpen}
+            setTableOpen={setTableOpen}
+            nameInput={nameInput}
+            setNameInput={setnameInput}
+            phoneInput={phoneInput}
+            setPhoneInput={setphoneInput}
+          />
+        )}
       </div>
     </div>
   );

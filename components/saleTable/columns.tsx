@@ -57,7 +57,7 @@ export const columns: ColumnDef<TableRowType>[] = [
   },
   {
     accessorKey: "ikiranguzo",
-    header: "Ikiranguzo",
+    header: "Ikiranguzo ",
     cell: ({ row }) => {
       const ikiranguzo = row.getValue("ikiranguzo") as number;
       const productType = row.getValue("ibyoUranguyeType") as string;
@@ -93,58 +93,63 @@ export const columns: ColumnDef<TableRowType>[] = [
       );
     },
   },
-  {
-    accessorKey: "customerName",
-    header: "Izina ry'umukiriya",
-    cell: ({ row, table }) => {
-      const ukonyigurishaKuriDetail = row.getValue(
-        "ukonyigurishaKuriDetail"
-      ) as number;
-      const rowId = row.getValue("_id") as Id<"product">;
-      return (
-        <TakeInputValue
-          className="w-[120px] text-nowrap"
-          value={"name"}
-          ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
-          id={rowId}
-          activeRow={row}
-        />
-      );
-    },
-  },
-  {
-    accessorKey: "customerPhone",
-    header: "Phone / TIN",
-    cell: ({ row }) => {
-      const ukonyigurishaKuriDetail = row.getValue(
-        "ukonyigurishaKuriDetail"
-      ) as number;
-      const rowId = row.getValue("_id") as Id<"product">;
-      return (
-        <TakeInputValue
-          className="w-[120px] text-nowrap"
-          activeRow={row}
-          value={"phone"}
-          ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
-          id={rowId}
-        />
-      );
-    },
-  },
+  // {
+  //   accessorKey: "customerName",
+  //   header: "Izina ry'umukiriya",
+  //   cell: ({ row, table }) => {
+  //     const ukonyigurishaKuriDetail = row.getValue(
+  //       "ukonyigurishaKuriDetail"
+  //     ) as number;
+  //     const rowId = row.getValue("_id") as Id<"product">;
+  //     return (
+  //       <TakeInputValue
+  //         className="w-[120px] text-nowrap"
+  //         value={"name"}
+  //         ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
+  //         id={rowId}
+  //         activeRow={row}
+  //       />
+  //     );
+  //   },
+  // },
+  // {
+  //   accessorKey: "customerPhone",
+  //   header: "Phone / TIN",
+  //   cell: ({ row }) => {
+  //     const ukonyigurishaKuriDetail = row.getValue(
+  //       "ukonyigurishaKuriDetail"
+  //     ) as number;
+  //     const rowId = row.getValue("_id") as Id<"product">;
+  //     return (
+  //       <TakeInputValue
+  //         className="w-[120px] text-nowrap"
+  //         activeRow={row}
+  //         value={"phone"}
+  //         ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
+  //         id={rowId}
+  //       />
+  //     );
+  //   },
+  // },
   {
     accessorKey: "arashaka",
-    header: "Aratwara z'ingahe",
+    header: () => <p className="text-nowrap">Aratwara z'ingahe</p>,
     cell: ({ row }) => {
       const ukonyigurishaKuriDetail = row.getValue(
         "ukonyigurishaKuriDetail"
       ) as number;
       const id = row.getValue("_id") as Id<"product">;
-
+      const byoseHamwe = row.getValue("byoseHamwe") as number;
+      const productType = row.getValue("ibyoUranguyeType") as string;
+      const stock = row.getValue("ingano") as number;
       return (
         <TakeInputValue
           className="w-[90px] text-nowrap"
           activeRow={row}
           value={"arashaka"}
+          byoseHamwe={byoseHamwe}
+          productType={productType}
+          stock={stock}
           ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
           id={id}
         />
@@ -153,7 +158,7 @@ export const columns: ColumnDef<TableRowType>[] = [
   },
   {
     accessorKey: "yishyuyeAngahe",
-    header: "Yishyura Angahe",
+    header: () => <p className="text-nowrap">Yishyura Angahe</p>,
     cell: ({ row }) => {
       const ukonyigurishaKuriDetail = row.getValue(
         "ukonyigurishaKuriDetail"
@@ -172,23 +177,23 @@ export const columns: ColumnDef<TableRowType>[] = [
       );
     },
   },
-  {
-    accessorKey: "status",
-    header: "Arashyuye",
-    cell: ({ row }) => {
-      const byoseHamwe = row.getValue("byoseHamwe") as number;
-      const productType = row.getValue("ibyoUranguyeType") as string;
-      const id = row.getValue("_id") as Id<"product">;
-      const stock = row.getValue("ingano") as number;
-      return (
-        <SellingButton
-          id={id}
-          activeRow={row}
-          stock={stock}
-          productType={productType}
-          byoseHamwe={byoseHamwe}
-        />
-      );
-    },
-  },
+  // {
+  //   accessorKey: "status",
+  //   header: "Arashyuye",
+  //   cell: ({ row }) => {
+  //     const byoseHamwe = row.getValue("byoseHamwe") as number;
+  //     const productType = row.getValue("ibyoUranguyeType") as string;
+  //     const id = row.getValue("_id") as Id<"product">;
+  //     const stock = row.getValue("ingano") as number;
+  //     return (
+  //       <SaveDataToStore
+  //         id={id}
+  //         activeRow={row}
+  //         stock={stock}
+  //         productType={productType}
+  //         byoseHamwe={byoseHamwe}
+  //       />
+  //     );
+  //   },
+  // },
 ];
