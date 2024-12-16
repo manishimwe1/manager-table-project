@@ -6,7 +6,7 @@ import { Purchase, TableRowType } from "@/types";
 import { Row } from "@tanstack/react-table";
 import { useMutation, useQuery } from "convex/react";
 import { redirect, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -15,12 +15,12 @@ import SkeletonLoader from "./SkeletonLoader";
 
 // Define props interface
 
-const SellingButton = ({}) => {
+const SellingButton = () => {
   const router = useRouter();
   const [ideni, setIdeni] = useState<"Yego" | "Oya" | undefined>();
   const [loading, setLoading] = useState(false);
 
-  const { name, phone, setReset, productData, isSubmitting } =
+  const { name, phone, setReset, productData, isSubmitting, setIsSubmitting } =
     useClientInfoStore();
   const session = useSession();
   const userId = session.data?.user;
@@ -28,110 +28,95 @@ const SellingButton = ({}) => {
   const { toast } = useToast();
 
   const user = useQuery(api.user.getUserIndb, { email: userId?.email! });
-  // const productId = useQuery(api.product.getProductById, { id: storeId });
+
   const newClient = useMutation(api.clientName.createClient);
-  console.log(productData, { name, phone }, "productData in selling");
-  // const handleSales = (value: string) => {
-  //   setLoading(!loading);
-  //   const inStock =
-  //     productType === "Ikesi x 20" || productType === "Ikesi x 12"
-  //       ? byoseHamwe
-  //       : stock;
-  //   if (aratwaraZingahe > inStock) {
-  //     setisSubmiting(true);
-  //     setLoading(false);
-  //     return toast({
-  //       title: "Ushyizemo ibicuruzwa byinshi kuruta ibiri muri stock",
-  //       variant: "destructive",
-  //     });
-  //   }
-  //   if (value === "Yego" && aratwaraZingahe) {
-  //     setIdeni("Yego");
-  //     // newClient({
-  //     //   productId: storeId,
-  //     //   userId: user?._id!,
-  //     //   name,
-  //     //   phone: phone ?? 0,
-  //     //   aratwaraZingahe,
-  //     //   yishyuyeAngahe,
-  //     //   nideni: false,
-  //     //   productType,
-  //     // });
-  //     console.log({
-  //       productId: storeId,
-  //       userId: user?._id!,
-  //       name,
-  //       phone: phone ?? 0,
-  //       aratwaraZingahe,
-  //       yishyuyeAngahe,
-  //       nideni: false,
-  //       productType,
-  //     });
 
-  //     setisSubmiting(true);
-  //     setLoading(false);
-  //     // activeRow.toggleSelected(false);
-  //     toast({
-  //       title: `Ugurishije kuri ${name ?? "unknown"}`,
-  //       variant: "success",
-  //     });
-  //   } else if (
-  //     value === "Oya" &&
-  //     aratwaraZingahe &&
-  //     name !== "" &&
-  //     phone !== 0
-  //   ) {
-  //     setIdeni("Oya");
-  //     console.log({
-  //       productId: storeId,
-  //       userId: user?._id!,
-  //       name,
-  //       phone: phone ?? 0,
-  //       aratwaraZingahe,
-  //       yishyuyeAngahe,
-  //       nideni: false,
-  //       productType,
-  //     });
+  const handleSales = (value: string) => {
+    productData.forEach((product) => {
+      const inStock =
+        product.productType === "Ikesi x 20" ||
+        product.productType === "Ikesi x 12"
+          ? product.byoseHamwe
+          : product.ingano;
 
-  //     // newClient({
-  //     //   userId: user?._id!,
-  //     //   productId: storeId,
-  //     //   name,
-  //     //   phone,
-  //     //   aratwaraZingahe,
-  //     //   yishyuyeAngahe,
-  //     //   nideni: true,
-  //     //   productType,
-  //     // });
-  //     setisSubmiting(true);
-  //     setLoading(false);
-  //     // activeRow.toggleSelected(false);
-  //     toast({
-  //       title: `Ugurishije   kuri ${name}`,
-  //       variant: "success",
-  //     });
-  //     router.refresh();
-  //   } else {
-  //     setisSubmiting(true);
-  //     setLoading(false);
-  //     toast({
-  //       title:
-  //         "Garagaza ibyo atwaye cg Izina na Telephone by' umukiriya kubera afashe ideni",
-  //       variant: "destructive",
-  //     });
-  //     return;
-  //   }
-  //   setReset();
-  // };
+      if (product.aratwaraZingahe > inStock) {
+        setIsSubmitting(true);
+        setLoading(false);
+        return toast({
+          title: "Ushyizemo ibicuruzwa byinshi kuruta ibiri muri stock",
+          variant: "destructive",
+        });
+      }
+
+      if (value === "Yego" && product.aratwaraZingahe) {
+        setIdeni("Yego");
+        newClient({
+          productId: product.id,
+          userId: user?._id!,
+          name,
+          phone: phone ?? 0,
+          aratwaraZingahe: product.aratwaraZingahe,
+          yishyuyeAngahe: product.yishyuyeAngahe,
+          nideni: false,
+          productType: product.productType,
+        });
+        setLoading(false);
+        // activeRow.toggleSelected(false);
+        toast({
+          title: `Ugurishije kuri ${name ?? "unknown"}`,
+          variant: "success",
+        });
+      } else if (
+        value === "Oya" &&
+        product.aratwaraZingahe &&
+        name !== "" &&
+        phone !== 0
+      ) {
+        setIdeni("Oya");
+
+        newClient({
+          userId: user?._id!,
+          productId: product.id,
+          name,
+          phone,
+          aratwaraZingahe: product.aratwaraZingahe,
+          yishyuyeAngahe: product.yishyuyeAngahe,
+          nideni: true,
+          productType: product.productType,
+        });
+        setLoading(false);
+        // activeRow.toggleSelected(false);
+        toast({
+          title: `Ugurishije kuri ${name ?? "unknown"}`,
+          variant: "success",
+        });
+      } else {
+        setIsSubmitting(true);
+        setLoading(false);
+        toast({
+          title:
+            "Garagaza ibyo atwaye cg Izina na Telephone by' umukiriya kubera afashe ideni",
+          variant: "destructive",
+        });
+        return;
+      }
+    });
+
+    setReset();
+  };
+  useEffect(() => {
+    console.log(productData, { name, phone }, "productData in selling");
+    setLoading(!loading);
+  }, [productData, name, phone]);
 
   return (
     <form className="flex">
       <Button
         disabled={loading}
         type="button"
-        // onClick={() => {
-        //   handleSales("Yego");
-        // }}
+        onClick={() => {
+          handleSales("Yego");
+        }}
         className="bg-blue-500 disabled:bg-gray-500 transition-all duration-150 text-white px-2 py-1 rounded"
       >
         {loading ? (
@@ -143,7 +128,7 @@ const SellingButton = ({}) => {
       <Button
         disabled={loading}
         type="button"
-        // onClick={() => handleSales("Oya")}
+        onClick={() => handleSales("Oya")}
         className="bg-red-400 disabled:bg-gray-500 transition-all duration-150 text-white px-2 py-1 rounded"
       >
         {loading ? (
@@ -152,13 +137,6 @@ const SellingButton = ({}) => {
           <span>Afashe ideni</span>
         )}
       </Button>
-      <button
-        hidden
-        type="submit"
-        className="bg-green-500 text-white px-3 py-1 rounded"
-      >
-        Submit
-      </button>
     </form>
   );
 };

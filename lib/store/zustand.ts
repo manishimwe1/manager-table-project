@@ -29,40 +29,23 @@ interface ClientInfo {
 }
 
 export const useClientInfoStore = create<ClientInfo>((set) => ({
-  productData: [], // Initialize product data as an empty array
   name: "",
   phone: 0,
   stock: 0, // Initialize stock as 0
   isSubmitting: false, // Initialize submission status
+  productData: [],
+  addProduct: (product) =>
+    set((state) => ({
+      productData: [...state.productData, product],
+    })),
+  updateProduct: (id, updatedProduct) =>
+    set((state) => ({
+      productData: state.productData.map((product) =>
+        product.id === id ? { ...product, ...updatedProduct } : product
+      ),
+    })),
+  resetProductData: () => set({ productData: [] }),
 
-  // Add a new product to the array
-  addProduct: (newProduct: ProductInfo) =>
-    set((state) => {
-      const exists = state.productData.some(
-        (product) => product.id === newProduct.id
-      );
-      if (exists) return state; // Prevent duplicate
-      return {
-        productData: [...state.productData, newProduct],
-      };
-    }),
-
-  // Update a specific product by ID
-  updateProduct: (id: Id<"product">, updates: Partial<ProductInfo>) =>
-    set((state) => {
-      const exists = state.productData.some((product) => product.id === id);
-      if (!exists) {
-        console.warn(`Product with id ${id} not found`);
-        return state; // Return unchanged state
-      }
-      return {
-        productData: state.productData.map((product) =>
-          product.id === id ? { ...product, ...updates } : product
-        ),
-      };
-    }),
-
-  // Remove a product from the array by ID
   removeProduct: (id: Id<"product">) =>
     set((state) => ({
       productData: state.productData.filter((product) => product.id !== id),
@@ -79,7 +62,7 @@ export const useClientInfoStore = create<ClientInfo>((set) => ({
     set(() => ({
       name: newName,
     })),
-
+ fnnshed
   // Set the client's phone number
   setPhone: (newPhone: number) =>
     set(() => ({

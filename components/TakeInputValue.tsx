@@ -7,7 +7,6 @@ import { Row } from "@tanstack/react-table";
 import { cn } from "@/lib/utils";
 
 const TakeInputValue = ({
-  value,
   ukonyigurishaKuriDetail,
   activeRow,
   ingano,
@@ -17,7 +16,6 @@ const TakeInputValue = ({
   id,
   igicuruzwa,
 }: {
-  value?: "arashaka" | "sale";
   ukonyigurishaKuriDetail: number;
   id: Id<"product">;
   ingano?: number;
@@ -37,40 +35,33 @@ const TakeInputValue = ({
       const newValue = e.target.value;
       setInputValue(newValue);
 
-      if (value === "arashaka") {
-        activeRow.toggleSelected(true);
+      activeRow.toggleSelected(true);
 
-        // Dynamically calculate total for "arashaka"
-        const numericValue = Number(newValue);
-        const total = numericValue * ukonyigurishaKuriDetail;
-        setCalculatedValue(total);
-      }
+      // Dynamically calculate total for "arashaka"
+      const numericValue = Number(newValue);
+      const total = numericValue * ukonyigurishaKuriDetail;
+      setCalculatedValue(total);
     },
-    [value, activeRow, ukonyigurishaKuriDetail]
+    [activeRow, ukonyigurishaKuriDetail]
   );
 
   const handleBlur = useCallback(() => {
-    if (
-      value === "arashaka" &&
-      ukonyigurishaKuriDetail &&
-      byoseHamwe &&
-      productType &&
-      ingano
-    ) {
+    if (ukonyigurishaKuriDetail && byoseHamwe && productType && ingano) {
       const numericValue = Number(inputValue);
       const total = numericValue * ukonyigurishaKuriDetail;
 
-      // Check if the product already exists in the store
       const existingProduct = productData.find((product) => product.id === id);
 
       if (existingProduct) {
-        // Update the existing product
         updateProduct(id, {
+          id,
+          byoseHamwe,
+          productType,
+          ingano,
           aratwaraZingahe: numericValue,
           yishyuyeAngahe: total,
         });
       } else {
-        // Add a new product
         addProduct({
           id,
           byoseHamwe,
@@ -83,11 +74,9 @@ const TakeInputValue = ({
         });
       }
 
-      // Update calculatedValue for display
       setCalculatedValue(total);
     }
   }, [
-    value,
     inputValue,
     ukonyigurishaKuriDetail,
     byoseHamwe,
@@ -101,26 +90,21 @@ const TakeInputValue = ({
 
   // Log `calculatedValue` whenever it updates
   useEffect(() => {
-    console.log(calculatedValue, "calculatedValue");
-  }, [calculatedValue]);
-
-  // Ensure React.memo doesn't block re-renders
-  const computedValue = value === "sale" ? calculatedValue : inputValue;
+    console.log(productData, "productData in input value");
+  }, [productData]);
 
   return (
     <Input
-      disabled={value === "sale"} // Disable input for "sale"
       className={cn(
         " px-1 placeholder:text-xs border-stone-900 dark:border-stone-500",
         className
       )}
       type="number"
-      value={computedValue} // Dynamically determine value
-      required={value === "arashaka"}
-      onChange={value === "sale" ? undefined : handleInputChange}
-      onBlur={value === "arashaka" ? handleBlur : undefined}
+      value={inputValue} // Dynamically determine value
+      required={true}
+      onChange={handleInputChange}
+      onBlur={handleBlur}
       min={0}
-      max={value === "arashaka" && ingano ? ingano : undefined}
     />
   );
 };

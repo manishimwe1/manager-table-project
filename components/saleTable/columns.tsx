@@ -147,12 +147,9 @@ export const columns: ColumnDef<TableRowType>[] = [
         <TakeInputValue
           className="w-[90px] text-nowrap"
           activeRow={row}
-          value={"arashaka"}
-          byoseHamwe={byoseHamwe}
-          productType={productType}
-          ingano={stock}
           ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
           id={id}
+          ingano={stock}
           igicuruzwa={igicuruzwa}
         />
       );
