@@ -38,20 +38,6 @@ const SalesPage: React.FC = () => {
     userId: user?._id as Id<"user">,
   });
 
-  const productByType: ProductType[] | undefined = useQuery(
-    api.product.getProductByProductType,
-    {
-      userId: user?._id as Id<"user">,
-    }
-  );
-
-  const productByDetail: ProductType[] | undefined = useQuery(
-    api.product.getProductByKuriDetail,
-    {
-      userId: user?._id as Id<"user">,
-    }
-  );
-
   // Redirect unauthenticated users
   useEffect(() => {
     if (session.status === "unauthenticated") {
@@ -151,20 +137,12 @@ const SalesPage: React.FC = () => {
   // Render multiple collapsible items with toggling functionality
   return (
     <section className="flex flex-col w-full h-full lg:pl-0">
-      {hasDetailProducts &&
-        renderCollapsible(
-          `Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())} `,
-          productByDetail,
-          isDetailOpen,
-          () => setIsDetailOpen(!isDetailOpen)
-        )}
-      {hasBulkProducts &&
-        renderCollapsible(
-          `Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())} `,
-          productByType,
-          isOpen,
-          () => setIsOpen(!isOpen)
-        )}
+      {renderCollapsible(
+        `Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())} `,
+        data,
+        isOpen,
+        () => setIsOpen(!isOpen)
+      )}
     </section>
   );
 };

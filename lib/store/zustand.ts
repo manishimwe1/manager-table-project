@@ -1,86 +1,104 @@
-import { set } from "zod";
 import { Id } from "@/convex/_generated/dataModel";
-import { create } from "zustand";
+import { create } from "zustand"; // No need to import 'set' from "zod"
+
+export interface ProductInfo {
+  id: Id<"product">; // Product ID
+  byoseHamwe: number; // Total amount
+  aratwaraZingahe: number; // Quantity taken
+  yishyuyeAngahe: number; // Amount paid
+  productType: string; // Type of product
+  ingano: number; // Size/quantity
+  ukonyigurishaKuriDetail: number; // Amount left
+  igicuruzwa: string; // Product name
+}
 
 interface ClientInfo {
-  name: string;
-  productType: string;
-  phone: number;
-  byoseHamwe: number;
-  stock: number;
-  aratwaraZingahe: number;
-  yishyuyeAngahe: number;
-  isSubmiting: boolean;
-  storeId: Id<"product">[]; // Array to store sold item IDs
-  setName: (newName: string) => void;
-  setproductType: (productType: string) => void;
-  setStock: (stock: number) => void;
-  setPhone: (newPhone: number) => void;
-  setByoseHamwe: (byoseHamwe: number) => void;
-  setAratwaraZingahe: (newAratwaraZingahe: number) => void;
-  setYishyuyeAngahe: (newYishyuyeAngahe: number) => void;
-  addToStoreId: (id: Id<"product">) => void;
-  resetStoreId: () => void;
-  setReset: () => void;
-  setisSubmiting: (value: boolean) => void;
+  productData: ProductInfo[]; // Array to store product information
+  addProduct: (newProduct: ProductInfo) => void; // Add a product to the array
+  updateProduct: (id: Id<"product">, updates: Partial<ProductInfo>) => void; // Update a product by ID
+  removeProduct: (id: Id<"product">) => void; // Remove a product by ID
+  resetProducts: () => void; // Reset the entire product array
+  name: string; // Client name
+  phone: number; // Client phone number
+  stock: number; // Stock (needs initialization)
+  isSubmitting: boolean; // Submission status
+  setName: (newName: string) => void; // Set client name
+  setPhone: (newPhone: number) => void; // Set client phone
+  setReset: () => void; // Reset all client-related fields
+  setIsSubmitting: (value: boolean) => void; // Set submission status
 }
 
 export const useClientInfoStore = create<ClientInfo>((set) => ({
+  productData: [], // Initialize product data as an empty array
   name: "",
-  productType: "",
-  byoseHamwe: 0,
-  stock: 0,
   phone: 0,
-  aratwaraZingahe: 0,
-  yishyuyeAngahe: 0,
-  isSubmiting: false,
-  storeId: [], // Initialize the storeId array
+  stock: 0, // Initialize stock as 0
+  isSubmitting: false, // Initialize submission status
+
+  // Add a new product to the array
+  addProduct: (newProduct: ProductInfo) =>
+    set((state) => {
+      const exists = state.productData.some(
+        (product) => product.id === newProduct.id
+      );
+      if (exists) return state; // Prevent duplicate
+      return {
+        productData: [...state.productData, newProduct],
+      };
+    }),
+
+  // Update a specific product by ID
+  updateProduct: (id: Id<"product">, updates: Partial<ProductInfo>) =>
+    set((state) => {
+      const exists = state.productData.some((product) => product.id === id);
+      if (!exists) {
+        console.warn(`Product with id ${id} not found`);
+        return state; // Return unchanged state
+      }
+      return {
+        productData: state.productData.map((product) =>
+          product.id === id ? { ...product, ...updates } : product
+        ),
+      };
+    }),
+
+  // Remove a product from the array by ID
+  removeProduct: (id: Id<"product">) =>
+    set((state) => ({
+      productData: state.productData.filter((product) => product.id !== id),
+    })),
+
+  // Reset the product array
+  resetProducts: () =>
+    set(() => ({
+      productData: [],
+    })),
+
+  // Set the client's name
   setName: (newName: string) =>
     set(() => ({
       name: newName,
     })),
-  setproductType: (productType: string) =>
-    set(() => ({
-      productType: productType,
-    })),
+
+  // Set the client's phone number
   setPhone: (newPhone: number) =>
     set(() => ({
       phone: newPhone,
     })),
-  setStock: (value: number) =>
-    set(() => ({
-      stock: value,
-    })),
-  setByoseHamwe: (byoseHamwe: number) =>
-    set(() => ({
-      byoseHamwe: byoseHamwe,
-    })),
-  setAratwaraZingahe: (newAratwaraZingahe: number) =>
-    set(() => ({
-      aratwaraZingahe: newAratwaraZingahe,
-    })),
-  setYishyuyeAngahe: (newYishyuyeAngahe: number) =>
-    set(() => ({
-      yishyuyeAngahe: newYishyuyeAngahe,
-    })),
-  addToStoreId: (id: Id<"product">) =>
-    set((state) => ({
-      storeId: [...state.storeId, id], // Append new ID to storeId array
-    })),
-  resetStoreId: () =>
-    set(() => ({
-      storeId: [], // Reset storeId to an empty array
-    })),
+
+  // Reset all client-related fields
   setReset: () =>
     set(() => ({
-      yishyuyeAngahe: 0,
-      name: "",
-      phone: undefined,
-      aratwaraZingahe: undefined,
-      storeId: [], // Reset storeId along with other fields
+      productData: [], // Reset product data
+      name: "", // Reset client name
+      phone: 0, // Reset client phone
+      stock: 0, // Reset stock
+      isSubmitting: false, // Reset submission status
     })),
-  setisSubmiting: (value: boolean) =>
+
+  // Set the submission status
+  setIsSubmitting: (value: boolean) =>
     set(() => ({
-      isSubmiting: value,
+      isSubmitting: value,
     })),
 }));

@@ -44,7 +44,6 @@ const AddSereveye = ({
               id="name"
               // onBlur={() => setTableOpen(false)}
               className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2  outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
-              autoFocus
               value={nameInput}
               onChange={(e) => {
                 setnameInput(e.target.value);
@@ -64,6 +63,7 @@ const AddSereveye = ({
             </Label>
             <Input
               id="phone"
+              type="number"
               onFocus={() => setTableOpen(true)}
               value={phoneInput}
               onChange={(e) => {
@@ -72,7 +72,6 @@ const AddSereveye = ({
               }}
               onBlur={() => setPhone(parseInt(phoneInput))}
               className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2  outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200 "
-              autoFocus
             />
           </div>
         </div>

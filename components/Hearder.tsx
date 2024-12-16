@@ -37,28 +37,24 @@ const Header = () => {
         "flex items-center justify-between px-4 py-2 inset-x-0 z-50 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-0 overflow-x-hidden"
       )}
     >
-      {/* Brand Logo */}
-      <Link
-        href="/"
-        className="text-lg font-bold text-gray-800 dark:text-gray-200 lg:pl-4"
-      >
-        Stock Manager
-      </Link>
+      {/* Mobile Menu Trigger */}
+      <div className="flex items-center gap-2">
+        <div className="lg:hidden flex items-center justify-center">
+          <MobileMenu />
+        </div>
+        {/* Brand Logo */}
+        <Link
+          href="/"
+          className="text-lg font-bold text-gray-800 dark:text-gray-200 "
+        >
+          Stock Manager
+        </Link>
+      </div>
 
       {/* Actions: Dark Mode Toggle + Mobile Menu */}
       <div className="flex items-center lg:gap-4 px-3">
-        {user ? (
-          <UserButton user={user} />
-        ) : session.status === "unauthenticated" ? (
-          <Button
-            asChild
-            className=" bg-background dark:text-gray-200 hover:bg-gray-600"
-          >
-            <Link href={"/login"}>Sign In</Link>
-          </Button>
-        ) : (
-          <Skeleton className="border h-6 w-6 " />
-        )}
+        {/* notification */}
+        <div className="flex items-center gap-2"></div>
         {/* Dark Mode Toggle */}
         <button
           onClick={toggleDarkMode}
@@ -71,11 +67,18 @@ const Header = () => {
             <Moon className="w-3.5 h-3.5 text-gray-800" />
           )}
         </button>
-
-        {/* Mobile Menu Trigger */}
-        <div className="lg:hidden">
-          <MobileMenu />
-        </div>
+        {user ? (
+          <UserButton user={user} />
+        ) : session.status === "unauthenticated" ? (
+          <Button
+            asChild
+            className=" bg-background dark:text-gray-200 hover:bg-gray-600"
+          >
+            <Link href={"/login"}>Sign In</Link>
+          </Button>
+        ) : (
+          <Skeleton className="border h-6 w-6 " />
+        )}
       </div>
     </header>
   );

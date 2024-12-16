@@ -141,6 +141,7 @@ export const columns: ColumnDef<TableRowType>[] = [
       const id = row.getValue("_id") as Id<"product">;
       const byoseHamwe = row.getValue("byoseHamwe") as number;
       const productType = row.getValue("ibyoUranguyeType") as string;
+      const igicuruzwa = row.getValue("igicuruzwa") as string;
       const stock = row.getValue("ingano") as number;
       return (
         <TakeInputValue
@@ -149,34 +150,37 @@ export const columns: ColumnDef<TableRowType>[] = [
           value={"arashaka"}
           byoseHamwe={byoseHamwe}
           productType={productType}
-          stock={stock}
+          ingano={stock}
           ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
           id={id}
+          igicuruzwa={igicuruzwa}
         />
       );
     },
   },
-  {
-    accessorKey: "yishyuyeAngahe",
-    header: () => <p className="text-nowrap">Yishyuye Angahe</p>,
-    cell: ({ row }) => {
-      const ukonyigurishaKuriDetail = row.getValue(
-        "ukonyigurishaKuriDetail"
-      ) as number;
-      const id = row.getValue("_id") as Id<"product">;
-      return ukonyigurishaKuriDetail ? (
-        <TakeInputValue
-          className="w-[90px] text-nowrap"
-          activeRow={row}
-          value={"sale"}
-          ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
-          id={id}
-        />
-      ) : (
-        <Loader2 className="animate-spin h-2 w-2" />
-      );
-    },
-  },
+  // {
+  //   accessorKey: "yishyuyeAngahe",
+  //   header: () => <p className="text-nowrap">Yishyuye Angahe</p>,
+  //   cell: ({ row }) => {
+  //     const ukonyigurishaKuriDetail = row.getValue(
+  //       "ukonyigurishaKuriDetail"
+  //     ) as number;
+  //     const id = row.getValue("_id") as Id<"product">;
+  //     const igicuruzwa = row.getValue("igicuruzwa") as string;
+  //     return ukonyigurishaKuriDetail ? (
+  //       <TakeInputValue
+  //         igicuruzwa={igicuruzwa}
+  //         className="w-[90px] text-nowrap"
+  //         activeRow={row}
+  //         value={"sale"}
+  //         ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
+  //         id={id}
+  //       />
+  //     ) : (
+  //       <Loader2 className="animate-spin h-2 w-2" />
+  //     );
+  //   },
+  // },
   // {
   //   accessorKey: "status",
   //   header: "Arashyuye",
