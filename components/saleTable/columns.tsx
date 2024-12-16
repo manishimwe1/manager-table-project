@@ -158,7 +158,7 @@ export const columns: ColumnDef<TableRowType>[] = [
   },
   {
     accessorKey: "yishyuyeAngahe",
-    header: () => <p className="text-nowrap">Yishyura Angahe</p>,
+    header: () => <p className="text-nowrap">Yishyuye Angahe</p>,
     cell: ({ row }) => {
       const ukonyigurishaKuriDetail = row.getValue(
         "ukonyigurishaKuriDetail"

@@ -108,14 +108,6 @@ const SalesPage: React.FC = () => {
   ): ReactNode => (
     <CollapsibleComponents title={title} isOpen={isOpen} setIsOpen={toggleOpen}>
       <div className="w-full flex items-center flex-col justify-end">
-        <div className="flex items-center w-full justify-end">
-          <div className="flex justify-end items-end gap-4 p-4 w-[600px]">
-            <p className="w-fit whitespace-nowrap text-sm md:flex justify-end items-center text-blue-700 font-bold pr-10 hidden">
-              Byose hamwe:{" "}
-              <span className="text-lg ml-2">{data?.length || 0}</span>
-            </p>
-          </div>
-        </div>
         <div className="flex flex-col gap-1 md:gap-2 lg:flex-row w-full h-full justify-between">
           <div className="w-full h-full flex flex-col gap-2">
             <div className=" w-full flex flex-col h-full">
