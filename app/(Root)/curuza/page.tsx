@@ -2,26 +2,22 @@
 
 import AddSereveye from "@/components/AddSereveye";
 import CollapsibleComponents from "@/components/collapsibleComponents";
-import DataComponents from "@/components/DataComponents";
 import EmptyPlaceholder from "@/components/EmptyPlaceholder";
-import SearchBox from "@/components/SearchBox";
 import SkeletonLoader from "@/components/SkeletonLoader";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { formatToday, getTranslatedDay } from "@/lib/utils";
 import { ProductType } from "@/types";
 import { useQuery } from "convex/react";
-import { Plus, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useMemo, useState, useEffect, ReactNode } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 
 const SalesPage: React.FC = () => {
   const router = useRouter();
   const session = useSession();
 
-  const [isDetailOpen, setIsDetailOpen] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [tableOpen, setTableOpen] = useState<boolean>(false);
   const [addSereveye, setAddSereveye] = useState<
     { id: number; tableOpen: boolean }[]
@@ -75,24 +71,12 @@ const SalesPage: React.FC = () => {
     [data]
   );
 
-  const hasBulkProducts = useMemo(
-    () =>
-      data?.some(
-        (item) =>
-          item.ibyoUranguyeType.includes("Ikesi x 20") ||
-          item.ibyoUranguyeType.includes("Ikesi x 12")
-      ) || false,
-    [data]
-  );
-
   // Reusable collapsible component rendering function
   const renderCollapsible = (
     title: string,
-    data: ProductType[] | undefined,
-    isOpen: boolean,
-    toggleOpen: () => void
+    data: ProductType[] | undefined
   ): ReactNode => (
-    <CollapsibleComponents title={title} isOpen={isOpen} setIsOpen={toggleOpen}>
+    <CollapsibleComponents title={title}>
       <div className="w-full flex items-center flex-col justify-end">
         <div className="flex flex-col gap-1 md:gap-2 lg:flex-row w-full h-full justify-between">
           <div className="w-full h-full flex flex-col gap-2">
@@ -139,9 +123,7 @@ const SalesPage: React.FC = () => {
     <section className="flex flex-col w-full h-full lg:pl-0">
       {renderCollapsible(
         `Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())} `,
-        data,
-        isOpen,
-        () => setIsOpen(!isOpen)
+        data
       )}
     </section>
   );

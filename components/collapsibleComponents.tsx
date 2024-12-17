@@ -12,8 +12,6 @@ interface CollapsibleItemProps {
   subtitle?: string;
   dataLength?: number;
   children: React.ReactNode;
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CollapsibleComponents = ({
@@ -21,9 +19,8 @@ const CollapsibleComponents = ({
   subtitle,
   dataLength,
   children,
-  isOpen,
-  setIsOpen,
 }: CollapsibleItemProps) => {
+  const [isOpen, setIsOpen] = useState(true);
   return (
     <div className={cn("py-4 rounded-lg w-full")}>
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>

@@ -76,6 +76,7 @@ const TakeInputValue = ({
         aratwaraZingahe: numericValue,
         yishyuyeAngahe: total,
       });
+      setInputValue("");
     } else {
       // Add a new product with activeRow info
       addProduct({
@@ -89,6 +90,7 @@ const TakeInputValue = ({
         ukonyigurishaKuriDetail,
         activeRow: activeRow, // Add activeRow to productData
       });
+      setInputValue("");
     }
     setCalculatedValue(total);
   }, [
