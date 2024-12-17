@@ -9,6 +9,7 @@ import {
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import NumberFlow from "@number-flow/react";
+import { Skeleton } from "./ui/skeleton";
 const HomeCard = ({
   title,
   content,
@@ -35,12 +36,16 @@ const HomeCard = ({
           </CardTitle>
         </CardHeader>
         <CardContent className="flex justify-end !p-0 mr-3 text-gray-800 dark:text-gray-200 3xl font-bold">
-          <NumberFlow
-            value={content ? content : 0}
-            transformTiming={{ duration: 750, easing: "ease-out" }}
-            spinTiming={{ duration: 750, easing: "ease-out" }}
-            opacityTiming={{ duration: 350, easing: "ease-out" }}
-          />
+          {content ? (
+            <NumberFlow
+              value={content ? content : 0}
+              transformTiming={{ duration: 750, easing: "ease-out" }}
+              spinTiming={{ duration: 750, easing: "ease-out" }}
+              opacityTiming={{ duration: 350, easing: "ease-out" }}
+            />
+          ) : (
+            <Skeleton className="w-6 h-6 mb-2 rounded-md" />
+          )}
         </CardContent>
       </Card>
     </Link>

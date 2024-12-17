@@ -15,17 +15,16 @@ const CardComponents = () => {
   const userId = session.data?.user;
 
   // Fetch all queries (hooks must always be called)
-  const user = useQuery(
-    api.user.getUserIndb,
-    { email: userId?.email || "" } // Provide a fallback to avoid errors
-  );
+  const user = useQuery(api.user.getUserIndb, { email: userId?.email || "" });
   const product: ProductType[] | undefined = useQuery(api.product.getProduct, {
     userId: user?._id as Id<"user">,
   });
   const outOfStock = useQuery(api.product.getProductOutOfStock, {
     userId: user?._id as Id<"user">,
   });
-  const Client = useQuery(api.clientName.getClientByIden);
+  const Client = useQuery(api.clientName.getClientByIden, {
+    userId: user?._id as Id<"user">,
+  });
   const saledProduct = useQuery(api.clientName.getSaledProduct);
   const ClientWhoPaid = useQuery(api.clientName.getClientWhoPaid, {
     userId: user?._id as Id<"user">,
@@ -36,8 +35,6 @@ const CardComponents = () => {
   if (!userId) {
     redirect("/login");
   }
-
-  if (!outOfStock) return null;
 
   return (
     <div className="flex items-center justify-between gap-4  md:flex-row flex-col-reverse ">
@@ -50,11 +47,11 @@ const CardComponents = () => {
         />
         <HomeCard
           title="Ibyashize muri stock"
-          content={outOfStock.length}
+          content={outOfStock?.length}
           link="/ibyashize"
         />
         <HomeCard
-          title="Nagurishijwe"
+          title="Ibyagurishijwe"
           content={saledProduct?.length}
           link="/ibyagurishijwe"
         />

@@ -75,10 +75,12 @@ const DataComponents = ({
               />
             </div>
           </div>
-          {
-            //@ts-ignore
-            <DataTable columns={columns} data={filteredData || []} />
-          }
+          <div className="w-full h-full flex items-center justify-center border border-red-500 px-2">
+            {
+              //@ts-ignore
+              <DataTable columns={columns} data={filteredData || []} />
+            }
+          </div>
           {Object.keys(rowSelection).length > 0 && (
             <div className="mt-4">
               <p>Selected Rows: {Object.keys(rowSelection).length}</p>

@@ -43,9 +43,11 @@ export const createClient = mutation({
 });
 
 export const getClientByIden = query({
-  handler: async (ctx) => {
+  args: { userId: v.id("user") },
+  handler: async (ctx, args) => {
     const Product = await ctx.db
       .query("client")
+      .withIndex("by_userId", (q) => q.eq("userId", args.userId))
       .filter((q) => q.eq(q.field("nideni"), true))
       .order("desc")
       .collect();
