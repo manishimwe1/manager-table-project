@@ -25,11 +25,20 @@ const TakeInputValue = ({
   productType: string;
   igicuruzwa: string;
 }) => {
-  const [inputValue, setInputValue] = useState<string | number>(""); // User-entered value
+  const [inputValue, setInputValue] = useState<string | number>(""); // Local state for input value
   const [calculatedValue, setCalculatedValue] = useState<number>(0); // Computed value for display
 
   const { addProduct, updateProduct, productData } = useClientInfoStore();
 
+  // Pre-fill input value if product already exists
+  useEffect(() => {
+    const existingProduct = productData.find((product) => product.id === id);
+    if (existingProduct) {
+      setInputValue(existingProduct.aratwaraZingahe || ""); // Pre-fill aratwaraZingahe value
+    }
+  }, [id, productData]);
+
+  // Handle input change
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;
@@ -37,7 +46,6 @@ const TakeInputValue = ({
 
       activeRow.toggleSelected(true);
 
-      // Dynamically calculate total for "arashaka"
       const numericValue = Number(newValue);
       const total = numericValue * ukonyigurishaKuriDetail;
       setCalculatedValue(total);
@@ -45,6 +53,7 @@ const TakeInputValue = ({
     [activeRow, ukonyigurishaKuriDetail]
   );
 
+  // Handle input blur (save or update product)
   const handleBlur = useCallback(() => {
     if (!ukonyigurishaKuriDetail || !byoseHamwe || !productType || !ingano) {
       console.warn("Missing required product details", {
@@ -59,30 +68,29 @@ const TakeInputValue = ({
     const numericValue = Number(inputValue);
     const total = numericValue * ukonyigurishaKuriDetail;
 
-    setCalculatedValue(total);
-
-    // Check if the product already exists
     const existingProduct = productData.find((product) => product.id === id);
 
     if (existingProduct) {
-      // Update existing product
+      // Update the existing product
       updateProduct(id, {
         aratwaraZingahe: numericValue,
         yishyuyeAngahe: total,
       });
     } else {
-      // Add new product
+      // Add a new product with activeRow info
       addProduct({
         id,
-        byoseHamwe: byoseHamwe,
-        productType: productType,
-        ingano: ingano,
+        byoseHamwe,
+        productType,
+        ingano,
         aratwaraZingahe: numericValue,
         yishyuyeAngahe: total,
         igicuruzwa,
         ukonyigurishaKuriDetail,
+        activeRow: activeRow, // Add activeRow to productData
       });
     }
+    setCalculatedValue(total);
   }, [
     inputValue,
     ukonyigurishaKuriDetail,
@@ -93,17 +101,18 @@ const TakeInputValue = ({
     productData,
     addProduct,
     updateProduct,
+    activeRow,
   ]);
 
   return (
     <Input
       className={cn(
-        " px-1 placeholder:text-xs border-stone-900 dark:border-stone-500",
+        "px-1 placeholder:text-xs border-stone-900 dark:border-stone-500",
         className
       )}
       type="number"
-      value={inputValue} // Dynamically determine value
-      required={true}
+      value={inputValue}
+      required
       onChange={handleInputChange}
       onBlur={handleBlur}
       min={0}

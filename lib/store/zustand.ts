@@ -1,4 +1,6 @@
 import { Id } from "@/convex/_generated/dataModel";
+import { TableRowType } from "@/types";
+import { Row } from "@tanstack/react-table";
 import { create } from "zustand";
 
 export interface ProductInfo {
@@ -10,6 +12,7 @@ export interface ProductInfo {
   ingano: number; // Size/quantity
   ukonyigurishaKuriDetail: number; // Amount left
   igicuruzwa: string; // Product name
+  activeRow: Row<TableRowType>;
 }
 
 interface ClientInfo {

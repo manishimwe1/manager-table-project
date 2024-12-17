@@ -20,7 +20,7 @@ const SellingButton = () => {
   const [ideni, setIdeni] = useState<"Yego" | "Oya" | undefined>();
   const [loading, setLoading] = useState(false);
 
-  const { name, phone, setReset, productData, isSubmitting, setIsSubmitting } =
+  const { name, phone, setReset, productData, setIsSubmitting } =
     useClientInfoStore();
   const session = useSession();
   const userId = session.data?.user;
@@ -102,12 +102,11 @@ const SellingButton = () => {
       }
     });
 
+    productData.forEach((product) => {
+      product.activeRow.toggleSelected(false);
+    });
     setReset();
   };
-  // useEffect(() => {
-  //   console.log(productData, { name, phone }, "productData in selling");
-  //   setLoading(!loading);
-  // }, [productData, name, phone]);
 
   return (
     <form className="flex">
