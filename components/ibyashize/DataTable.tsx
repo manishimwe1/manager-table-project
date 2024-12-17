@@ -58,12 +58,6 @@ export function DataTable<outOfStock, TValue>({
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
-                className={cn(
-                  "dark:text-gray-200",
-                  row.getValue("status") === true
-                    ? "bg-red-200 font-bold"
-                    : null
-                )}
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >

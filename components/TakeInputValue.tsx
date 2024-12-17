@@ -18,11 +18,11 @@ const TakeInputValue = ({
 }: {
   ukonyigurishaKuriDetail: number;
   id: Id<"product">;
-  ingano?: number;
+  ingano: number;
   activeRow: Row<TableRowType>;
   className: string;
-  byoseHamwe?: number;
-  productType?: string;
+  byoseHamwe: number;
+  productType: string;
   igicuruzwa: string;
 }) => {
   const [inputValue, setInputValue] = useState<string | number>(""); // User-entered value
@@ -46,35 +46,42 @@ const TakeInputValue = ({
   );
 
   const handleBlur = useCallback(() => {
-    if (ukonyigurishaKuriDetail && byoseHamwe && productType && ingano) {
-      const numericValue = Number(inputValue);
-      const total = numericValue * ukonyigurishaKuriDetail;
+    if (!ukonyigurishaKuriDetail || !byoseHamwe || !productType || !ingano) {
+      console.warn("Missing required product details", {
+        ukonyigurishaKuriDetail,
+        byoseHamwe,
+        productType,
+        ingano,
+      });
+      return;
+    }
 
-      const existingProduct = productData.find((product) => product.id === id);
+    const numericValue = Number(inputValue);
+    const total = numericValue * ukonyigurishaKuriDetail;
 
-      if (existingProduct) {
-        updateProduct(id, {
-          id,
-          byoseHamwe,
-          productType,
-          ingano,
-          aratwaraZingahe: numericValue,
-          yishyuyeAngahe: total,
-        });
-      } else {
-        addProduct({
-          id,
-          byoseHamwe,
-          productType,
-          ingano,
-          aratwaraZingahe: numericValue,
-          yishyuyeAngahe: total,
-          igicuruzwa,
-          ukonyigurishaKuriDetail,
-        });
-      }
+    setCalculatedValue(total);
 
-      setCalculatedValue(total);
+    // Check if the product already exists
+    const existingProduct = productData.find((product) => product.id === id);
+
+    if (existingProduct) {
+      // Update existing product
+      updateProduct(id, {
+        aratwaraZingahe: numericValue,
+        yishyuyeAngahe: total,
+      });
+    } else {
+      // Add new product
+      addProduct({
+        id,
+        byoseHamwe: byoseHamwe,
+        productType: productType,
+        ingano: ingano,
+        aratwaraZingahe: numericValue,
+        yishyuyeAngahe: total,
+        igicuruzwa,
+        ukonyigurishaKuriDetail,
+      });
     }
   }, [
     inputValue,
@@ -87,11 +94,6 @@ const TakeInputValue = ({
     addProduct,
     updateProduct,
   ]);
-
-  // Log `calculatedValue` whenever it updates
-  useEffect(() => {
-    console.log(productData, "productData in input value");
-  }, [productData]);
 
   return (
     <Input

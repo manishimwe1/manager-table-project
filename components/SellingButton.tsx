@@ -104,10 +104,10 @@ const SellingButton = () => {
 
     setReset();
   };
-  useEffect(() => {
-    console.log(productData, { name, phone }, "productData in selling");
-    setLoading(!loading);
-  }, [productData, name, phone]);
+  // useEffect(() => {
+  //   console.log(productData, { name, phone }, "productData in selling");
+  //   setLoading(!loading);
+  // }, [productData, name, phone]);
 
   return (
     <form className="flex">

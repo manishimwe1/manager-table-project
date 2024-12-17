@@ -145,6 +145,8 @@ export const columns: ColumnDef<TableRowType>[] = [
       const stock = row.getValue("ingano") as number;
       return (
         <TakeInputValue
+          byoseHamwe={byoseHamwe}
+          productType={productType}
           className="w-[90px] text-nowrap"
           activeRow={row}
           ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
