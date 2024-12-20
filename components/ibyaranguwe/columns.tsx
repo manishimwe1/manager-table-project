@@ -1,14 +1,11 @@
 "use client";
 
 import { Id } from "@/convex/_generated/dataModel";
-import { formatReadableDate } from "@/lib/utils";
-import { ProductType, PurchaseType } from "@/types";
+import { ProductType } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "../ui/badge";
 
 import React from "react";
 import DisplayBadge from "../DisplayBadge";
-import { ArrowDownNarrowWide } from "lucide-react";
 
 export const columns: ColumnDef<ProductType>[] = [
   {

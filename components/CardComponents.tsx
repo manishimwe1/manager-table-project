@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import HomeCard from "./HomeCard";
-import CreateProduct from "./Create-product";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useSession } from "next-auth/react";
@@ -38,7 +37,7 @@ const CardComponents = () => {
     redirect("/login");
   }
   console.log(saledProduct?.length);
-  
+
   return (
     <div className="flex items-center justify-between gap-4  md:flex-row flex-col-reverse ">
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4  w-full ">

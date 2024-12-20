@@ -89,18 +89,4 @@ export const columns: ColumnDef<outOfStock>[] = [
       );
     },
   },
-  // {
-  //   accessorKey: "_id",
-  //   header: "",
-  //   cell: ({ row }) => {
-  //     const rowId = row.getValue("_id") as Id<"product">;
-  //     console.log(rowId);
-
-  //     return (
-  //       <ActionComponents ibyashize={true} id={rowId}>
-  //         <MoreVertical className="h-4 w-4" />
-  //       </ActionComponents>
-  //     );
-  //   },
-  // },
 ];

@@ -5,7 +5,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
-import { ProductType, PurchaseType } from "@/types";
+import { ProductType } from "@/types";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { ChevronsDownUp } from "lucide-react";
@@ -13,7 +13,6 @@ import { cn, getTranslatedDay, groupByDate } from "@/lib/utils";
 import { useState } from "react";
 import { DataTable } from "./ibyaranguwe/DataTable";
 import { columns } from "./ibyaranguwe/columns";
-import { Skeleton } from "./ui/skeleton";
 import EmptyPlaceholder from "./EmptyPlaceholder";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";

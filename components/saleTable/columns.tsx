@@ -2,11 +2,8 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Id } from "@/convex/_generated/dataModel";
-import SellingButton from "../SellingButton";
 import TakeInputValue from "../TakeInputValue";
 import { TableRowType } from "@/types";
-import { Loader2 } from "lucide-react";
-import NumberFlow, { Format } from "@number-flow/react";
 
 export const columns: ColumnDef<TableRowType>[] = [
   {
@@ -93,44 +90,7 @@ export const columns: ColumnDef<TableRowType>[] = [
       );
     },
   },
-  // {
-  //   accessorKey: "customerName",
-  //   header: "Izina ry'umukiriya",
-  //   cell: ({ row, table }) => {
-  //     const ukonyigurishaKuriDetail = row.getValue(
-  //       "ukonyigurishaKuriDetail"
-  //     ) as number;
-  //     const rowId = row.getValue("_id") as Id<"product">;
-  //     return (
-  //       <TakeInputValue
-  //         className="w-[120px] text-nowrap"
-  //         value={"name"}
-  //         ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
-  //         id={rowId}
-  //         activeRow={row}
-  //       />
-  //     );
-  //   },
-  // },
-  // {
-  //   accessorKey: "customerPhone",
-  //   header: "Phone / TIN",
-  //   cell: ({ row }) => {
-  //     const ukonyigurishaKuriDetail = row.getValue(
-  //       "ukonyigurishaKuriDetail"
-  //     ) as number;
-  //     const rowId = row.getValue("_id") as Id<"product">;
-  //     return (
-  //       <TakeInputValue
-  //         className="w-[120px] text-nowrap"
-  //         activeRow={row}
-  //         value={"phone"}
-  //         ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
-  //         id={rowId}
-  //       />
-  //     );
-  //   },
-  // },
+
   {
     accessorKey: "arashaka",
     header: () => <p className="text-nowrap">Aratwara z'ingahe</p>,
@@ -157,46 +117,4 @@ export const columns: ColumnDef<TableRowType>[] = [
       );
     },
   },
-  // {
-  //   accessorKey: "yishyuyeAngahe",
-  //   header: () => <p className="text-nowrap">Yishyuye Angahe</p>,
-  //   cell: ({ row }) => {
-  //     const ukonyigurishaKuriDetail = row.getValue(
-  //       "ukonyigurishaKuriDetail"
-  //     ) as number;
-  //     const id = row.getValue("_id") as Id<"product">;
-  //     const igicuruzwa = row.getValue("igicuruzwa") as string;
-  //     return ukonyigurishaKuriDetail ? (
-  //       <TakeInputValue
-  //         igicuruzwa={igicuruzwa}
-  //         className="w-[90px] text-nowrap"
-  //         activeRow={row}
-  //         value={"sale"}
-  //         ukonyigurishaKuriDetail={ukonyigurishaKuriDetail}
-  //         id={id}
-  //       />
-  //     ) : (
-  //       <Loader2 className="animate-spin h-2 w-2" />
-  //     );
-  //   },
-  // },
-  // {
-  //   accessorKey: "status",
-  //   header: "Arashyuye",
-  //   cell: ({ row }) => {
-  //     const byoseHamwe = row.getValue("byoseHamwe") as number;
-  //     const productType = row.getValue("ibyoUranguyeType") as string;
-  //     const id = row.getValue("_id") as Id<"product">;
-  //     const stock = row.getValue("ingano") as number;
-  //     return (
-  //       <SaveDataToStore
-  //         id={id}
-  //         activeRow={row}
-  //         stock={stock}
-  //         productType={productType}
-  //         byoseHamwe={byoseHamwe}
-  //       />
-  //     );
-  //   },
-  // },
 ];

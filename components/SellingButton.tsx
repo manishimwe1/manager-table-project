@@ -1,17 +1,13 @@
 "use client";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
 import { useClientInfoStore } from "@/lib/store/zustand";
-import { Purchase, TableRowType } from "@/types";
-import { Row } from "@tanstack/react-table";
 import { useMutation, useQuery } from "convex/react";
-import { redirect, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useSession } from "next-auth/react";
-import SkeletonLoader from "./SkeletonLoader";
 
 // Define props interface
 

@@ -4,7 +4,6 @@ import { Input } from "./ui/input";
 import { ChevronDown, Minus, Plus } from "lucide-react";
 import DataComponents from "./DataComponents";
 import { ProductType } from "@/types";
-import { set } from "zod";
 import { useClientInfoStore } from "@/lib/store/zustand";
 import { cn } from "@/lib/utils";
 
