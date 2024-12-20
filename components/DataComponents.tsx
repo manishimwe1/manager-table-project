@@ -69,13 +69,16 @@ const DataComponents = ({
               searchValue={searchValue}
               setSearchValue={setSearchValue}
             />
-            <div className="w-fit h-fit p-1 text-stone-950 text-nowrap text-sm lg:text-lg border-t-2 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 justify-end items-center rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer group">
+            <div
+              className="w-fit h-fit p-1 text-stone-950 text-nowrap text-sm lg:text-lg border-t-2 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 justify-end items-center rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer group"
+              onClick={() => setTableOpen(!tableOpen)}
+            >
               <ChevronUp
                 className={cn("group-hover:hover:text-stone-500 h-4 w-4")}
               />
             </div>
           </div>
-          <div className="w-full h-full flex items-center justify-center border border-red-500 px-2">
+          <div className="w-full h-full flex items-center justify-center overflow-x-scroll">
             {
               //@ts-ignore
               <DataTable columns={columns} data={filteredData || []} />

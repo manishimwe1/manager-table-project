@@ -1,11 +1,12 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { Minus, Plus } from "lucide-react";
+import { ChevronDown, Minus, Plus } from "lucide-react";
 import DataComponents from "./DataComponents";
 import { ProductType } from "@/types";
 import { set } from "zod";
 import { useClientInfoStore } from "@/lib/store/zustand";
+import { cn } from "@/lib/utils";
 
 const AddSereveye = ({
   tableOpen,
@@ -28,7 +29,9 @@ const AddSereveye = ({
 }) => {
   const [nameInput, setnameInput] = useState("");
   const [phoneInput, setphoneInput] = useState("");
-  const { setName, setPhone } = useClientInfoStore();
+  const { setName, setPhone, productData } = useClientInfoStore();
+  console.log(productData);
+
   return (
     <div className="flex flex-col w-full h-full p-4">
       <div className="flex items-center justify-between lg:px-4 px-2  w-full">
@@ -87,6 +90,16 @@ const AddSereveye = ({
           >
             <Plus className="group-hover:hover:text-stone-500 h-4 w-4" />
           </div>
+          {productData.length > 0 && tableOpen === false && (
+            <div
+              className="w-fit h-fit p-1 text-stone-950 text-nowrap text-sm lg:text-lg border-t-2 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 justify-end items-center rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer group"
+              onClick={() => setTableOpen(!tableOpen)}
+            >
+              <ChevronDown
+                className={cn("group-hover:hover:text-stone-500 h-4 w-4")}
+              />
+            </div>
+          )}
           {showRemove && (
             <div
               className=" w-fit h-fit p-1 text-stone-950  text-nowrap text-sm lg:text-lg border-l-2 border-gray-200  bg-gray-100  shadow-md shadow-white dark:shadow-black/70  justify-end items-center rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer group"

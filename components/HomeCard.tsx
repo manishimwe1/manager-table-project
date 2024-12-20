@@ -38,7 +38,14 @@ const HomeCard = ({
         <CardContent className="flex justify-end !p-0 mr-3 text-gray-800 dark:text-gray-200 3xl font-bold">
           {content ? (
             <NumberFlow
-              value={content ? content : 0}
+              value={content}
+              transformTiming={{ duration: 750, easing: "ease-out" }}
+              spinTiming={{ duration: 750, easing: "ease-out" }}
+              opacityTiming={{ duration: 350, easing: "ease-out" }}
+            />
+          ) : content === 0 ? (
+            <NumberFlow
+              value={0}
               transformTiming={{ duration: 750, easing: "ease-out" }}
               spinTiming={{ duration: 750, easing: "ease-out" }}
               opacityTiming={{ duration: 350, easing: "ease-out" }}

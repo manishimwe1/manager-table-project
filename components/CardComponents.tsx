@@ -25,7 +25,9 @@ const CardComponents = () => {
   const Client = useQuery(api.clientName.getClientByIden, {
     userId: user?._id as Id<"user">,
   });
-  const saledProduct = useQuery(api.clientName.getSaledProduct);
+  const saledProduct = useQuery(api.clientName.getSaledProduct, {
+    userId: user?._id as Id<"user">,
+  });
   const ClientWhoPaid = useQuery(api.clientName.getClientWhoPaid, {
     userId: user?._id as Id<"user">,
   });
@@ -35,7 +37,8 @@ const CardComponents = () => {
   if (!userId) {
     redirect("/login");
   }
-
+  console.log(saledProduct?.length);
+  
   return (
     <div className="flex items-center justify-between gap-4  md:flex-row flex-col-reverse ">
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4  w-full ">

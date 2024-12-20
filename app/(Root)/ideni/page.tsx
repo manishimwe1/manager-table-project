@@ -5,12 +5,19 @@ import { DataTable } from "@/components/amadeni/DataTable";
 import HeaderSection from "@/components/HeaderSection";
 import SearchBox from "@/components/SearchBox";
 import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
+import { useSession } from "next-auth/react";
 import React, { useMemo, useState } from "react";
 
 const IdeniPage = () => {
   const [searchValue, setSearchValue] = useState("");
-  const Client = useQuery(api.clientName.getClientByIden);
+  const session = useSession();
+    const userId = session.data?.user;
+  
+    // Fetch all queries (hooks must always be called)
+    const user = useQuery(api.user.getUserIndb, { email: userId?.email || "" });
+  const Client = useQuery(api.clientName.getClientByIden,{userId:user?._id as Id<"user">});
 
   const filteredData = useMemo(() => {
     if (!searchValue) return Client;

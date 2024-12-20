@@ -74,9 +74,9 @@ export default function LoginPage() {
   }
 
   return (
-    <section className="flex items-center justify-center w-full h-screen">
-      <div className="w-full hidden overflow-hidden bg-cover bg-center h-screen md:flex flex-col bg-hero-bg" />
-      <div className="md:w-[70%] w-full h-screen flex items-center flex-col space-y-4 justify-center bg-slate-900 px-10 lg:px-20">
+    <section className="flex items-center justify-between w-full h-screen">
+      <div className="md:w-1/2 w-full hidden lg:flex overflow-hidden bg-cover bg-center h-full bg-hero-bg " />
+      <div className="w-full md:w-[50%]  flex items-center flex-col h-full space-y-4 justify-center bg-slate-900 px-10 lg:px-20">
         <div className="flex gap-2 flex-col">
           <h2 className="text-balance text-xl md:text-3xl font-bold tracking-tighter text-white">
             Welcome back
