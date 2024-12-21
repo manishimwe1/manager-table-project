@@ -21,8 +21,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 const DataComponents = ({
   dataByDate,
+  name,
 }: {
   dataByDate: ProductType[] | undefined;
+  name: string;
 }) => {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [searchValue, setSearchValue] = useState<string>("");
@@ -83,7 +85,7 @@ const DataComponents = ({
                   <p>
                     Name:
                     <span className="dark:text-gray-400 text-lg text-stone-900 capitalize">
-                      {"Manzi"}
+                      {name}
                     </span>
                   </p>
                   {productData.map((product) => (

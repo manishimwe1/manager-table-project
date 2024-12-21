@@ -1,12 +1,13 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { Minus, Plus, Trash } from "lucide-react";
+import { ChevronDown, ChevronUp, Minus, Plus, Trash } from "lucide-react";
 import { Button } from "./ui/button";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import DataComponents from "./DataComponents";
 import { ProductType } from "@/types";
+import { useClientInfoStore } from "@/lib/store/zustand";
 
 interface SereveyeItem {
   id: number;
@@ -34,10 +35,11 @@ const SereveyeRow: React.FC<SereveyeRowProps> = ({
   totalRows,
   dataByDate,
 }) => {
+  const { setName, setFactureNumber } = useClientInfoStore();
   return (
     <div className="flex flex-col py-4">
       <div className="flex flex-col lg:flex-row items-center justify-between">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 w-1/2">
           <Label
             className="text-stone-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 rounded-lg dark:bg-stone-900 dark:text-gray-200"
             htmlFor={`name-${item.id}`}
@@ -50,10 +52,15 @@ const SereveyeRow: React.FC<SereveyeRowProps> = ({
             value={item.name}
             onChange={(e) => onUpdate(index, e.target.value)}
             placeholder="Enter name"
+            onBlur={(e) => {
+              setName(e.target.value);
+              setFactureNumber(index + 1);
+              onToggleTable(index);
+            }}
           />
-          <Button className="text-stone-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-gray-200">
+          {/* <Button className="text-stone-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-gray-200">
             curuza
-          </Button>
+          </Button> */}
         </div>
         <div className="flex items-center gap-2">
           <p className="dark:text-stone-400 text-lg font-semibold">
@@ -62,15 +69,15 @@ const SereveyeRow: React.FC<SereveyeRowProps> = ({
           <Label className="text-red-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-blue-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-blue-500">
             {index + 1}
           </Label>
-          <div className="flex items-center gap-2 mt-2">
+          <div className="flex items-center gap-2">
             <div
               className="w-fit h-fit p-1 text-stone-950 border-l-2 border-gray-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer"
               onClick={() => onToggleTable(index)}
             >
               {item.tableOpen ? (
-                <Minus className="h-4 w-4" />
+                <ChevronDown className="h-4 w-4" />
               ) : (
-                <Plus className="h-4 w-4" />
+                <ChevronUp className="h-4 w-4" />
               )}
             </div>
             {totalRows > 1 && (
@@ -88,7 +95,7 @@ const SereveyeRow: React.FC<SereveyeRowProps> = ({
       {item.tableOpen && (
         <div className="mt-4">
           <div className="bg-gray-100 dark:bg-stone-800 p-4 rounded-lg">
-            <DataComponents dataByDate={dataByDate} />
+            <DataComponents dataByDate={dataByDate} name={item.name} />
           </div>
         </div>
       )}
@@ -158,10 +165,10 @@ const AddSereveye: React.FC<AddSereveyeProps> = ({
         ))}
 
         <div
-          className="mt-4 w-fit h-fit p-2 text-stone-950 border-l-2 border-gray-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer"
+          className="mt-4 w-fit h-fit p-2 text-stone-950 border-t-2 border-gray-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer"
           onClick={handleAddRow}
         >
-          Add New Row
+          Ongera Umukiriya
         </div>
       </div>
     </div>

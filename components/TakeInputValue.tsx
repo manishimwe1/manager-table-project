@@ -19,6 +19,7 @@ const TakeInputValue = ({
   productType,
   id,
   igicuruzwa,
+  customerName, // Add this new prop
 }: {
   ukonyigurishaKuriDetail: number;
   id: Id<"product">;
@@ -28,86 +29,118 @@ const TakeInputValue = ({
   byoseHamwe: number;
   productType: string;
   igicuruzwa: string;
+  customerName: string; // Add this new prop type
 }) => {
   const session = useSession();
   const userId = session.data?.user;
   const { toast } = useToast();
-  // Fetch all queries (hooks must always be called)
   const user = useQuery(api.user.getUserIndb, { email: userId?.email || "" });
-  const [inputValue, setInputValue] = useState<string | number>(""); // Local state for input value
-  const [calculatedValue, setCalculatedValue] = useState<number>(0); // Computed value for display
+  const [localInputValue, setLocalInputValue] = useState<string>("");
+  const [localCalculatedValue, setLocalCalculatedValue] = useState<number>(0);
 
   const { name, factureNumber, updateProduct, productData } =
     useClientInfoStore();
 
   const addDraftPurchase = useMutation(api.draftPurchace.createPurchase);
   const getDraftPurchases = useQuery(api.draftPurchace.getDraftPurchase, {
-    name: name,
+    name: customerName, // Use customerName instead of global name
     factureNumber: factureNumber,
   });
-  console.log(getDraftPurchases);
 
-  // Pre-fill input value if product already exists
+  // Modified to use customerName in the check
+  const findExistingDraft = useCallback(() => {
+    if (!getDraftPurchases || !igicuruzwa || !id) return null;
+
+    return getDraftPurchases.find(
+      (product) =>
+        product.igicuruzwa === igicuruzwa &&
+        product.productId === id &&
+        product.name === customerName // Add this check
+    );
+  }, [getDraftPurchases, igicuruzwa, id, customerName]);
+
   useEffect(() => {
-    const existingProduct = productData.find((product) => product.id === id);
-    if (existingProduct) {
-      setInputValue(existingProduct.aratwaraZingahe || ""); // Pre-fill aratwaraZingahe value
-    }
-  }, [id, productData]);
+    const existingProduct =
+      getDraftPurchases?.find(
+        (product) =>
+          product.igicuruzwa === igicuruzwa &&
+          product.productId === id &&
+          product.name === customerName // Add this check
+      ) || null;
 
-  // Handle input change
+    if (existingProduct?.aratwaraZingahe != null) {
+      setLocalInputValue(existingProduct.aratwaraZingahe.toString());
+      setLocalCalculatedValue(
+        existingProduct.aratwaraZingahe * ukonyigurishaKuriDetail
+      );
+    } else {
+      setLocalInputValue("");
+      setLocalCalculatedValue(0);
+    }
+  }, [
+    getDraftPurchases,
+    igicuruzwa,
+    id,
+    ukonyigurishaKuriDetail,
+    customerName,
+  ]);
+  // Add customerName dependency
+
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;
-      setInputValue(newValue);
 
+      if (Number(newValue) < 0 || isNaN(Number(newValue))) {
+        return;
+      }
+
+      setLocalInputValue(newValue);
       activeRow.toggleSelected(true);
 
       const numericValue = Number(newValue);
       const total = numericValue * ukonyigurishaKuriDetail;
-      setCalculatedValue(total);
+      setLocalCalculatedValue(total);
     },
     [activeRow, ukonyigurishaKuriDetail]
   );
 
-  // Handle input blur (save or update product)
   const handleBlur = useCallback(() => {
+    if (!localInputValue.trim()) {
+      setLocalInputValue("");
+      return;
+    }
+
     if (
       !ukonyigurishaKuriDetail ||
       !byoseHamwe ||
       !productType ||
       !ingano ||
-      !name
+      !customerName // Check customerName instead of name
     ) {
       toast({
-        description: `Missing required product details ${ukonyigurishaKuriDetail},
-        ${byoseHamwe},
-        ${productType},
-        ${ingano},
-      }`,
+        description: "Missing required product details",
         variant: "destructive",
       });
       return;
     }
 
-    const numericValue = Number(inputValue);
+    const numericValue = Number(localInputValue);
     const total = numericValue * ukonyigurishaKuriDetail;
 
-    const existingProduct = productData.find((product) => product.id === id);
+    const existingProduct = productData.find(
+      (product) => product.id === id && name === customerName // Add customer check
+    );
 
     if (existingProduct) {
-      // Update the existing product
       updateProduct(id, {
         aratwaraZingahe: numericValue,
         yishyuyeAngahe: total,
       });
-      setInputValue("");
     } else {
-      // Add a new product with activeRow info
       const purchaseNumber = Math.floor(Math.random() * 1000000000);
       addDraftPurchase({
         purchaseNumber,
-        name,
+        name: customerName ?? "", // Use customerName here
         factureNumber,
         productId: id,
         byoseHamwe,
@@ -119,11 +152,9 @@ const TakeInputValue = ({
         ukonyigurishaKuriDetail,
         userId: user?._id as Id<"user">,
       });
-      setInputValue("");
     }
-    setCalculatedValue(total);
   }, [
-    inputValue,
+    localInputValue,
     ukonyigurishaKuriDetail,
     byoseHamwe,
     productType,
@@ -132,7 +163,11 @@ const TakeInputValue = ({
     productData,
     addDraftPurchase,
     updateProduct,
-    user,
+    user?._id,
+    customerName, // Replace name with customerName
+    factureNumber,
+    igicuruzwa,
+    toast,
   ]);
 
   return (
@@ -142,11 +177,11 @@ const TakeInputValue = ({
         className
       )}
       type="number"
-      value={inputValue}
-      required
+      value={localInputValue}
       onChange={handleInputChange}
       onBlur={handleBlur}
       min={0}
+      placeholder="0"
     />
   );
 };
