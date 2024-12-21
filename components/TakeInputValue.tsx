@@ -5,6 +5,10 @@ import { Id } from "@/convex/_generated/dataModel";
 import { TableRowType } from "@/types";
 import { Row } from "@tanstack/react-table";
 import { cn } from "@/lib/utils";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { useSession } from "next-auth/react";
+import { useToast } from "@/hooks/use-toast";
 
 const TakeInputValue = ({
   ukonyigurishaKuriDetail,
@@ -25,10 +29,23 @@ const TakeInputValue = ({
   productType: string;
   igicuruzwa: string;
 }) => {
+  const session = useSession();
+  const userId = session.data?.user;
+  const { toast } = useToast();
+  // Fetch all queries (hooks must always be called)
+  const user = useQuery(api.user.getUserIndb, { email: userId?.email || "" });
   const [inputValue, setInputValue] = useState<string | number>(""); // Local state for input value
   const [calculatedValue, setCalculatedValue] = useState<number>(0); // Computed value for display
 
-  const { addProduct, updateProduct, productData } = useClientInfoStore();
+  const { name, factureNumber, updateProduct, productData } =
+    useClientInfoStore();
+
+  const addDraftPurchase = useMutation(api.draftPurchace.createPurchase);
+  const getDraftPurchases = useQuery(api.draftPurchace.getDraftPurchase, {
+    name: name,
+    factureNumber: factureNumber,
+  });
+  console.log(getDraftPurchases);
 
   // Pre-fill input value if product already exists
   useEffect(() => {
@@ -55,12 +72,20 @@ const TakeInputValue = ({
 
   // Handle input blur (save or update product)
   const handleBlur = useCallback(() => {
-    if (!ukonyigurishaKuriDetail || !byoseHamwe || !productType || !ingano) {
-      console.warn("Missing required product details", {
-        ukonyigurishaKuriDetail,
-        byoseHamwe,
-        productType,
-        ingano,
+    if (
+      !ukonyigurishaKuriDetail ||
+      !byoseHamwe ||
+      !productType ||
+      !ingano ||
+      !name
+    ) {
+      toast({
+        description: `Missing required product details ${ukonyigurishaKuriDetail},
+        ${byoseHamwe},
+        ${productType},
+        ${ingano},
+      }`,
+        variant: "destructive",
       });
       return;
     }
@@ -79,8 +104,12 @@ const TakeInputValue = ({
       setInputValue("");
     } else {
       // Add a new product with activeRow info
-      addProduct({
-        id,
+      const purchaseNumber = Math.floor(Math.random() * 1000000000);
+      addDraftPurchase({
+        purchaseNumber,
+        name,
+        factureNumber,
+        productId: id,
         byoseHamwe,
         productType,
         ingano,
@@ -88,7 +117,7 @@ const TakeInputValue = ({
         yishyuyeAngahe: total,
         igicuruzwa,
         ukonyigurishaKuriDetail,
-        activeRow: activeRow, // Add activeRow to productData
+        userId: user?._id as Id<"user">,
       });
       setInputValue("");
     }
@@ -101,9 +130,9 @@ const TakeInputValue = ({
     ingano,
     id,
     productData,
-    addProduct,
+    addDraftPurchase,
     updateProduct,
-    activeRow,
+    user,
   ]);
 
   return (

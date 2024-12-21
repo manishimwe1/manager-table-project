@@ -22,11 +22,11 @@ interface ClientInfo {
   removeProduct: (id: Id<"product">) => void; // Remove a product by ID
   resetProducts: () => void; // Reset the entire product array
   name: string; // Client name
-  phone: number; // Client phone number
+  factureNumber: number; // Client phone number
   stock: number; // Stock (needs initialization)
   isSubmitting: boolean; // Submission status
   setName: (newName: string) => void; // Set client name
-  setPhone: (newPhone: number) => void; // Set client phone
+  setFactureNumber: (newPhone: number) => void; // Set client phone
   setReset: () => void; // Reset all client-related fields
   setIsSubmitting: (value: boolean) => void; // Set submission status
 }
@@ -34,7 +34,7 @@ interface ClientInfo {
 export const useClientInfoStore = create<ClientInfo>((set) => ({
   productData: [], // Initialize product data as an empty array
   name: "",
-  phone: 0,
+  factureNumber: 0,
   stock: 0, // Initialize stock as 0
   isSubmitting: false, // Initialize submission status
 
@@ -84,9 +84,9 @@ export const useClientInfoStore = create<ClientInfo>((set) => ({
     })),
 
   // Set the client's phone number
-  setPhone: (newPhone: number) =>
+  setFactureNumber: (factureNumber: number) =>
     set(() => ({
-      phone: newPhone,
+      factureNumber: factureNumber,
     })),
 
   // Reset all client-related fields

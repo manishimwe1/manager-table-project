@@ -16,7 +16,7 @@ const SellingButton = () => {
   const [ideni, setIdeni] = useState<"Yego" | "Oya" | undefined>();
   const [loading, setLoading] = useState(false);
 
-  const { name, phone, setReset, productData, setIsSubmitting } =
+  const { name, factureNumber, setReset, productData, setIsSubmitting } =
     useClientInfoStore();
   const session = useSession();
   const userId = session.data?.user;
@@ -50,7 +50,7 @@ const SellingButton = () => {
           productId: product.id,
           userId: user?._id!,
           name,
-          phone: phone ?? 0,
+          phone: factureNumber ?? 0,
           aratwaraZingahe: product.aratwaraZingahe,
           yishyuyeAngahe: product.yishyuyeAngahe,
           nideni: false,
@@ -66,7 +66,7 @@ const SellingButton = () => {
         value === "Oya" &&
         product.aratwaraZingahe &&
         name !== "" &&
-        phone !== 0
+        factureNumber !== 0
       ) {
         setIdeni("Oya");
 
@@ -74,7 +74,7 @@ const SellingButton = () => {
           userId: user?._id!,
           productId: product.id,
           name,
-          phone,
+          phone: factureNumber,
           aratwaraZingahe: product.aratwaraZingahe,
           yishyuyeAngahe: product.yishyuyeAngahe,
           nideni: true,

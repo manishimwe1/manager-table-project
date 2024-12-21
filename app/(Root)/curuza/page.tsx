@@ -12,16 +12,14 @@ import { useQuery } from "convex/react";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 const SalesPage: React.FC = () => {
   const router = useRouter();
   const session = useSession();
-
-  const [tableOpen, setTableOpen] = useState<boolean>(false);
   const [addSereveye, setAddSereveye] = useState<
-    { id: number; tableOpen: boolean }[]
-  >([]);
+    { id: number; tableOpen: boolean; name: string }[]
+  >([{ id: 1, tableOpen: false, name: "" }]);
 
   const userId = session.data?.user;
 
@@ -41,36 +39,6 @@ const SalesPage: React.FC = () => {
     }
   }, [session.status, router]);
 
-  // Memoize the rendering of additional components for performance
-  const renderAddSereveye = useMemo(() => {
-    return addSereveye.map((item, index) => (
-      <AddSereveye
-        key={item.id}
-        index={index}
-        data={data}
-        tableOpen={item.tableOpen}
-        setTableOpen={(open) =>
-          setAddSereveye((prev) =>
-            prev.map((entry, i) =>
-              i === index ? { ...entry, tableOpen: open } : entry
-            )
-          )
-        }
-        addSereveye={addSereveye}
-        setAddSereveye={setAddSereveye}
-        showRemove={true}
-      />
-    ));
-  }, [addSereveye, data]);
-
-  // Helpers to identify product groups
-  const hasDetailProducts = useMemo(
-    () =>
-      data?.some((item) => item.ibyoUranguyeType.includes("Kuri detail")) ||
-      false,
-    [data]
-  );
-
   // Reusable collapsible component rendering function
   const renderCollapsible = (
     title: string,
@@ -80,19 +48,14 @@ const SalesPage: React.FC = () => {
       <div className="w-full flex items-center flex-col justify-end">
         <div className="flex flex-col gap-1 md:gap-2 lg:flex-row w-full h-full justify-between">
           <div className="w-full h-full flex flex-col gap-2">
-            <div className=" w-full flex flex-col h-full">
-              {addSereveye.length >= 0 && (
-                <AddSereveye
-                  index={0}
-                  data={data}
-                  tableOpen={tableOpen}
-                  setTableOpen={setTableOpen}
-                  addSereveye={addSereveye}
-                  setAddSereveye={setAddSereveye}
-                />
-              )}
+            <div className="w-full flex flex-col h-full">
+              <AddSereveye
+                data={data}
+                FactureNumber={1}
+                addSereveye={addSereveye}
+                setAddSereveye={setAddSereveye}
+              />
             </div>
-            {renderAddSereveye}
           </div>
         </div>
       </div>
@@ -118,11 +81,11 @@ const SalesPage: React.FC = () => {
     );
   }
 
-  // Render multiple collapsible items with toggling functionality
+  // Render the page
   return (
     <section className="flex flex-col w-full h-full lg:pl-0">
       {renderCollapsible(
-        `Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())} `,
+        `Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())}`,
         data
       )}
     </section>

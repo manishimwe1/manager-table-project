@@ -8,7 +8,7 @@ import React, {
   useState,
 } from "react";
 import { ProductType } from "@/types";
-import { ChevronUp, Loader2 } from "lucide-react";
+import { ChevronUp, Loader2, SortAsc } from "lucide-react";
 import { DataTable } from "./saleTable/DataTable";
 import { columns } from "./saleTable/columns";
 import { RowSelectionState } from "@tanstack/react-table";
@@ -21,25 +21,14 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 const DataComponents = ({
   dataByDate,
-  tableOpen,
-  setTableOpen,
-  nameInput,
-  setNameInput,
-  phoneInput,
 }: {
   dataByDate: ProductType[] | undefined;
-  tableOpen: boolean;
-  setTableOpen: (open: boolean) => void;
-  nameInput: string;
-  setNameInput: Dispatch<SetStateAction<string>>;
-  phoneInput: string;
-  setPhoneInput: Dispatch<SetStateAction<string>>;
 }) => {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [searchValue, setSearchValue] = useState<string>("");
 
   // Access `productData` directly from the Zustand store
-  const { name, phone, productData, isSubmitting } = useClientInfoStore();
+  const { productData, isSubmitting } = useClientInfoStore();
 
   // Filter data based on the search value
   const filteredData = useMemo(() => {
@@ -56,23 +45,21 @@ const DataComponents = ({
       0,
     [productData]
   );
-  useEffect(() => {
-    console.log(productData, "in data");
-  }, [productData]);
+
   return (
     <div className="w-full py-3 h-full">
       {dataByDate ? (
         <div className="w-full flex flex-col h-full items-center">
-          <div className="flex justify-between items-center w-full gap-2">
+          <div className="flex justify-between items-center w-full gap-2 px-2 lg:px-4">
             <SearchBox
               searchValue={searchValue}
               setSearchValue={setSearchValue}
             />
             <div
               className="w-fit h-fit p-1 text-stone-950 text-nowrap text-sm lg:text-lg border-t-2 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 justify-end items-center rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer group"
-              onClick={() => setTableOpen(!tableOpen)}
+              onClick={() => {}}
             >
-              <ChevronUp
+              <SortAsc
                 className={cn("group-hover:hover:text-stone-500 h-4 w-4")}
               />
             </div>
@@ -96,7 +83,7 @@ const DataComponents = ({
                   <p>
                     Name:
                     <span className="dark:text-gray-400 text-lg text-stone-900 capitalize">
-                      {nameInput}
+                      {"Manzi"}
                     </span>
                   </p>
                   {productData.map((product) => (
