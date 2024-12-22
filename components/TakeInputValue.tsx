@@ -93,28 +93,27 @@ const TakeInputValue = ({
       yishyuyeAngahe: total,
     };
 
-    if (draftPurchased) {
-      // updateDraftPurchase({
-      //   id: id,
-      //   fields,
-      // });
-    } else {
-      const purchaseNumber = Math.floor(Math.random() * 1000000000);
-      addDraftPurchase({
-        purchaseNumber,
-        name: name ?? "",
-        factureNumber,
-        productId: id,
-        byoseHamwe,
-        productType,
-        ingano,
-        aratwaraZingahe: Number(localInputValue),
-        yishyuyeAngahe: total,
-        igicuruzwa,
-        ukonyigurishaKuriDetail,
-        userId: user?._id as Id<"user">,
-      });
-    }
+    // if (draftPurchased) {
+    // updateDraftPurchase({
+    //   id: id,
+    //   fields,
+    // });
+    // } else {
+    const purchaseNumber = Math.floor(Math.random() * 1000000000);
+    addDraftPurchase({
+      purchaseNumber,
+      name: name ?? "",
+      factureNumber,
+      productId: id,
+      byoseHamwe,
+      productType,
+      ingano,
+      aratwaraZingahe: Number(localInputValue),
+      yishyuyeAngahe: total,
+      igicuruzwa,
+      ukonyigurishaKuriDetail,
+      userId: user?._id as Id<"user">,
+    });
   }, [
     localInputValue,
     ukonyigurishaKuriDetail,
