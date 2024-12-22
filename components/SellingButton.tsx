@@ -116,8 +116,8 @@ const SellingButton = ({
 
   return (
     <div className="w-full flex items-center justify-center gap-2 flex-col">
-      <div className="h-[200px] w-[350px] lg:w-full rounded-md border dark:border-black !bg-stone-950 !shadow-md shadow-stone-950s p-4 flex  items-center justify-between">
-        <div className="flex items-start flex-col gap-2 w-full border h-full">
+      <div className="h-[200px] w-full lg:w-full rounded-md   !bg-stone-950 !shadow-md shadow-stone-950s p-4 flex flex-col lg:flex-row items-center justify-between ">
+        <div className="flex items-start flex-col gap-2 w-full  h-full">
           <p>
             Name:
             <span className="dark:text-gray-400 text-lg text-stone-900 capitalize">
@@ -131,7 +131,7 @@ const SellingButton = ({
             </span>
           </p>
         </div>
-        <ScrollArea className="h-[184px] w-full rounded-md border p-4">
+        <ScrollArea className="h-[184px] w-full rounded-md px-2ed  lg:p-4 border dark:border-stone-900">
           {draftPurchases ? (
             draftPurchases.map((purchase) => (
               <div className="flex w-full gap-4 py-2" key={purchase._id}>
