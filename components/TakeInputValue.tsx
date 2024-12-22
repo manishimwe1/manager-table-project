@@ -1,9 +1,13 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { Input } from "./ui/input";
 import { useClientInfoStore } from "@/lib/store/zustand";
 import { Id } from "@/convex/_generated/dataModel";
-import { TableRowType } from "@/types";
-import { Row } from "@tanstack/react-table";
 import { cn } from "@/lib/utils";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -11,81 +15,50 @@ import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 
 const TakeInputValue = ({
-  ukonyigurishaKuriDetail,
-  activeRow,
-  ingano,
-  className,
-  byoseHamwe,
+  setActiveRow,
   productType,
   id,
+  ukonyigurishaKuriDetail,
+  byoseHamwe,
+  ingano,
   igicuruzwa,
-  customerName, // Add this new prop
+  draftPurchase,
+  draftId,
 }: {
-  ukonyigurishaKuriDetail: number;
   id: Id<"product">;
-  ingano: number;
-  activeRow: Row<TableRowType>;
-  className: string;
-  byoseHamwe: number;
+  setActiveRow: Dispatch<SetStateAction<boolean>>;
   productType: string;
+  ukonyigurishaKuriDetail: number;
+  byoseHamwe: number;
+  ingano: number;
   igicuruzwa: string;
-  customerName: string; // Add this new prop type
+  draftPurchase?: { aratwaraZingahe: number } | null; // Pass draftPurchase individually
+  draftId: Id<"draftPurchase"> | null;
 }) => {
   const session = useSession();
   const userId = session.data?.user;
   const { toast } = useToast();
   const user = useQuery(api.user.getUserIndb, { email: userId?.email || "" });
-  const [localInputValue, setLocalInputValue] = useState<string>("");
-  const [localCalculatedValue, setLocalCalculatedValue] = useState<number>(0);
+
+  const [localInputValue, setLocalInputValue] = useState<string>(
+    draftPurchase?.aratwaraZingahe?.toString() || ""
+  );
+  const [localCalculatedValue, setLocalCalculatedValue] = useState<number>(
+    draftPurchase ? draftPurchase.aratwaraZingahe * ukonyigurishaKuriDetail : 0
+  );
+  console.log(draftId, "-------------");
 
   const { name, factureNumber, updateProduct, productData } =
     useClientInfoStore();
 
   const addDraftPurchase = useMutation(api.draftPurchace.createPurchase);
-  const getDraftPurchases = useQuery(api.draftPurchace.getDraftPurchase, {
-    name: customerName, // Use customerName instead of global name
+  const draftPurchased = useQuery(api.draftPurchace.getDraftPurchase, {
+    name, // Use customerName instead of global name
     factureNumber: factureNumber,
   });
-
-  // Modified to use customerName in the check
-  const findExistingDraft = useCallback(() => {
-    if (!getDraftPurchases || !igicuruzwa || !id) return null;
-
-    return getDraftPurchases.find(
-      (product) =>
-        product.igicuruzwa === igicuruzwa &&
-        product.productId === id &&
-        product.name === customerName // Add this check
-    );
-  }, [getDraftPurchases, igicuruzwa, id, customerName]);
-
-  useEffect(() => {
-    const existingProduct =
-      getDraftPurchases?.find(
-        (product) =>
-          product.igicuruzwa === igicuruzwa &&
-          product.productId === id &&
-          product.name === customerName // Add this check
-      ) || null;
-
-    if (existingProduct?.aratwaraZingahe != null) {
-      setLocalInputValue(existingProduct.aratwaraZingahe.toString());
-      setLocalCalculatedValue(
-        existingProduct.aratwaraZingahe * ukonyigurishaKuriDetail
-      );
-    } else {
-      setLocalInputValue("");
-      setLocalCalculatedValue(0);
-    }
-  }, [
-    getDraftPurchases,
-    igicuruzwa,
-    id,
-    ukonyigurishaKuriDetail,
-    customerName,
-  ]);
-  // Add customerName dependency
-
+  const updateDraftPurchase = useMutation(
+    api.draftPurchace.updateDraftPurchase
+  );
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;
@@ -95,28 +68,17 @@ const TakeInputValue = ({
       }
 
       setLocalInputValue(newValue);
-      activeRow.toggleSelected(true);
+      setActiveRow(true);
 
       const numericValue = Number(newValue);
       const total = numericValue * ukonyigurishaKuriDetail;
       setLocalCalculatedValue(total);
     },
-    [activeRow, ukonyigurishaKuriDetail]
+    [setActiveRow, ukonyigurishaKuriDetail]
   );
 
   const handleBlur = useCallback(() => {
-    if (!localInputValue.trim()) {
-      setLocalInputValue("");
-      return;
-    }
-
-    if (
-      !ukonyigurishaKuriDetail ||
-      !byoseHamwe ||
-      !productType ||
-      !ingano ||
-      !customerName // Check customerName instead of name
-    ) {
+    if (!ukonyigurishaKuriDetail || !name) {
       toast({
         description: "Missing required product details",
         variant: "destructive",
@@ -124,29 +86,29 @@ const TakeInputValue = ({
       return;
     }
 
-    const numericValue = Number(localInputValue);
-    const total = numericValue * ukonyigurishaKuriDetail;
+    const total = Number(localInputValue) * ukonyigurishaKuriDetail;
 
-    const existingProduct = productData.find(
-      (product) => product.id === id && name === customerName // Add customer check
-    );
+    const fields = {
+      aratwaraZingahe: Number(localInputValue),
+      yishyuyeAngahe: total,
+    };
 
-    if (existingProduct) {
-      updateProduct(id, {
-        aratwaraZingahe: numericValue,
-        yishyuyeAngahe: total,
-      });
+    if (draftPurchased) {
+      // updateDraftPurchase({
+      //   id: id,
+      //   fields,
+      // });
     } else {
       const purchaseNumber = Math.floor(Math.random() * 1000000000);
       addDraftPurchase({
         purchaseNumber,
-        name: customerName ?? "", // Use customerName here
+        name: name ?? "",
         factureNumber,
         productId: id,
         byoseHamwe,
         productType,
         ingano,
-        aratwaraZingahe: numericValue,
+        aratwaraZingahe: Number(localInputValue),
         yishyuyeAngahe: total,
         igicuruzwa,
         ukonyigurishaKuriDetail,
@@ -156,25 +118,24 @@ const TakeInputValue = ({
   }, [
     localInputValue,
     ukonyigurishaKuriDetail,
+    name,
+    addDraftPurchase,
+    updateProduct,
+    productData,
+    id,
+    factureNumber,
     byoseHamwe,
     productType,
     ingano,
-    id,
-    productData,
-    addDraftPurchase,
-    updateProduct,
-    user?._id,
-    customerName, // Replace name with customerName
-    factureNumber,
     igicuruzwa,
+    user?._id,
     toast,
   ]);
 
   return (
     <Input
       className={cn(
-        "px-1 placeholder:text-xs border-stone-900 dark:border-stone-500",
-        className
+        "px-1 placeholder:text-xs border-stone-900 dark:border-stone-500"
       )}
       type="number"
       value={localInputValue}

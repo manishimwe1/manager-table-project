@@ -1,13 +1,12 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { ChevronDown, ChevronUp, Minus, Plus, Trash } from "lucide-react";
-import { Button } from "./ui/button";
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import DataComponents from "./DataComponents";
+import { ChevronDown, ChevronUp, Trash } from "lucide-react";
 import { ProductType } from "@/types";
 import { useClientInfoStore } from "@/lib/store/zustand";
+import DataTable from "./DataTable";
+import { useToast } from "@/hooks/use-toast";
+import SellingButton from "./SellingButton";
 
 interface SereveyeItem {
   id: number;
@@ -35,11 +34,14 @@ const SereveyeRow: React.FC<SereveyeRowProps> = ({
   totalRows,
   dataByDate,
 }) => {
-  const { setName, setFactureNumber } = useClientInfoStore();
+  const { toast } = useToast();
+  const { setName, name, setFactureNumber, factureNumber } =
+    useClientInfoStore();
+
   return (
     <div className="flex flex-col py-4">
-      <div className="flex flex-col lg:flex-row items-center justify-between">
-        <div className="flex items-center gap-4 w-1/2">
+      <div className="flex  w-full gap-2 items-center justify-between px-4">
+        <div className="flex items-center gap-4 w-full lg:w-1/2">
           <Label
             className="text-stone-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 rounded-lg dark:bg-stone-900 dark:text-gray-200"
             htmlFor={`name-${item.id}`}
@@ -53,31 +55,47 @@ const SereveyeRow: React.FC<SereveyeRowProps> = ({
             onChange={(e) => onUpdate(index, e.target.value)}
             placeholder="Enter name"
             onBlur={(e) => {
+              if (e.target.value === "") {
+                toast({
+                  description: "Ooops!!... Ntazi ry'umukiriya washyizimo",
+                  variant: "destructive",
+                });
+                return;
+              }
               setName(e.target.value);
               setFactureNumber(index + 1);
               onToggleTable(index);
             }}
           />
-          {/* <Button className="text-stone-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-gray-200">
-            curuza
-          </Button> */}
         </div>
-        <div className="flex items-center gap-2">
-          <p className="dark:text-stone-400 text-lg font-semibold">
-            Nimero y'afactire:
-          </p>
-          <Label className="text-red-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-blue-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-blue-500">
-            {index + 1}
-          </Label>
+        <div className="flex items-center gap-2  ">
+          <div className="lg:flex hidden items-center gap-2 ">
+            <p className="dark:text-stone-400 text-lg font-semibold">
+              Nimero y'afactire:
+            </p>
+            <Label className="text-red-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-blue-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-blue-500">
+              {index + 1}
+            </Label>
+          </div>
           <div className="flex items-center gap-2">
             <div
               className="w-fit h-fit p-1 text-stone-950 border-l-2 border-gray-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer"
-              onClick={() => onToggleTable(index)}
+              onClick={() => {
+                if (name === "") {
+                  toast({
+                    description: "Ooops!!... Ntazi ry'umukiriya washyizimo",
+                    variant: "destructive",
+                  });
+                  return;
+                }
+
+                onToggleTable(index);
+              }}
             >
               {item.tableOpen ? (
-                <ChevronDown className="h-4 w-4" />
-              ) : (
                 <ChevronUp className="h-4 w-4" />
+              ) : (
+                <ChevronDown className="h-4 w-4" />
               )}
             </div>
             {totalRows > 1 && (
@@ -94,8 +112,16 @@ const SereveyeRow: React.FC<SereveyeRowProps> = ({
 
       {item.tableOpen && (
         <div className="mt-4">
-          <div className="bg-gray-100 dark:bg-stone-800 p-4 rounded-lg">
-            <DataComponents dataByDate={dataByDate} name={item.name} />
+          <div className="bg-gray-100 dark:bg-stone-800 p-2 lg:p-4 rounded-lg">
+            {/* <DataComponents dataByDate={dataByDate} name={item.name} /> */}
+            <DataTable
+              data={dataByDate}
+              name={item.name}
+              factureNumber={index + 1}
+            />
+          </div>
+          <div className="dark:bg-stone-900 mt-2 rounded-sm dark:text-gray-200 w-full h-full  flex flex-col items-start justify-center p-4">
+            <SellingButton name={name} factureNumber={index + 1} />
           </div>
         </div>
       )}
@@ -149,7 +175,7 @@ const AddSereveye: React.FC<AddSereveyeProps> = ({
   };
 
   return (
-    <div className="flex flex-col w-full h-full p-4">
+    <div className="flex flex-col w-full h-full">
       <div className="flex flex-col gap-2">
         {addSereveye.map((item, index) => (
           <SereveyeRow

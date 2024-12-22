@@ -48,7 +48,7 @@ const SalesPage: React.FC = () => {
       <div className="w-full flex items-center flex-col justify-end">
         <div className="flex flex-col gap-1 md:gap-2 lg:flex-row w-full h-full justify-between">
           <div className="w-full h-full flex flex-col gap-2">
-            <div className="w-full flex flex-col h-full">
+            <div className="w-full flex flex-col h-full ">
               <AddSereveye
                 data={data}
                 FactureNumber={1}

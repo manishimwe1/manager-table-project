@@ -58,3 +58,30 @@ export const getDraftPurchase = query({
     return draftPurchase;
   },
 });
+
+export const updateDraftPurchase = mutation({
+  args: {
+    id: v.id("draftPurchase"),
+    fields: v.object({
+      // Define possible fields that can be updated and their types
+      wishyuyeAngahe: v.optional(v.number()),
+      igicuruzwa: v.optional(v.string()),
+      ingano: v.optional(v.number()),
+      ikiranguzo: v.optional(v.number()),
+      uzishyuraAngahe: v.optional(v.number()),
+      status: v.optional(v.boolean()),
+      ukonyigurishaKuriDetailKuriDetail: v.optional(v.number()),
+      inyungu: v.optional(v.number()),
+      ndanguyeZingahe: v.optional(v.number()),
+      byoseHamwe: v.optional(v.number()),
+      ibyoUranguyeType: v.optional(v.string()),
+    }),
+  },
+
+  handler: async (ctx, args) => {
+    const { id, fields } = args;
+
+    // Only update fields that are provided
+    await ctx.db.patch(id, fields);
+  },
+});
