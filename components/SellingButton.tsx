@@ -116,7 +116,7 @@ const SellingButton = ({
 
   return (
     <div className="w-full flex items-center justify-center gap-2 flex-col">
-      <div className="h-[200px] w-full lg:w-full rounded-md   !bg-stone-950 !shadow-md shadow-stone-950s p-4 flex flex-col lg:flex-row items-center justify-between ">
+      <div className="h-[200px] w-full lg:w-full rounded-md   dark:!bg-stone-950 !shadow-md shadow-stone-950s p-4 flex flex-col lg:flex-row items-center justify-between ">
         <div className="flex items-start flex-col gap-2 w-full  h-full">
           <p>
             Name:
