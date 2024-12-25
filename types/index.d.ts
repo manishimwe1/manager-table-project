@@ -93,3 +93,20 @@ export interface outOfStock {
   inyungu: number;
   ndanguyeZingahe: number;
 }
+
+export interface DraftPurchaseType {
+  _id: Id<"draftPurchase">;
+  _creationTime: number;
+  purchaseNumber: number;
+  userId: Id<"user">;
+  igicuruzwa: string;
+  ingano: number;
+  ukonyigurishaKuriDetail: number;
+  aratwaraZingahe: number;
+  productType: string;
+  byoseHamwe: number;
+  productId: Id<"product">;
+  yishyuyeAngahe: number;
+  name: string;
+  factureNumber: number;
+}

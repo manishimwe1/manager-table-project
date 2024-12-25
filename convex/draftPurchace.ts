@@ -42,7 +42,7 @@ export const createPurchase = mutation({
 });
 
 export const getDraftPurchase = query({
-  args: { name: v.string(), factureNumber: v.number() },
+  args: { factureNumber: v.number(), name: v.string() },
   handler: async (ctx, args) => {
     const draftPurchase = await ctx.db
       .query("draftPurchase")
@@ -83,5 +83,20 @@ export const updateDraftPurchase = mutation({
 
     // Only update fields that are provided
     await ctx.db.patch(id, fields);
+  },
+});
+
+export const getDraftPurchaseForMe = query({
+  args: { userId: v.id("user") },
+  handler: async (ctx, args) => {
+    const draftPurchase = await ctx.db
+      .query("draftPurchase")
+      .withIndex("by_userId", (q) => q.eq("userId", args.userId))
+      .collect();
+    if (!draftPurchase) {
+      new ConvexError("SOMETHING WENT WRONNG WHILE GETTING ");
+      return [];
+    }
+    return draftPurchase;
   },
 });

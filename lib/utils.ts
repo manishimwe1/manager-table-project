@@ -70,9 +70,13 @@ export const groupByDateInSaled = (
 
 export const formatToday = (): string => {
   const today = new Date();
-  const dayName = today.toLocaleDateString(undefined, { weekday: "long" }); // Get the day name
-  const formattedDate = today.toLocaleDateString(undefined); // Get the MM/DD/YYYY format
-  return `${dayName}, ${formattedDate}`;
+  const dayName = today.toLocaleDateString(undefined, {
+    weekday: "long",
+    numberingSystem: "day",
+  }); // Get the day name
+  const formattedDate = today.getFullYear();
+  const niceFormatDate = `${today.getDate()}`; // Get the MM/DD/YYYY format
+  return `${dayName}, ${niceFormatDate} / ${today.getUTCMonth() + 1} / ${formattedDate}`;
 };
 
 const TranslateDay = {

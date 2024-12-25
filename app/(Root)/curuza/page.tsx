@@ -2,10 +2,17 @@
 
 import AddSereveye from "@/components/AddSereveye";
 import CollapsibleComponents from "@/components/collapsibleComponents";
+import DataTable from "@/components/DataTable";
 import EmptyPlaceholder from "@/components/EmptyPlaceholder";
+import HeaderSection from "@/components/HeaderSection";
 import SkeletonLoader from "@/components/SkeletonLoader";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { useToast } from "@/hooks/use-toast";
+import { useClientInfoStore } from "@/lib/store/zustand";
 import { formatToday, getTranslatedDay } from "@/lib/utils";
 import { ProductType } from "@/types";
 import { useQuery } from "convex/react";
@@ -14,12 +21,27 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 
+interface ClientInfoItem {
+  id: number;
+  data: ProductType[] | undefined;
+}
+
+type ClientInfo = ClientInfoItem[];
+
+// Start with empty array instead of undefined data
 const SalesPage: React.FC = () => {
+  const [clientInfo, setClientInfo] = useState<ClientInfo>([]);
   const router = useRouter();
   const session = useSession();
+  const { toast } = useToast();
+
+  const { setName, name, setFactureNumber, factureNumber } =
+    useClientInfoStore();
   const [addSereveye, setAddSereveye] = useState<
     { id: number; tableOpen: boolean; name: string }[]
-  >([{ id: 1, tableOpen: false, name: "" }]);
+  >([{ id: factureNumber, tableOpen: false, name: name }]);
+
+  const [nameInput, setNameInput] = useState("");
 
   const userId = session.data?.user;
 
@@ -39,54 +61,122 @@ const SalesPage: React.FC = () => {
     }
   }, [session.status, router]);
 
-  // Reusable collapsible component rendering function
-  const renderCollapsible = (
-    title: string,
-    data: ProductType[] | undefined
-  ): ReactNode => (
-    <CollapsibleComponents title={title}>
-      <div className="w-full flex items-center flex-col justify-end">
-        <div className="flex flex-col gap-1 md:gap-2 lg:flex-row w-full h-full justify-between">
-          <div className="w-full h-full flex flex-col gap-2">
-            <div className="w-full flex flex-col h-full ">
-              <AddSereveye
-                data={data}
-                FactureNumber={1}
-                addSereveye={addSereveye}
-                setAddSereveye={setAddSereveye}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </CollapsibleComponents>
-  );
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setClientInfo((prev) => {
+        // If it's the first entry, start with id 1
+        if (prev.length === 0) {
+          return [{ id: 1, data: data }];
+        }
+
+        // Check if we already have this data
+        const exists = prev.some(
+          (item) => item.data && item.data.length === data.length
+        );
+
+        if (exists) return prev;
+
+        // Add new entry with next sequential id
+        return [
+          ...prev,
+          {
+            id: prev[prev.length - 1].id + 1,
+            data: data,
+          },
+        ];
+      });
+    }
+  }, [data]);
+
+  console.log(clientInfo, "clientInfo");
 
   // Early return for loading and error states
   if (session.status === "loading") {
     return <SkeletonLoader />;
   }
 
-  if (!data) {
-    return <Loader2 className="animate-spin mx-auto my-20" />;
-  }
-
-  if (data.length === 0) {
-    return (
-      <EmptyPlaceholder
-        title="Ntagicuruzwa kiri muri stock"
-        link="/rangura"
-        label="Rangura"
-      />
-    );
-  }
-
   // Render the page
+
   return (
     <section className="flex flex-col w-full h-full lg:pl-0">
-      {renderCollapsible(
+      {/* {renderCollapsible(
         `Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())}`,
         data
+      )} */}
+      <HeaderSection
+        title={`Urutonde rw'ibicuruzwa  ${getTranslatedDay(formatToday())}`}
+        className="cursor-pointer"
+      />
+      <div className="w-full h-fit border flex items-center justify-end">
+        <div
+          className="mt-4 w-fit h-fit p-2 text-stone-950 border-t-2 border-gray-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer"
+          onClick={() => {
+            if (data && data.length > 0) {
+              setClientInfo((prev) => {
+                if (prev.length === 0) {
+                  return [{ id: 1, data: data }];
+                }
+                return [
+                  ...prev,
+                  {
+                    id: prev[prev.length - 1].id + 1,
+                    data: data,
+                  },
+                ];
+              });
+            }
+          }}
+        >
+          Ongera Umukiriya
+        </div>
+      </div>
+
+      {clientInfo.length === 0 ? (
+        <div className="h-[200px] w-full px-1 lg:px-2 space-y-2">
+          <div className="flex gap-1">
+            <Skeleton className="h-[30px] w-[100px] rounded-md" />
+            <Skeleton className="h-[30px] w-full" />
+          </div>
+          <Skeleton className="h-[200px] w-full" />
+        </div>
+      ) : (
+        clientInfo.map((info) => (
+          <div
+            className="h-full w-full rounded-lg overflow-hidden px-1 lg:px-3 flex flex-col gap-4"
+            key={info.id}
+          >
+            <div className="flex items-center gap-4 w-full lg:w-1/2 px-2 lg:px-3">
+              <Label
+                className="text-stone-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 rounded-lg dark:bg-stone-900 cursor-pointer dark:text-gray-200"
+                htmlFor={`name`}
+              >
+                Umukiriya
+              </Label>
+              <Input
+                id={`name`}
+                className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2 outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
+                value={nameInput}
+                onChange={(e) => setNameInput(e.target.value)}
+                placeholder="Shyiramo umukiriya"
+                onBlur={(e) => {
+                  if (e.target.value === "") {
+                    toast({
+                      description: "Ooops!!... Ntazi ry'umukiriya washyizimo",
+                      variant: "destructive",
+                    });
+                    return;
+                  }
+                  setName(e.target.value);
+                }}
+              />
+            </div>
+            <DataTable
+              name={nameInput}
+              factureNumber={info.id}
+              data={info.data}
+            />
+          </div>
+        ))
       )}
     </section>
   );

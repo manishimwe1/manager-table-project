@@ -46,7 +46,6 @@ const TakeInputValue = ({
   const [localCalculatedValue, setLocalCalculatedValue] = useState<number>(
     draftPurchase ? draftPurchase.aratwaraZingahe * ukonyigurishaKuriDetail : 0
   );
-  console.log(draftId, "-------------");
 
   const { name, factureNumber, updateProduct, productData } =
     useClientInfoStore();

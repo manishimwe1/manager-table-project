@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { ChevronDown, ChevronUp, Trash } from "lucide-react";
@@ -35,6 +35,7 @@ const SereveyeRow: React.FC<SereveyeRowProps> = ({
   dataByDate,
 }) => {
   const { toast } = useToast();
+  const [nameInput, setNameInput] = useState("");
   const { setName, name, setFactureNumber, factureNumber } =
     useClientInfoStore();
 
@@ -51,8 +52,8 @@ const SereveyeRow: React.FC<SereveyeRowProps> = ({
           <Input
             id={`name-${item.id}`}
             className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2 outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
-            value={item.name}
-            onChange={(e) => onUpdate(index, e.target.value)}
+            value={nameInput}
+            onChange={(e) => setNameInput(e.target.value)}
             placeholder="Enter name"
             onBlur={(e) => {
               if (e.target.value === "") {
@@ -142,6 +143,9 @@ const AddSereveye: React.FC<AddSereveyeProps> = ({
   setAddSereveye,
   addSereveye,
 }) => {
+  const { setName, name, setFactureNumber, factureNumber } =
+    useClientInfoStore();
+  const [clientInfo, setClientInfo] = useState([{ name, factureNumber }]);
   const generateUniqueId = () => {
     const maxId = addSereveye.reduce((max, item) => Math.max(max, item.id), 0);
     return maxId + 1;
@@ -170,8 +174,12 @@ const AddSereveye: React.FC<AddSereveyeProps> = ({
   const handleAddRow = () => {
     setAddSereveye((prev) => [
       ...prev,
-      { id: generateUniqueId(), tableOpen: false, name: "" },
+
+      { id: FactureNumber, tableOpen: false, name: "" },
     ]);
+
+    setClientInfo((prev) => [...prev, { factureNumber, name }]);
+    console.log(clientInfo, "______in addSereveye");
   };
 
   return (
@@ -180,7 +188,7 @@ const AddSereveye: React.FC<AddSereveyeProps> = ({
         {addSereveye.map((item, index) => (
           <SereveyeRow
             dataByDate={dataByDate}
-            key={item.id}
+            key={`${item.name} + ${index}`}
             item={item}
             index={index}
             onUpdate={handleUpdateName}

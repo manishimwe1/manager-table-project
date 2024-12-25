@@ -1,4 +1,5 @@
 import { internal } from "./_generated/api";
+import { Id } from "./_generated/dataModel";
 import { internalQuery, mutation, query } from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 
@@ -43,11 +44,12 @@ export const createClient = mutation({
 });
 
 export const getClientByIden = query({
-  args: { userId: v.id("user") },
+  args: { userId: v.optional(v.id("user")) },
   handler: async (ctx, args) => {
+    const userId = args.userId as Id<"user">;
     const Product = await ctx.db
       .query("client")
-      .withIndex("by_userId", (q) => q.eq("userId", args.userId))
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
       .filter((q) => q.eq(q.field("nideni"), true))
       .order("desc")
       .collect();
@@ -64,7 +66,7 @@ export const getClientByIden = query({
 
 export const getSaledProduct = query({
   args: { userId: v.id("user") },
-  handler: async (ctx,args) => {
+  handler: async (ctx, args) => {
     try {
       // Get the start of the current day in UTC
       const startOfToday = new Date();
@@ -73,7 +75,8 @@ export const getSaledProduct = query({
 
       // Query the database for products created today
       const products = await ctx.db
-        .query("client").withIndex("by_userId", (q) => q.eq("userId", args.userId))
+        .query("client")
+        .withIndex("by_userId", (q) => q.eq("userId", args.userId))
         .filter(
           (q) => q.gte(q.field("_creationTime"), todayTimestamp) // Cast _creationTime to number
         )
