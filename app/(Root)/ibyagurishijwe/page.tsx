@@ -1,6 +1,6 @@
 "use client";
 
-import { Client } from "@/types";
+import { Client, ProductType } from "@/types";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { ChevronsDownUp, Loader2 } from "lucide-react";
@@ -22,15 +22,36 @@ import {
 import { DataTable } from "@/components/ibyagurishijwe/DataTable";
 import { columns } from "@/components/ibyagurishijwe/columns";
 import EmptyPlaceholder from "@/components/EmptyPlaceholder";
+import { useSession } from "next-auth/react";
+import { Id } from "@/convex/_generated/dataModel";
+import SkeletonLoader from "@/components/SkeletonLoader";
+import { redirect } from "next/navigation";
 
 const IbyagurishijwePage = () => {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [openState, setOpenState] = useState<{ [key: string]: boolean }>({});
+  const session = useSession();
+  const userId = session.data?.user;
 
+  // Fetch all queries (hooks must always be called)
+  const user = useQuery(api.user.getUserIndb, { email: userId?.email || "" });
+  const product: ProductType[] | undefined = useQuery(api.product.getProduct, {
+    userId: user?._id as Id<"user">,
+  });
   // Fetch all products
-  const saledProduct: Client[] | undefined = useQuery(
-    api.clientName.getSaledProduct
-  );
+
+  const saledProduct = useQuery(api.clientName.getSaledProduct, {
+    userId: user?._id as Id<"user">,
+  });
+  const ClientWhoPaid = useQuery(api.clientName.getClientWhoPaid, {
+    userId: user?._id as Id<"user">,
+  });
+
+  if (session.status === "loading") return <SkeletonLoader />;
+
+  if (!userId) {
+    redirect("/login");
+  }
   const saledProductInDENI: Client[] | undefined = useQuery(
     api.clientName.getSaledProductInDeni
   );
