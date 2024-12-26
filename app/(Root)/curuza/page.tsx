@@ -42,6 +42,7 @@ const SalesPage: React.FC = () => {
     clientData,
     addClientData,
     draftPurchaseByClient,
+    isSubmitting,
   } = useClientInfoStore();
   const [nameInput, setNameInput] = useState("");
 
@@ -66,7 +67,10 @@ const SalesPage: React.FC = () => {
     if (data && data.length > 0) {
       addClientData(data);
     }
-  }, [data, addClientData]);
+    if (isSubmitting === true) {
+      setNameInput("");
+    }
+  }, [data, addClientData, isSubmitting]);
 
   console.log(clientData, "clientData");
 
@@ -113,48 +117,39 @@ const SalesPage: React.FC = () => {
           <Skeleton className="h-[200px] w-full" />
         </div>
       ) : (
-        clientData.map((info) => (
-          <div
-            className="h-full w-full rounded-lg overflow-hidden px-1 lg:px-3 flex flex-col gap-4"
-            key={info.id}
-          >
-            <div className="flex items-center gap-4 w-full lg:w-1/2 px-2 lg:px-3">
-              <Label
-                className="text-stone-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 rounded-lg dark:bg-stone-900 cursor-pointer dark:text-gray-200"
-                htmlFor={`name`}
-              >
-                Umukiriya
-              </Label>
-              <Input
-                id={`name`}
-                className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2 outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
-                value={
-                  draftPurchaseByClient[factureNumber]
-                    ? draftPurchaseByClient[factureNumber][0].name
-                    : nameInput
+        <div className="h-full w-full rounded-lg overflow-hidden px-1 lg:px-3 flex flex-col gap-4">
+          <div className="flex items-center gap-4 w-full lg:w-1/2 px-2 lg:px-3">
+            <Label
+              className="text-stone-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 rounded-lg dark:bg-stone-900 cursor-pointer dark:text-gray-200"
+              htmlFor={`name`}
+            >
+              Umukiriya
+            </Label>
+            <Input
+              id={`name`}
+              className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2 outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
+              value={nameInput}
+              onChange={(e) => setNameInput(e.target.value)}
+              placeholder="Shyiramo umukiriya"
+              onBlur={(e) => {
+                if (e.target.value === "") {
+                  toast({
+                    description: "Ooops!!... Ntazi ry'umukiriya washyizimo",
+                    variant: "destructive",
+                  });
+                  return;
                 }
-                onChange={(e) => setNameInput(e.target.value)}
-                placeholder="Shyiramo umukiriya"
-                onBlur={(e) => {
-                  if (e.target.value === "") {
-                    toast({
-                      description: "Ooops!!... Ntazi ry'umukiriya washyizimo",
-                      variant: "destructive",
-                    });
-                    return;
-                  }
-                  setName(e.target.value);
-                  setFactureNumber(info.id);
-                }}
-              />
-            </div>
-            <DataTable
-              name={nameInput}
-              factureNumber={info.id}
-              data={info.data}
+                setName(e.target.value);
+                setFactureNumber(1);
+              }}
             />
           </div>
-        ))
+          <DataTable
+            name={nameInput}
+            factureNumber={factureNumber}
+            data={data}
+          />
+        </div>
       )}
     </section>
   );

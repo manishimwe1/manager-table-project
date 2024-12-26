@@ -47,7 +47,7 @@ const TakeInputValue = ({
     draftPurchase ? draftPurchase.aratwaraZingahe * ukonyigurishaKuriDetail : 0
   );
 
-  const { name, factureNumber, updateProduct, productData } =
+  const { name, factureNumber, updateProduct, productData, isSubmitting } =
     useClientInfoStore();
 
   const addDraftPurchase = useMutation(api.draftPurchace.createPurchase);
@@ -58,6 +58,11 @@ const TakeInputValue = ({
   const updateDraftPurchase = useMutation(
     api.draftPurchace.updateDraftPurchase
   );
+  useEffect(() => {
+    if (isSubmitting === true) {
+      setLocalInputValue("");
+    }
+  }, [isSubmitting]);
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;

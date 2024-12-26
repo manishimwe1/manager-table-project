@@ -28,7 +28,7 @@ interface ClientInfo {
   setName: (newName: string) => void; // Set client name
   setFactureNumber: (newPhone: number) => void; // Set client phone
   setReset: () => void; // Reset all client-related fields
-  setIsSubmitting: (value: boolean) => void; // Set submission status
+  setIsSubmitting: () => void; // Set submission status
   clientData: {
     id: number;
     data: ProductType[] | undefined;
@@ -123,9 +123,9 @@ export const useClientInfoStore = create<ClientInfo>((set) => ({
     })),
 
   // Set the submission status
-  setIsSubmitting: (value: boolean) =>
-    set(() => ({
-      isSubmitting: value,
+  setIsSubmitting: () =>
+    set((state) => ({
+      isSubmitting: state.isSubmitting === true,
     })),
 
   // Add client data

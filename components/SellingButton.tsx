@@ -111,14 +111,6 @@ const SellingButton = ({
   }, [name, factureNumber, draftPurchases]);
   console.log(draftPurchaseByClient, "draftPurchaceForClient");
 
-  // Debug logging
-  useEffect(() => {
-    console.log("All Customer Data:", customerData);
-    console.log("Current Props:", { name, factureNumber });
-    console.log("Current Draft Purchases:", draftPurchases);
-    console.log("Current Draft Purchases For me:", draftPurchaseForMe);
-  }, [customerData, name, factureNumber, draftPurchases]);
-
   const getCurrentCustomer = () => {
     return customerData.find(
       (customer) =>
@@ -140,7 +132,6 @@ const SellingButton = ({
             : product.ingano;
 
         if (product.aratwaraZingahe > inStock) {
-          setIsSubmitting(true);
           toast({
             title: "Ushyizemo ibicuruzwa byinshi kuruta ibiri muri stock",
             variant: "destructive",
@@ -171,16 +162,9 @@ const SellingButton = ({
           });
 
           product.activeRow.toggleSelected(false);
+          setIsSubmitting();
         }
       }
-
-      // Remove only the current customer after successful sale
-      setCustomerData((prev) =>
-        prev.filter(
-          (customer) =>
-            customer.name !== name || customer.factureNumber !== factureNumber
-        )
-      );
 
       setIdeni(value as "Yego" | "Oya");
       toast({
@@ -206,21 +190,21 @@ const SellingButton = ({
     <div className="w-full flex items-center justify-center gap-2 flex-col">
       <div className="h-[200px] w-full lg:w-full rounded-md dark:!bg-stone-950 !shadow-md shadow-stone-950s p-4 flex items-center justify-between">
         <div className="flex items-start flex-col gap-2 w-full h-full">
-          <p>
+          <p className="dark:text-gray-500">
             Facture Number:
-            <span className="dark:text-gray-400 text-lg text-stone-900 capitalize">
+            <span className="dark:text-gray-300 text-lg text-stone-900 capitalize">
               {currentCustomer?.factureNumber || factureNumber}
             </span>
           </p>
-          <p>
+          <p className="dark:text-gray-500">
             Name:
-            <span className="dark:text-gray-400 text-lg text-stone-900 capitalize">
+            <span className="dark:text-gray-300 text-lg text-stone-900 capitalize">
               {currentCustomer?.name || name}
             </span>
           </p>
-          <p>
+          <p className="dark:text-gray-500">
             Phone:
-            <span className="dark:text-gray-400 text-lg text-stone-900 capitalize">
+            <span className="dark:text-gray-300 text-lg text-stone-900 capitalize">
               {currentCustomer?.factureNumber || factureNumber}
             </span>
           </p>
@@ -228,7 +212,9 @@ const SellingButton = ({
             <Button
               disabled={loading}
               type="button"
-              onClick={() => handleSales("Yego")}
+              onClick={() => {
+                handleSales("Yego");
+              }}
               className="boder-customer border-t-2 !border-blue-500 hover:!text-blue-600 hover:dark:!bg-stone-950 transition-all duration-200 ease-in-out hover:!shadow-blue-500/50"
             >
               {loading ? (
