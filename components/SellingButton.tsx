@@ -29,12 +29,18 @@ const SellingButton = ({
   const [ideni, setIdeni] = useState<"Yego" | "Oya" | undefined>();
   const [loading, setLoading] = useState(false);
   const [customerData, setCustomerData] = useState<CustomerInfo[]>([]);
-  const [draftPurchaceForClient, setDraftPurchaceForClient] = useState<
-    DraftPurchaseType[] | undefined
-  >();
+
   const prevPropsRef = useRef({ name: "", factureNumber: 0 });
 
-  const { setReset, productData, setIsSubmitting } = useClientInfoStore();
+  const {
+    setReset,
+    productData,
+    setIsSubmitting,
+    draftPurchaseByClient,
+    addDraftPurchase,
+    updateDraftPurchase,
+    removeDraftPurchase,
+  } = useClientInfoStore();
   const { toast } = useToast();
   const session = useSession();
   const userId = session.data?.user;
@@ -61,7 +67,7 @@ const SellingButton = ({
     );
 
     if (draftPurchaceForClient) {
-      setDraftPurchaceForClient(draftPurchaceForClient);
+      addDraftPurchase(factureNumber, draftPurchaceForClient);
     }
     const prevProps = prevPropsRef.current;
 
@@ -103,6 +109,7 @@ const SellingButton = ({
       prevPropsRef.current = { name, factureNumber };
     }
   }, [name, factureNumber, draftPurchases]);
+  console.log(draftPurchaseByClient, "draftPurchaceForClient");
 
   // Debug logging
   useEffect(() => {
@@ -217,51 +224,34 @@ const SellingButton = ({
               {currentCustomer?.factureNumber || factureNumber}
             </span>
           </p>
+          <form className="flex w-full justify-end ">
+            <Button
+              disabled={loading}
+              type="button"
+              onClick={() => handleSales("Yego")}
+              className="boder-customer border-t-2 !border-blue-500 hover:!text-blue-600 hover:dark:!bg-stone-950 transition-all duration-200 ease-in-out hover:!shadow-blue-500/50"
+            >
+              {loading ? (
+                <Loader2 className="animate-spin h-4 w-4" />
+              ) : (
+                <span>Arishyuye</span>
+              )}
+            </Button>
+            <Button
+              disabled={loading}
+              type="button"
+              onClick={() => handleSales("Oya")}
+              className="boder-customer border-t-2 !border-red-500 hover:!text-red-600 hover:dark:!bg-stone-950 transition-all duration-200 ease-in-out hover:!shadow-red-500/50"
+            >
+              {loading ? (
+                <Loader2 className="animate-spin h-4 w-4" />
+              ) : (
+                <span>Afashe ideni</span>
+              )}
+            </Button>
+          </form>
         </div>
-        <MemoizedScrollArea draftPurchase={draftPurchaceForClient} />
-      </div>
-
-      <div className="flex items-center gap-2 justify-between md:justify-around w-full">
-        <form className="flex">
-          <Button
-            disabled={loading}
-            type="button"
-            onClick={() => handleSales("Yego")}
-            className="boder-customer border-t-2 !border-blue-500 hover:!text-blue-600 hover:dark:!bg-stone-950 transition-all duration-200 ease-in-out hover:!shadow-blue-500/50"
-          >
-            {loading ? (
-              <Loader2 className="animate-spin h-4 w-4" />
-            ) : (
-              <span>Arishyuye</span>
-            )}
-          </Button>
-          <Button
-            disabled={loading}
-            type="button"
-            onClick={() => handleSales("Oya")}
-            className="boder-customer border-t-2 !border-red-500 hover:!text-red-600 hover:dark:!bg-stone-950 transition-all duration-200 ease-in-out hover:!shadow-red-500/50"
-          >
-            {loading ? (
-              <Loader2 className="animate-spin h-4 w-4" />
-            ) : (
-              <span>Afashe ideni</span>
-            )}
-          </Button>
-        </form>
-        <div className="flex justify-end">
-          <Button
-            disabled={loading}
-            type="button"
-            onClick={() => handleSales("Yego")}
-            className="boder-customer border-t-2 !border-gray-500 hover:!text-gray-50 hover:dark:!bg-stone-950 transition-all duration-200 ease-in-out hover:!shadow-gray-500/50"
-          >
-            {loading ? (
-              <Loader2 className="animate-spin h-4 w-4" />
-            ) : (
-              <span>Sohora Factire</span>
-            )}
-          </Button>
-        </div>
+        <MemoizedScrollArea factureNumber={factureNumber} loading={loading} />
       </div>
     </div>
   );

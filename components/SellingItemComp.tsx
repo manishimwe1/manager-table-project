@@ -1,43 +1,63 @@
-import React, { memo } from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2 } from "lucide-react";
 import { DraftPurchaseType } from "@/types";
+import { ArrowUp01, Loader2 } from "lucide-react";
+import React, { useState } from "react";
+import { Button } from "./ui/button";
+import { useClientInfoStore } from "@/lib/store/zustand";
+import { ScrollArea } from "./ui/scroll-area";
 
-const PurchaseItem = memo(({ purchace }: { purchace: DraftPurchaseType }) => (
-  <div className="flex w-full gap-4 py-2">
-    <div className="flex gap-2 w-full">
-      <p>{purchace.igicuruzwa}</p>
+interface SellingItemCompProps {
+  factureNumber: number;
+  loading: boolean;
+}
 
-      <p>{purchace.aratwaraZingahe}</p>
+const SellingItemComp = ({ factureNumber, loading }: SellingItemCompProps) => {
+  const { draftPurchaseByClient } = useClientInfoStore();
+  const clientPurchases = draftPurchaseByClient[factureNumber] || [];
+
+  return (
+    <div className="h-full w-full dark:bg-stone-900 rounded-md flex flex-col dark:text-gray-200 ">
+      <ScrollArea className="h-[180px] w-full">
+        {clientPurchases.length === 0 ? (
+          <div className="flex items-center justify-center h-full mt-4">
+            <Loader2 className="animate-spin h-6 w-6" />
+            <p>Gurasha ikintu...</p>
+          </div>
+        ) : (
+          clientPurchases.map((purchase, index) => (
+            <ScrollArea
+              key={`${purchase.productId}+${index}`}
+              className="!flex items-center !justify-between p-2 border-b w-full  "
+            >
+              <div className="flex gap-2 justify-between">
+                <p>{purchase.igicuruzwa}</p>
+                <p>{purchase.aratwaraZingahe}</p>
+                <p className="">{purchase.yishyuyeAngahe}</p>
+              </div>
+            </ScrollArea>
+          ))
+        )}
+      </ScrollArea>
+      <div className="flex justify-end">
+        <Button
+          disabled={loading}
+          type="button"
+          // onClick={() => handleSales("Yego")}
+          className="boder-customer border-t-2 !border-gray-500 hover:!text-gray-50 hover:dark:!bg-stone-950 transition-all duration-200 ease-in-out hover:!shadow-gray-500/50 dark:!bg-stone-950"
+        >
+          {loading ? (
+            <Loader2 className="animate-spin h-4 w-4" />
+          ) : clientPurchases?.length === 0 ? (
+            <span className="flex items-center">
+              Gurisha{" "}
+              <ArrowUp01 className="h-4 w-4 text-blue-500 animate-pulse" />
+            </span>
+          ) : (
+            <span>Sohora Factire</span>
+          )}
+        </Button>
+      </div>
     </div>
-    <p>{purchace.yishyuyeAngahe}</p>
-  </div>
-));
+  );
+};
 
-const PurchaseList = memo(
-  ({ draftPurchase }: { draftPurchase: DraftPurchaseType[] | undefined }) => {
-    if (!draftPurchase) {
-      return (
-        <div className="flex items-center justify-center h-full">
-          <Loader2 className="animate-spin h-6 w-6" />
-        </div>
-      );
-    }
-
-    return draftPurchase.map((purchase) => (
-      <PurchaseItem key={purchase._id} purchace={purchase} />
-    ));
-  }
-);
-
-const MemoizedScrollArea = ({
-  draftPurchase,
-}: {
-  draftPurchase: DraftPurchaseType[] | undefined;
-}) => (
-  <ScrollArea className="h-[184px] w-full rounded-md px-2ed lg:p-4 border dark:border-stone-900">
-    <PurchaseList draftPurchase={draftPurchase} />
-  </ScrollArea>
-);
-
-export default memo(MemoizedScrollArea);
+export default SellingItemComp;

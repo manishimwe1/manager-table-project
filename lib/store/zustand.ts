@@ -1,5 +1,5 @@
 import { Id } from "@/convex/_generated/dataModel";
-import { TableRowType } from "@/types";
+import { DraftPurchaseType, ProductType, TableRowType } from "@/types";
 import { Row } from "@tanstack/react-table";
 import { create } from "zustand";
 
@@ -29,11 +29,34 @@ interface ClientInfo {
   setFactureNumber: (newPhone: number) => void; // Set client phone
   setReset: () => void; // Reset all client-related fields
   setIsSubmitting: (value: boolean) => void; // Set submission status
+  clientData: {
+    id: number;
+    data: ProductType[] | undefined;
+  }[];
+  addClientData: (data: ProductType[]) => void;
+  resetClientData: () => void;
+  draftPurchaseByClient: {
+    [key: number]: DraftPurchaseType[]; // Map facture numbers to purchases
+  };
+
+  // Add methods for managing draft purchases
+  addDraftPurchase: (
+    factureNumber: number,
+    purchase: DraftPurchaseType[]
+  ) => void;
+  updateDraftPurchase: (
+    factureNumber: number,
+    purchaseId: string,
+    updates: Partial<DraftPurchaseType>
+  ) => void;
+  removeDraftPurchase: (factureNumber: number, purchaseId: string) => void;
+  resetDraftPurchases: () => void;
 }
 
 export const useClientInfoStore = create<ClientInfo>((set) => ({
   productData: [], // Initialize product data as an empty array
   name: "",
+  clientData: [],
   factureNumber: 0,
   stock: 0, // Initialize stock as 0
   isSubmitting: false, // Initialize submission status
@@ -103,5 +126,109 @@ export const useClientInfoStore = create<ClientInfo>((set) => ({
   setIsSubmitting: (value: boolean) =>
     set(() => ({
       isSubmitting: value,
+    })),
+
+  // Add client data
+  addClientData: (data: ProductType[]) =>
+    set((state) => {
+      if (!data || data.length === 0) return state;
+
+      // For first entry
+      if (state.clientData.length === 0) {
+        return {
+          ...state,
+          clientData: [{ id: 1, data }],
+        };
+      }
+
+      // Get the highest existing ID
+      const highestId = Math.max(...state.clientData.map((item) => item.id));
+
+      // Add new entry with incremented id
+      return {
+        ...state,
+        clientData: [
+          ...state.clientData,
+          {
+            id: highestId + 1,
+            data,
+          },
+        ],
+      };
+    }),
+  resetClientData: () =>
+    set((state) => ({
+      ...state,
+      clientData: [],
+    })),
+
+  draftPurchaseByClient: {},
+
+  // Add a new draft purchase for a specific client
+  addDraftPurchase: (factureNumber: number, purchases: DraftPurchaseType[]) =>
+    set((state) => {
+      const currentPurchases = state.draftPurchaseByClient[factureNumber] || [];
+
+      // Filter out duplicates based on _id
+      const uniquePurchases = purchases.filter(
+        (newPurchase) =>
+          !currentPurchases.some(
+            (existingPurchase) => existingPurchase._id === newPurchase._id
+          )
+      );
+
+      // Only add if there are new unique purchases
+      if (uniquePurchases.length === 0) return state;
+
+      return {
+        ...state,
+        draftPurchaseByClient: {
+          ...state.draftPurchaseByClient,
+          [factureNumber]: [...currentPurchases, ...uniquePurchases],
+        },
+      };
+    }),
+
+  // Update an existing draft purchase
+  updateDraftPurchase: (
+    factureNumber: number,
+    purchaseId: string,
+    updates: Partial<DraftPurchaseType>
+  ) =>
+    set((state) => {
+      const currentPurchases = state.draftPurchaseByClient[factureNumber] || [];
+
+      return {
+        ...state,
+        draftPurchaseByClient: {
+          ...state.draftPurchaseByClient,
+          [factureNumber]: currentPurchases.map((purchase) =>
+            purchase._id === purchaseId ? { ...purchase, ...updates } : purchase
+          ),
+        },
+      };
+    }),
+
+  // Remove a draft purchase
+  removeDraftPurchase: (factureNumber: number, purchaseId: string) =>
+    set((state) => {
+      const currentPurchases = state.draftPurchaseByClient[factureNumber] || [];
+
+      return {
+        ...state,
+        draftPurchaseByClient: {
+          ...state.draftPurchaseByClient,
+          [factureNumber]: currentPurchases.filter(
+            (purchase) => purchase._id !== purchaseId
+          ),
+        },
+      };
+    }),
+
+  // Reset all draft purchases
+  resetDraftPurchases: () =>
+    set((state) => ({
+      ...state,
+      draftPurchaseByClient: {},
     })),
 }));

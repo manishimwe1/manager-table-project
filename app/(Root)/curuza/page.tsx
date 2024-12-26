@@ -30,17 +30,19 @@ type ClientInfo = ClientInfoItem[];
 
 // Start with empty array instead of undefined data
 const SalesPage: React.FC = () => {
-  const [clientInfo, setClientInfo] = useState<ClientInfo>([]);
   const router = useRouter();
   const session = useSession();
   const { toast } = useToast();
 
-  const { setName, name, setFactureNumber, factureNumber } =
-    useClientInfoStore();
-  const [addSereveye, setAddSereveye] = useState<
-    { id: number; tableOpen: boolean; name: string }[]
-  >([{ id: factureNumber, tableOpen: false, name: name }]);
-
+  const {
+    setName,
+    name,
+    setFactureNumber,
+    factureNumber,
+    clientData,
+    addClientData,
+    draftPurchaseByClient,
+  } = useClientInfoStore();
   const [nameInput, setNameInput] = useState("");
 
   const userId = session.data?.user;
@@ -60,40 +62,20 @@ const SalesPage: React.FC = () => {
       router.push("/login");
     }
   }, [session.status, router]);
-
   useEffect(() => {
     if (data && data.length > 0) {
-      setClientInfo((prev) => {
-        // If it's the first entry, start with id 1
-        if (prev.length === 0) {
-          return [{ id: 1, data: data }];
-        }
-
-        // Check if we already have this data
-        const exists = prev.some(
-          (item) => item.data && item.data.length === data.length
-        );
-
-        if (exists) return prev;
-
-        // Add new entry with next sequential id
-        return [
-          ...prev,
-          {
-            id: prev[prev.length - 1].id + 1,
-            data: data,
-          },
-        ];
-      });
+      addClientData(data);
     }
-  }, [data]);
+  }, [data, addClientData]);
 
-  console.log(clientInfo, "clientInfo");
+  console.log(clientData, "clientData");
 
   // Early return for loading and error states
   if (session.status === "loading") {
     return <SkeletonLoader />;
   }
+
+  console.log(draftPurchaseByClient[factureNumber], "draft");
 
   // Render the page
 
@@ -111,19 +93,10 @@ const SalesPage: React.FC = () => {
         <div
           className="mt-4 w-fit h-fit p-2 text-stone-950 border-t-2 border-gray-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer"
           onClick={() => {
+            console.log(data, "SATEDATA");
+            console.log(clientData, "clientData");
             if (data && data.length > 0) {
-              setClientInfo((prev) => {
-                if (prev.length === 0) {
-                  return [{ id: 1, data: data }];
-                }
-                return [
-                  ...prev,
-                  {
-                    id: prev[prev.length - 1].id + 1,
-                    data: data,
-                  },
-                ];
-              });
+              addClientData(data);
             }
           }}
         >
@@ -131,7 +104,7 @@ const SalesPage: React.FC = () => {
         </div>
       </div>
 
-      {clientInfo.length === 0 ? (
+      {clientData.length === 0 ? (
         <div className="h-[200px] w-full px-1 lg:px-2 space-y-2">
           <div className="flex gap-1">
             <Skeleton className="h-[30px] w-[100px] rounded-md" />
@@ -140,7 +113,7 @@ const SalesPage: React.FC = () => {
           <Skeleton className="h-[200px] w-full" />
         </div>
       ) : (
-        clientInfo.map((info) => (
+        clientData.map((info) => (
           <div
             className="h-full w-full rounded-lg overflow-hidden px-1 lg:px-3 flex flex-col gap-4"
             key={info.id}
@@ -155,7 +128,11 @@ const SalesPage: React.FC = () => {
               <Input
                 id={`name`}
                 className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2 outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
-                value={nameInput}
+                value={
+                  draftPurchaseByClient[factureNumber]
+                    ? draftPurchaseByClient[factureNumber][0].name
+                    : nameInput
+                }
                 onChange={(e) => setNameInput(e.target.value)}
                 placeholder="Shyiramo umukiriya"
                 onBlur={(e) => {
@@ -167,6 +144,7 @@ const SalesPage: React.FC = () => {
                     return;
                   }
                   setName(e.target.value);
+                  setFactureNumber(info.id);
                 }}
               />
             </div>
