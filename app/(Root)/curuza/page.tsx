@@ -5,6 +5,7 @@ import CollapsibleComponents from "@/components/collapsibleComponents";
 import DataTable from "@/components/DataTable";
 import EmptyPlaceholder from "@/components/EmptyPlaceholder";
 import HeaderSection from "@/components/HeaderSection";
+import SellingButton from "@/components/SellingButton";
 import SkeletonLoader from "@/components/SkeletonLoader";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,6 +31,7 @@ type ClientInfo = ClientInfoItem[];
 
 // Start with empty array instead of undefined data
 const SalesPage: React.FC = () => {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const session = useSession();
   const { toast } = useToast();
@@ -41,10 +43,12 @@ const SalesPage: React.FC = () => {
     factureNumber,
     clientData,
     addClientData,
-    draftPurchaseByClient,
+    removeProduct,
+    productData,
     isSubmitting,
   } = useClientInfoStore();
   const [nameInput, setNameInput] = useState("");
+  const [isOpen, setIsOpen] = useState(true);
 
   const userId = session.data?.user;
 
@@ -72,39 +76,28 @@ const SalesPage: React.FC = () => {
     }
   }, [data, addClientData, isSubmitting]);
 
-  console.log(clientData, "clientData");
+  console.log(productData, "productData");
 
   // Early return for loading and error states
   if (session.status === "loading") {
     return <SkeletonLoader />;
   }
 
-  console.log(draftPurchaseByClient[factureNumber], "draft");
+  console.log(loading, "loding");
 
   // Render the page
 
   return (
     <section className="flex flex-col w-full h-full lg:pl-0">
-      {/* {renderCollapsible(
-        `Urutonde rw'ibicuruzwa ${getTranslatedDay(formatToday())}`,
-        data
-      )} */}
       <HeaderSection
         title={`Urutonde rw'ibicuruzwa  ${getTranslatedDay(formatToday())}`}
         className="cursor-pointer"
       />
-      <div className="w-full h-fit border flex items-center justify-end">
-        <div
-          className="mt-4 w-fit h-fit p-2 text-stone-950 border-t-2 border-gray-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer"
-          onClick={() => {
-            console.log(data, "SATEDATA");
-            console.log(clientData, "clientData");
-            if (data && data.length > 0) {
-              addClientData(data);
-            }
-          }}
-        >
-          Ongera Umukiriya
+      <div className="w-full h-fit  flex items-center justify-between gap-4">
+        <div className="flex items-center w-full  justify-center h-full">
+          <CollapsibleComponents title="Reba aba abakiriya buyumunsi">
+            <div className="w-full h-full bg-red-600">here</div>
+          </CollapsibleComponents>
         </div>
       </div>
 
@@ -128,8 +121,11 @@ const SalesPage: React.FC = () => {
             <Input
               id={`name`}
               className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2 outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
-              value={nameInput}
-              onChange={(e) => setNameInput(e.target.value)}
+              value={nameInput === "" ? name : nameInput}
+              onChange={(e) => {
+                setNameInput(e.target.value);
+                setName(e.target.value);
+              }}
               placeholder="Shyiramo umukiriya"
               onBlur={(e) => {
                 if (e.target.value === "") {
@@ -141,14 +137,41 @@ const SalesPage: React.FC = () => {
                 }
                 setName(e.target.value);
                 setFactureNumber(1);
+                setNameInput("");
+                setLoading(false);
+                setIsOpen(false);
               }}
             />
           </div>
-          <DataTable
-            name={nameInput}
+          {!isOpen && (
+            <DataTable
+              loading={loading}
+              setLoading={setLoading}
+              name={nameInput}
+              factureNumber={factureNumber}
+              data={data}
+            />
+          )}
+          <SellingButton
             factureNumber={factureNumber}
-            data={data}
+            name={name}
+            key={factureNumber}
+            setLoading={setLoading}
+            loading={loading}
+            setIsOpen={setIsOpen}
           />
+        </div>
+      )}
+      {loading && (
+        <div
+          className="mt-4 w-fit h-fit p-2 text-stone-950 border-t-2 border-gray-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer text-nowrap "
+          onClick={() => {
+            setLoading(false);
+            setIsOpen(false);
+            productData.forEach((product) => removeProduct(product.productId));
+          }}
+        >
+          Ongera Umukiriya
         </div>
       )}
     </section>

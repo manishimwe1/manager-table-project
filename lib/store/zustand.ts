@@ -4,7 +4,7 @@ import { Row } from "@tanstack/react-table";
 import { create } from "zustand";
 
 export interface ProductInfo {
-  id: Id<"product">; // Product ID
+  productId: Id<"product">; // Product ID
   byoseHamwe: number; // Total amount
   aratwaraZingahe: number; // Quantity taken
   yishyuyeAngahe: number; // Amount paid
@@ -12,7 +12,7 @@ export interface ProductInfo {
   ingano: number; // Size/quantity
   ukonyigurishaKuriDetail: number; // Amount left
   igicuruzwa: string; // Product name
-  activeRow: Row<TableRowType>;
+  userId: Id<"user">;
 }
 
 interface ClientInfo {
@@ -22,10 +22,12 @@ interface ClientInfo {
   removeProduct: (id: Id<"product">) => void; // Remove a product by ID
   resetProducts: () => void; // Reset the entire product array
   name: string; // Client name
+  phone: number; // Client phone number
   factureNumber: number; // Client phone number
   stock: number; // Stock (needs initialization)
   isSubmitting: boolean; // Submission status
   setName: (newName: string) => void; // Set client name
+  setPhone: (newPhone: number) => void; // Set client phone
   setFactureNumber: (newPhone: number) => void; // Set client phone
   setReset: () => void; // Reset all client-related fields
   setIsSubmitting: () => void; // Set submission status
@@ -60,12 +62,12 @@ export const useClientInfoStore = create<ClientInfo>((set) => ({
   factureNumber: 0,
   stock: 0, // Initialize stock as 0
   isSubmitting: false, // Initialize submission status
-
+  phone: 0,
   // Add a new product to the array
   addProduct: (newProduct: ProductInfo) =>
     set((state) => {
       const exists = state.productData.some(
-        (product) => product.id === newProduct.id
+        (product) => product.productId === newProduct.productId
       );
       if (exists) return state; // Prevent duplicate
       return {
@@ -76,14 +78,16 @@ export const useClientInfoStore = create<ClientInfo>((set) => ({
   // Update a specific product by ID
   updateProduct: (id: Id<"product">, updates: Partial<ProductInfo>) =>
     set((state) => {
-      const exists = state.productData.some((product) => product.id === id);
+      const exists = state.productData.some(
+        (product) => product.productId === id
+      );
       if (!exists) {
         console.warn(`Product with id ${id} not found`);
         return state; // Return unchanged state
       }
       return {
         productData: state.productData.map((product) =>
-          product.id === id ? { ...product, ...updates } : product
+          product.productId === id ? { ...product, ...updates } : product
         ),
       };
     }),
@@ -91,7 +95,9 @@ export const useClientInfoStore = create<ClientInfo>((set) => ({
   // Remove a product from the array by ID
   removeProduct: (id: Id<"product">) =>
     set((state) => ({
-      productData: state.productData.filter((product) => product.id !== id),
+      productData: state.productData.filter(
+        (product) => product.productId !== id
+      ),
     })),
 
   // Reset the product array
@@ -104,6 +110,10 @@ export const useClientInfoStore = create<ClientInfo>((set) => ({
   setName: (newName: string) =>
     set(() => ({
       name: newName,
+    })),
+  setPhone: (phone: number) =>
+    set(() => ({
+      phone: phone,
     })),
 
   // Set the client's phone number
@@ -125,7 +135,7 @@ export const useClientInfoStore = create<ClientInfo>((set) => ({
   // Set the submission status
   setIsSubmitting: () =>
     set((state) => ({
-      isSubmitting: state.isSubmitting === true,
+      isSubmitting: !state.isSubmitting,
     })),
 
   // Add client data

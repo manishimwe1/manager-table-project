@@ -4,25 +4,25 @@ import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { useClientInfoStore } from "@/lib/store/zustand";
 import { ScrollArea } from "./ui/scroll-area";
+import Link from "next/link";
 
 interface SellingItemCompProps {
   factureNumber: number;
   loading: boolean;
 }
 
-const SellingItemComp = ({ factureNumber, loading }: SellingItemCompProps) => {
-  const { draftPurchaseByClient, isSubmitting, resetClientData } =
+const SellingItemComp = ({ loading }: SellingItemCompProps) => {
+  const { draftPurchaseByClient, isSubmitting, resetClientData, productData } =
     useClientInfoStore();
-  const clientPurchases = draftPurchaseByClient[factureNumber] || [];
 
   useEffect(() => {
-    if (isSubmitting === true) {
+    if (loading === true) {
       resetClientData();
     }
-    console.log(isSubmitting, "isSubmitting here!!");
+    console.log(loading, "isSubmitting here!!");
   }, [isSubmitting]);
-  console.log(isSubmitting, "isSubmitting here!!out");
-  const total = clientPurchases.reduce((acc, purchase) => {
+  console.log(loading, "isSubmitting here!!out");
+  const total = productData.reduce((acc, purchase) => {
     // Check if yishyuyeAngahe exists and is a number
     const amount =
       typeof purchase.yishyuyeAngahe === "number" ? purchase.yishyuyeAngahe : 0;
@@ -33,13 +33,14 @@ const SellingItemComp = ({ factureNumber, loading }: SellingItemCompProps) => {
   return (
     <div className="h-[180px] w-full   rounded-md flex flex-col dark:text-gray-200 ">
       <ScrollArea className="h-[250px] w-full">
-        {clientPurchases.length === 0 ? (
+        {productData.length === 0 ? (
           <div className="flex items-center justify-center h-full mt-4">
-            <Loader2 className="animate-spin h-6 w-6" />
-            <p>Gurasha ikintu...</p>
+            <p className="text-sm font-semibold text-stone-500">
+              Gurisha ikintu...
+            </p>
           </div>
         ) : (
-          clientPurchases.map((purchase, index) => (
+          productData.map((purchase, index) => (
             <ScrollArea
               key={`${purchase.productId}+${index}`}
               className="!flex items-center !justify-between p-2 border-b w-full boder-customer dark:bg-stone-900/60 dark:!border-stone-700 border-t-2  "
@@ -65,14 +66,17 @@ const SellingItemComp = ({ factureNumber, loading }: SellingItemCompProps) => {
           Rwf
         </p>
         <Button
-          disabled={loading}
+          disabled={!loading}
           type="button"
+          asChild
           // onClick={() => handleSales("Yego")}
-          className="boder-customer border-t-2 border-stone-900 dark:!border-gray-500 hover:!text-stone-700 hover:dark:!bg-stone-950 transition-all duration-200 ease-in-out hover:!bg-slate-50 hover:!shadow-gray-500/50 dark:!bg-stone-950"
+          className="boder-customer border-t-2 border-stone-900 dark:!border-gray-500 hover:!text-stone-700 hover:dark:!bg-stone-950 transition-all duration-200 ease-in-out hover:!bg-slate-50 hover:!shadow-gray-500/50 dark:!bg-stone-950 disabled:cursor-not-allowed"
         >
           {loading ? (
-            <Loader2 className="animate-spin h-4 w-4" />
-          ) : clientPurchases?.length === 0 ? (
+            <Link href={``}>
+              <span>Sohora Factire</span>
+            </Link>
+          ) : productData?.length === 0 ? (
             <span className="flex items-center">
               Gurisha{" "}
               <ArrowUp01 className="h-4 w-4 text-blue-500 animate-pulse" />

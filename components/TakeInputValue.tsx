@@ -23,7 +23,7 @@ const TakeInputValue = ({
   ingano,
   igicuruzwa,
   draftPurchase,
-  draftId,
+  loading,
 }: {
   id: Id<"product">;
   setActiveRow: Dispatch<SetStateAction<boolean>>;
@@ -32,8 +32,9 @@ const TakeInputValue = ({
   byoseHamwe: number;
   ingano: number;
   igicuruzwa: string;
-  draftPurchase?: { aratwaraZingahe: number } | null; // Pass draftPurchase individually
-  draftId: Id<"draftPurchase"> | null;
+  draftPurchase?: { aratwaraZingahe: number } | null;
+
+  loading: boolean;
 }) => {
   const session = useSession();
   const userId = session.data?.user;
@@ -47,8 +48,14 @@ const TakeInputValue = ({
     draftPurchase ? draftPurchase.aratwaraZingahe * ukonyigurishaKuriDetail : 0
   );
 
-  const { name, factureNumber, updateProduct, productData, isSubmitting } =
-    useClientInfoStore();
+  const {
+    name,
+    factureNumber,
+    updateProduct,
+    productData,
+    isSubmitting,
+    addProduct,
+  } = useClientInfoStore();
 
   const addDraftPurchase = useMutation(api.draftPurchace.createPurchase);
   const draftPurchased = useQuery(api.draftPurchace.getDraftPurchase, {
@@ -59,10 +66,10 @@ const TakeInputValue = ({
     api.draftPurchace.updateDraftPurchase
   );
   useEffect(() => {
-    if (isSubmitting === true) {
+    if (loading === true) {
       setLocalInputValue("");
     }
-  }, [isSubmitting]);
+  }, [loading]);
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;
@@ -73,18 +80,14 @@ const TakeInputValue = ({
 
       setLocalInputValue(newValue);
       setActiveRow(true);
-
-      const numericValue = Number(newValue);
-      const total = numericValue * ukonyigurishaKuriDetail;
-      setLocalCalculatedValue(total);
     },
     [setActiveRow, ukonyigurishaKuriDetail]
   );
 
   const handleBlur = useCallback(() => {
-    if (!ukonyigurishaKuriDetail || !name) {
+    if (!ukonyigurishaKuriDetail || name === "") {
       toast({
-        description: "Missing required product details",
+        description: "Shyiramo izina ry'umukiriya",
         variant: "destructive",
       });
       return;
@@ -97,17 +100,7 @@ const TakeInputValue = ({
       yishyuyeAngahe: total,
     };
 
-    // if (draftPurchased) {
-    // updateDraftPurchase({
-    //   id: id,
-    //   fields,
-    // });
-    // } else {
-    const purchaseNumber = Math.floor(Math.random() * 1000000000);
-    addDraftPurchase({
-      purchaseNumber,
-      name: name ?? "",
-      factureNumber,
+    addProduct({
       productId: id,
       byoseHamwe,
       productType,

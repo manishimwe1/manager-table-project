@@ -20,7 +20,6 @@ const CollapsibleComponents = ({
   dataLength,
   children,
 }: CollapsibleItemProps) => {
-  const [isOpen, setIsOpen] = useState(true);
   return (
     <div className={cn("py-4 rounded-lg w-full")}>
       <Collapsible>

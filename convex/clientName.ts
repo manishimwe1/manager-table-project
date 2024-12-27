@@ -11,8 +11,9 @@ export const createClient = mutation({
     phone: v.number(),
     aratwaraZingahe: v.number(),
     yishyuyeAngahe: v.number(),
-    nideni: v.boolean(),
+    yishyuye: v.boolean(),
     productType: v.string(),
+    facture: v.number(),
   },
   handler: async (ctx, args) => {
     const product = await ctx.db.get(args.productId);
@@ -28,7 +29,8 @@ export const createClient = mutation({
       igicuruzwa: product.igicuruzwa,
       aratwaraZingahe: args.aratwaraZingahe,
       yishyuyeAngahe: args.yishyuyeAngahe,
-      nideni: args.nideni,
+      yishyuye: args.yishyuye,
+      facture: args.facture,
     });
 
     await ctx.runMutation(internal.product.updateProdut, {
@@ -50,7 +52,7 @@ export const getClientByIden = query({
     const Product = await ctx.db
       .query("client")
       .withIndex("by_userId", (q) => q.eq("userId", userId))
-      .filter((q) => q.eq(q.field("nideni"), true))
+      .filter((q) => q.eq(q.field("yishyuye"), true))
       .order("desc")
       .collect();
 
@@ -105,7 +107,7 @@ export const getSaledProductInDeni = query({
         .filter(
           (q) =>
             q.gte(q.field("_creationTime"), todayTimestamp) &&
-            q.eq(q.field("nideni"), true) // Cast _creationTime to number
+            q.eq(q.field("yishyuye"), true) // Cast _creationTime to number
         )
         .order("desc") // Order products by creation time in descending order
         .collect();
@@ -141,7 +143,7 @@ export const updatePayedClient = mutation({
   handler: async (ctx, args) => {
     const { id } = args;
 
-    await ctx.db.patch(id, { nideni: false });
+    await ctx.db.patch(id, { yishyuye: false });
   },
 });
 
@@ -151,7 +153,7 @@ export const getClientWhoPaid = query({
     const Product = await ctx.db
       .query("client")
       .withIndex("by_userId", (q) => q.eq("userId", args.userId!))
-      .filter((q) => q.eq(q.field("nideni"), false))
+      .filter((q) => q.eq(q.field("yishyuye"), false))
       .order("desc")
       .collect();
 
@@ -170,7 +172,7 @@ export const getClientWhoPaidById = query({
     const Product = await ctx.db
       .query("client")
       .filter(
-        (q) => q.eq(q.field("nideni"), false) && q.eq(q.field("_id"), args.id)
+        (q) => q.eq(q.field("yishyuye"), false) && q.eq(q.field("_id"), args.id)
       )
       .order("desc")
       .collect();

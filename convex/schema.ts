@@ -23,9 +23,10 @@ export default defineSchema({
     igicuruzwa: v.string(),
     aratwaraZingahe: v.number(),
     yishyuyeAngahe: v.number(),
-    nideni: v.boolean(),
+    yishyuye: v.boolean(),
     userId: v.string(),
     productId: v.id("product"),
+    facture: v.number(),
   })
     .index("by_name", ["name"])
     .index("by_userId", ["userId"]),
