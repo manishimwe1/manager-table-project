@@ -3,20 +3,12 @@ import { api } from "@/convex/_generated/api";
 import { useClientInfoStore } from "@/lib/store/zustand";
 import { useMutation, useQuery } from "convex/react";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { Button } from "./ui/button";
-import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useSession } from "next-auth/react";
-import { ScrollArea } from "./ui/scroll-area";
 import MemoizedScrollArea from "@/components/SellingItemComp";
 import { Id } from "@/convex/_generated/dataModel";
-import { DraftPurchaseType } from "@/types";
-interface CustomerInfo {
-  name: string;
-  factureNumber: number;
-  drafts?: any[];
-}
 
 const SellingButton = ({
   name,
@@ -24,22 +16,18 @@ const SellingButton = ({
   loading,
   setLoading,
   setIsOpen,
+  isOpen,
 }: {
   name: string;
   factureNumber: number;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const router = useRouter();
-  const [ideni, setIdeni] = useState<"Yego" | "Oya" | undefined>();
 
-  const [customerData, setCustomerData] = useState<CustomerInfo[]>([]);
-
-  const prevPropsRef = useRef({ name: "", factureNumber: 0 });
-
-  const { setReset, productData, removeProduct, phone, setName } =
-    useClientInfoStore();
+  const { productData, removeProduct, phone, setName } = useClientInfoStore();
   const { toast } = useToast();
   const session = useSession();
   const userId = session.data?.user;
@@ -58,66 +46,8 @@ const SellingButton = ({
   const draftPurchaseForMe = useQuery(api.draftPurchace.getDraftPurchaseForMe, {
     userId: user?._id as Id<"user">,
   });
-  // Effect to accumulate customer data
-  // useEffect(() => {
-  //   const draftPurchaceForClient = draftPurchaseForMe?.filter(
-  //     (purchase) =>
-  //       purchase.factureNumber === factureNumber && purchase.name === name
-  //   );
 
-  //   if (draftPurchaceForClient) {
-  //     addDraftPurchase(factureNumber, draftPurchaceForClient);
-  //   }
-  //   const prevProps = prevPropsRef.current;
-
-  //   console.log(
-  //     "Current Draft Purchases For client_____:",
-  //     draftPurchaceForClient
-  //   );
-  //   // Only update if props have changed
-  //   if (name !== prevProps.name || factureNumber !== prevProps.factureNumber) {
-  //     if (draftPurchases) {
-  //       setCustomerData((prev) => {
-  //         // Check if this customer already exists
-  //         const existingIndex = prev.findIndex(
-  //           (c) => c.name === name && c.factureNumber === factureNumber
-  //         );
-
-  //         if (existingIndex === -1) {
-  //           // Add new customer while keeping all previous ones
-  //           return [
-  //             ...prev,
-  //             {
-  //               name,
-  //               factureNumber,
-  //               drafts: draftPurchases,
-  //             },
-  //           ];
-  //         } else {
-  //           // Update existing customer's drafts while keeping others
-  //           return prev.map((customer, index) =>
-  //             index === existingIndex
-  //               ? { ...customer, drafts: draftPurchases }
-  //               : customer
-  //           );
-  //         }
-  //       });
-  //     }
-
-  //     // Update previous props reference
-  //     prevPropsRef.current = { name, factureNumber };
-  //   }
-  // }, [name, factureNumber, draftPurchases]);
   console.log(productData, "productData");
-
-  // const getCurrentCustomer = () => {
-  //   return customerData.find(
-  //     (customer) =>
-  //       customer.name === name && customer.factureNumber === factureNumber
-  //   );
-  // };
-
-  // Rest of the component remains the same, just update the handleSales function:
   const handleSales = async (value: string) => {
     try {
       if (name === "")
@@ -125,8 +55,16 @@ const SellingButton = ({
           title: "Shyirano izina ry'umukiriya",
           variant: "destructive",
         });
+
+      if (productData.length === 0) {
+        return toast({
+          title: "Garagaza ibya atwaye",
+          variant: "destructive",
+        });
+      }
+
       setLoading(true);
-      setName("");
+
       const facture = Math.floor(Math.random() * 1000000);
       for (const product of productData) {
         await newClient({
@@ -146,7 +84,7 @@ const SellingButton = ({
         title: `Ugurishije kuri ${name}`,
         variant: "success",
       });
-      setIsOpen(true);
+      setIsOpen(false);
     } catch (error) {
       console.error("Error processing sale:", error);
       toast({
@@ -172,7 +110,7 @@ const SellingButton = ({
               {factureNumber}
             </span>
           </p>
-          {!loading ? (
+          {isOpen ? (
             <form className="flex w-full h-full justify-end place-items-end ">
               <Button
                 disabled={loading}
@@ -193,7 +131,23 @@ const SellingButton = ({
                 <span>Afashe ideni</span>
               </Button>
             </form>
-          ) : null}
+          ) : (
+            <div className="w-full h-full flex justify-end items-end">
+              <div
+                className="mt-4 w-fit h-fit p-2 text-stone-950 border-t-2 border-gray-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer text-nowrap "
+                onClick={() => {
+                  setName("");
+                  setLoading(false);
+                  setIsOpen(true);
+                  productData.forEach((product) =>
+                    removeProduct(product.productId)
+                  );
+                }}
+              >
+                Ongera Umukiriya
+              </div>
+            </div>
+          )}
         </div>
         <MemoizedScrollArea factureNumber={factureNumber} loading={loading} />
       </div>

@@ -112,9 +112,11 @@ export function PurchaseForm({
     const uzishyuraAngahe = wishyuye
       ? 0
       : Number(form.getValues("ikiranguzo")) * Number(form.getValues("ingano"));
-    const inyungu =
-      Number(form.getValues("ukonyigurishaKuriDetail")) * Number(byoseHamwe) -
-      uzishyuraAngahe;
+    const inyungu = wishyuye
+      ? Number(form.getValues("ukonyigurishaKuriDetail")) * Number(byoseHamwe) -
+        Number(form.getValues("ikiranguzo")) * Number(form.getValues("ingano"))
+      : Number(form.getValues("ukonyigurishaKuriDetail")) * Number(byoseHamwe) -
+        uzishyuraAngahe;
 
     if (product?._id) {
       await updateProduct({

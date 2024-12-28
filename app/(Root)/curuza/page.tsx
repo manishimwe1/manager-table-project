@@ -1,9 +1,7 @@
 "use client";
 
-import AddSereveye from "@/components/AddSereveye";
 import CollapsibleComponents from "@/components/collapsibleComponents";
 import DataTable from "@/components/DataTable";
-import EmptyPlaceholder from "@/components/EmptyPlaceholder";
 import HeaderSection from "@/components/HeaderSection";
 import SellingButton from "@/components/SellingButton";
 import SkeletonLoader from "@/components/SkeletonLoader";
@@ -17,17 +15,9 @@ import { useClientInfoStore } from "@/lib/store/zustand";
 import { formatToday, getTranslatedDay } from "@/lib/utils";
 import { ProductType } from "@/types";
 import { useQuery } from "convex/react";
-import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
-
-interface ClientInfoItem {
-  id: number;
-  data: ProductType[] | undefined;
-}
-
-type ClientInfo = ClientInfoItem[];
+import { FocusEvent, useEffect, useState } from "react";
 
 // Start with empty array instead of undefined data
 const SalesPage: React.FC = () => {
@@ -48,7 +38,7 @@ const SalesPage: React.FC = () => {
     isSubmitting,
   } = useClientInfoStore();
   const [nameInput, setNameInput] = useState("");
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const userId = session.data?.user;
 
@@ -83,10 +73,22 @@ const SalesPage: React.FC = () => {
     return <SkeletonLoader />;
   }
 
-  console.log(loading, "loding");
+  const handleBlur = (e: FocusEvent<HTMLInputElement, Element>) => {
+    if (e.target.value === "") {
+      toast({
+        description: "Ooops!!... Ntazi ry'umukiriya washyizimo",
+        variant: "destructive",
+      });
+      return;
+    }
+    setName(e.target.value);
+    setFactureNumber(1);
+    setNameInput("");
+    setLoading(false);
+    setIsOpen(true);
 
-  // Render the page
-
+    productData.forEach((product) => removeProduct(product.productId));
+  };
   return (
     <section className="flex flex-col w-full h-full lg:pl-0">
       <HeaderSection
@@ -95,7 +97,7 @@ const SalesPage: React.FC = () => {
       />
       <div className="w-full h-fit  flex items-center justify-between gap-4">
         <div className="flex items-center w-full  justify-center h-full">
-          <CollapsibleComponents title="Reba aba abakiriya buyumunsi">
+          <CollapsibleComponents title="Reba abakiriya buyumunsi">
             <div className="w-full h-full bg-red-600">here</div>
           </CollapsibleComponents>
         </div>
@@ -127,23 +129,10 @@ const SalesPage: React.FC = () => {
                 setName(e.target.value);
               }}
               placeholder="Shyiramo umukiriya"
-              onBlur={(e) => {
-                if (e.target.value === "") {
-                  toast({
-                    description: "Ooops!!... Ntazi ry'umukiriya washyizimo",
-                    variant: "destructive",
-                  });
-                  return;
-                }
-                setName(e.target.value);
-                setFactureNumber(1);
-                setNameInput("");
-                setLoading(false);
-                setIsOpen(false);
-              }}
+              onBlur={handleBlur}
             />
           </div>
-          {!isOpen && (
+          {isOpen && (
             <DataTable
               loading={loading}
               setLoading={setLoading}
@@ -152,6 +141,7 @@ const SalesPage: React.FC = () => {
               data={data}
             />
           )}
+
           <SellingButton
             factureNumber={factureNumber}
             name={name}
@@ -159,19 +149,8 @@ const SalesPage: React.FC = () => {
             setLoading={setLoading}
             loading={loading}
             setIsOpen={setIsOpen}
+            isOpen={isOpen}
           />
-        </div>
-      )}
-      {loading && (
-        <div
-          className="mt-4 w-fit h-fit p-2 text-stone-950 border-t-2 border-gray-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer text-nowrap "
-          onClick={() => {
-            setLoading(false);
-            setIsOpen(false);
-            productData.forEach((product) => removeProduct(product.productId));
-          }}
-        >
-          Ongera Umukiriya
         </div>
       )}
     </section>

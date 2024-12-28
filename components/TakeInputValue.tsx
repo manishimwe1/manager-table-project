@@ -13,6 +13,7 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
+import { ProductType } from "@/types";
 
 const TakeInputValue = ({
   setActiveRow,
@@ -24,16 +25,17 @@ const TakeInputValue = ({
   igicuruzwa,
   draftPurchase,
   loading,
+  data,
 }: {
   id: Id<"product">;
   setActiveRow: Dispatch<SetStateAction<boolean>>;
   productType: string;
   ukonyigurishaKuriDetail: number;
+  data: ProductType[] | undefined;
   byoseHamwe: number;
   ingano: number;
   igicuruzwa: string;
   draftPurchase?: { aratwaraZingahe: number } | null;
-
   loading: boolean;
 }) => {
   const session = useSession();
@@ -55,44 +57,76 @@ const TakeInputValue = ({
     productData,
     isSubmitting,
     addProduct,
+    removeProduct,
   } = useClientInfoStore();
 
-  const addDraftPurchase = useMutation(api.draftPurchace.createPurchase);
-  const draftPurchased = useQuery(api.draftPurchace.getDraftPurchase, {
-    name, // Use customerName instead of global name
-    factureNumber: factureNumber,
-  });
-  const updateDraftPurchase = useMutation(
-    api.draftPurchace.updateDraftPurchase
-  );
+  const MAX_VALUE =
+    productType === "Ikesi x 20" || productType === "Ikesi x 12"
+      ? data?.find((product) => product._id === id)?.byoseHamwe
+      : data?.find((product) => product._id === id)?.ingano;
+
   useEffect(() => {
     if (loading === true) {
       setLocalInputValue("");
+      setLocalCalculatedValue(0);
     }
   }, [loading]);
+
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (name === "") {
+        return toast({
+          description: "Shyiramo izina ry'umukiriya",
+          variant: "destructive",
+        });
+      }
+
       const newValue = e.target.value;
 
-      if (Number(newValue) < 0 || isNaN(Number(newValue))) {
+      if (Number(newValue) <= 0 || isNaN(Number(newValue))) {
         return;
       }
 
       setLocalInputValue(newValue);
+      setLocalCalculatedValue(Number(newValue) * ukonyigurishaKuriDetail);
       setActiveRow(true);
     },
-    [setActiveRow, ukonyigurishaKuriDetail]
+    [setActiveRow, ukonyigurishaKuriDetail, name, toast]
   );
 
   const handleBlur = useCallback(() => {
-    if (!ukonyigurishaKuriDetail || name === "") {
+    if (
+      !ukonyigurishaKuriDetail ||
+      name === "" ||
+      Number(localInputValue) <= 0
+    ) {
       toast({
-        description: "Shyiramo izina ry'umukiriya",
+        description: "Shyiramo izina ry'umukiriya cg atwaye zingahe",
         variant: "destructive",
+      });
+      setLocalInputValue("");
+      productData.find((product) => {
+        if (product.productId === id) {
+          removeProduct(product.productId);
+        }
       });
       return;
     }
-
+    if (MAX_VALUE) {
+      if (Number(localInputValue) > MAX_VALUE) {
+        toast({
+          description: " Ooops!!... ibyo atwaye biruta ibiri muri stock ",
+          variant: "destructive",
+        });
+        setLocalInputValue("");
+        productData.find((product) => {
+          if (product.productId === id) {
+            removeProduct(product.productId);
+          }
+        });
+        return;
+      }
+    }
     const total = Number(localInputValue) * ukonyigurishaKuriDetail;
 
     const fields = {
@@ -100,6 +134,15 @@ const TakeInputValue = ({
       yishyuyeAngahe: total,
     };
 
+    const existingProduct = productData.find(
+      (product) => product.productId === id
+    );
+
+    if (existingProduct) {
+      console.log("existingProduct", existingProduct);
+
+      updateProduct(id, fields);
+    }
     addProduct({
       productId: id,
       byoseHamwe,
@@ -115,11 +158,8 @@ const TakeInputValue = ({
     localInputValue,
     ukonyigurishaKuriDetail,
     name,
-    addDraftPurchase,
-    updateProduct,
-    productData,
+    addProduct,
     id,
-    factureNumber,
     byoseHamwe,
     productType,
     ingano,
@@ -129,17 +169,20 @@ const TakeInputValue = ({
   ]);
 
   return (
-    <Input
-      className={cn(
-        "px-1 placeholder:text-xs border-stone-900 dark:border-stone-500"
-      )}
-      type="number"
-      value={localInputValue}
-      onChange={handleInputChange}
-      onBlur={handleBlur}
-      min={0}
-      placeholder="0"
-    />
+    <>
+      <Input
+        className={cn(
+          "px-1 placeholder:text-xs border-stone-900 dark:border-stone-500 w-[100px]"
+        )}
+        type="number"
+        value={localInputValue}
+        onChange={handleInputChange}
+        onBlur={handleBlur}
+        min={0}
+        max={MAX_VALUE}
+        placeholder="0"
+      />
+    </>
   );
 };
 

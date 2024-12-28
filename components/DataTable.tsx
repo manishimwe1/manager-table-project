@@ -104,6 +104,7 @@ export default function DataTable({
                     byoseHamwe={product.byoseHamwe}
                     ingano={product.ingano}
                     igicuruzwa={product.igicuruzwa}
+                    data={data}
                   />
                 </TableCell>
               </TableRow>
