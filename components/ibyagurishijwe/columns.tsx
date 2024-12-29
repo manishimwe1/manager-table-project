@@ -31,6 +31,14 @@ export const columns: ColumnDef<Client>[] = [
     },
   },
   {
+    accessorKey: "aratwaraZingahe",
+    header: "Yatwaye ",
+    cell: ({ row }) => {
+      const aratwaraZingahe = row.getValue("aratwaraZingahe") as number;
+      return <p className="text-center">{aratwaraZingahe}</p>;
+    },
+  },
+  {
     accessorKey: "name",
     header: () => <p className="text-nowrap ">Izina ry'umukiriya</p>,
     cell: ({ row }) => {
@@ -54,14 +62,7 @@ export const columns: ColumnDef<Client>[] = [
       return <ShowUkonyiranguza productId={productId} />;
     },
   },
-  {
-    accessorKey: "aratwaraZingahe",
-    header: "Yatwaye ",
-    cell: ({ row }) => {
-      const aratwaraZingahe = row.getValue("aratwaraZingahe") as number;
-      return <p className="text-left">{aratwaraZingahe}</p>;
-    },
-  },
+
   {
     accessorKey: "yishyuye",
     header: "",

@@ -96,7 +96,11 @@ const SalesPage: React.FC = () => {
       /> */}
       <div className="w-full h-fit  flex items-center justify-between gap-4">
         <div className="flex items-center w-full  justify-center h-full">
-          <CollapsibleComponents title="Reba abakiriya buyumunsi">
+          <CollapsibleComponents
+            title="Reba abakiriya buyumunsi"
+            setIsOpen={setIsOpen}
+            isOpen={isOpen}
+          >
             <div className="w-full h-full">
               {<Ibyagurishijwe userId={user?._id} />}
             </div>

@@ -32,16 +32,27 @@ const Ibyagurishijwe = ({ userId }: { userId: Id<"user"> | undefined }) => {
                   setSearchValue={setSearchValue}
                 />
               </div>
-              <p className="font-bold text-nowrap dark:text-gray-400 ">
+            </div>
+            <div className="w-full flex justify-end items-center h-fit">
+              <p className="font-bold text-nowrap dark:text-gray-400 text-sm">
+                Total:{" "}
+                <span className=" text-blue-800 text-base">
+                  {filteredData
+                    .reduce((acc, item) => acc + item.yishyuyeAngahe, 0)
+                    .toLocaleString()}{" "}
+                </span>
+                Rwf
+              </p>
+              <p className="font-bold text-nowrap dark:text-gray-400 text-xs">
                 Byose hamwe{" "}
-                <span className="text-lg ml-2 text-blue-800">
+                <span className="text-sm ml-2 text-blue-800">
                   {filteredData?.length}
                 </span>
               </p>
             </div>
-            <ul>
+            <div>
               <DataTable columns={columns} data={filteredData} />
-            </ul>
+            </div>
           </>
         ) : (
           <p className="text-center mt-3 text-red-200 underline">

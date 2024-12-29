@@ -12,6 +12,8 @@ interface CollapsibleItemProps {
   subtitle?: string;
   dataLength?: number;
   children: React.ReactNode;
+  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>> | undefined;
+  isOpen?: boolean;
 }
 
 const CollapsibleComponents = ({
@@ -19,6 +21,8 @@ const CollapsibleComponents = ({
   subtitle,
   dataLength,
   children,
+  setIsOpen,
+  isOpen,
 }: CollapsibleItemProps) => {
   return (
     <div className={cn("py-4 rounded-lg w-full")}>
@@ -27,6 +31,9 @@ const CollapsibleComponents = ({
           className={cn(
             "flex items-center justify-between w-full text-lg text-balance border-b-2 border-blue-200 dark:border-stone-700 shadow-sm text-gray-800 dark:text-gray-200 shadow-background py-2 px-3 rounded-xl bg-background  dark:shadow-black/70"
           )}
+          onClick={() => {
+            setIsOpen && setIsOpen(!isOpen);
+          }}
         >
           {title}
           <ChevronsDownUp
