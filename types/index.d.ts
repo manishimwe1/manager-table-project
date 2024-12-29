@@ -78,7 +78,7 @@ export interface Client {
   phone: number | undefined;
   aratwaraZingahe: number;
   yishyuyeAngahe: number;
-  nideni: boolean;
+  yishyuye: boolean;
 }
 
 export interface outOfStock {

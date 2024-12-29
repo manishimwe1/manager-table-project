@@ -3,6 +3,7 @@
 import CollapsibleComponents from "@/components/collapsibleComponents";
 import DataTable from "@/components/DataTable";
 import HeaderSection from "@/components/HeaderSection";
+import Ibyagurishijwe from "@/components/Ibyagurishijwe";
 import SellingButton from "@/components/SellingButton";
 import SkeletonLoader from "@/components/SkeletonLoader";
 import { Input } from "@/components/ui/input";
@@ -12,11 +13,12 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useToast } from "@/hooks/use-toast";
 import { useClientInfoStore } from "@/lib/store/zustand";
-import { formatToday, getTranslatedDay } from "@/lib/utils";
+import { formatToday, getTranslatedDay, groupByDateInSaled } from "@/lib/utils";
 import { ProductType } from "@/types";
 import { useQuery } from "convex/react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { FocusEvent, useEffect, useState } from "react";
 
 // Start with empty array instead of undefined data
@@ -69,9 +71,6 @@ const SalesPage: React.FC = () => {
   console.log(productData, "productData");
 
   // Early return for loading and error states
-  if (session.status === "loading") {
-    return <SkeletonLoader />;
-  }
 
   const handleBlur = (e: FocusEvent<HTMLInputElement, Element>) => {
     if (e.target.value === "") {
@@ -91,14 +90,16 @@ const SalesPage: React.FC = () => {
   };
   return (
     <section className="flex flex-col w-full h-full lg:pl-0">
-      <HeaderSection
+      {/* <HeaderSection
         title={`Urutonde rw'ibicuruzwa  ${getTranslatedDay(formatToday())}`}
         className="cursor-pointer"
-      />
+      /> */}
       <div className="w-full h-fit  flex items-center justify-between gap-4">
         <div className="flex items-center w-full  justify-center h-full">
           <CollapsibleComponents title="Reba abakiriya buyumunsi">
-            <div className="w-full h-full bg-red-600">here</div>
+            <div className="w-full h-full">
+              {<Ibyagurishijwe userId={user?._id} />}
+            </div>
           </CollapsibleComponents>
         </div>
       </div>
@@ -131,6 +132,21 @@ const SalesPage: React.FC = () => {
               placeholder="Shyiramo umukiriya"
               onBlur={handleBlur}
             />
+            {isOpen ? (
+              <div className="w-fit h-fit boder-customer border-b-2 p-1 px-2 cursor-pointer">
+                <ChevronDown
+                  onClick={() => setIsOpen(false)}
+                  className="h-4 w-4 text-gray-500 "
+                />
+              </div>
+            ) : (
+              <div className="w-fit h-fit boder-customer border-b-2 p-1 px-2 cursor-pointer">
+                <ChevronUp
+                  onClick={() => setIsOpen(true)}
+                  className="h-4 w-4 text-gray-500 "
+                />
+              </div>
+            )}
           </div>
           {isOpen && (
             <DataTable

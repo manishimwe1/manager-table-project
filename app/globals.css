@@ -120,6 +120,6 @@ body {
 
 @layer utilities {
   .boder-customer {
-    @apply text-stone-950 text-sm lg:text-lg  px-3 py-1 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 rounded-lg dark:bg-stone-900 dark:text-gray-200;
+    @apply text-stone-950 text-sm lg:text-lg border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 rounded-lg dark:bg-stone-900 dark:text-gray-200;
   }
 }

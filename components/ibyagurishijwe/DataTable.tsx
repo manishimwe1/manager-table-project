@@ -58,11 +58,7 @@ export function DataTable<Client, TValue>({
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
-                className={cn(
-                  row.getValue("nideni") === true
-                    ? "bg-red-200 font-bold"
-                    : null
-                )}
+                className={cn("dark:text-gray-200")}
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >
