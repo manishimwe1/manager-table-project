@@ -12,14 +12,12 @@ import { Id } from "@/convex/_generated/dataModel";
 
 const SellingButton = ({
   name,
-  factureNumber,
   loading,
   setLoading,
   setIsOpen,
   isOpen,
 }: {
   name: string;
-  factureNumber: number;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
@@ -27,7 +25,7 @@ const SellingButton = ({
 }) => {
   const router = useRouter();
 
-  const { productData, removeProduct, phone, setName } = useClientInfoStore();
+  const { productData, phone, setName } = useClientInfoStore();
   const { toast } = useToast();
   const session = useSession();
   const userId = session.data?.user;
@@ -55,6 +53,13 @@ const SellingButton = ({
         });
       }
 
+      if (value === "Oya") {
+        if (phone === 0)
+          return toast({
+            title: "Shyirano phone y'umukiriya kubera atwaye ideni",
+            variant: "destructive",
+          });
+      }
       setLoading(true);
 
       const facture = Math.floor(Math.random() * 1000000);
@@ -91,7 +96,6 @@ const SellingButton = ({
       {productData.length > 0 ? (
         <div className=" h-full w-full rounded-md dark:!bg-stone-950 !shadow-md shadow-stone-950s lg:p-4 p-2 flex items-center justify-between  flex-col-reverse lg:flex-row">
           <MemoizedScrollArea
-            factureNumber={factureNumber}
             loading={loading}
             productData={productData}
             handleSales={handleSales}

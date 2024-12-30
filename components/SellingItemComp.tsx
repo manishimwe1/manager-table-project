@@ -7,7 +7,6 @@ import { ScrollArea } from "./ui/scroll-area";
 import Link from "next/link";
 
 interface SellingItemCompProps {
-  factureNumber: number;
   loading: boolean;
   productData: ProductInfo[];
   handleSales: (value: string) => void;

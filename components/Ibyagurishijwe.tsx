@@ -43,6 +43,22 @@ const Ibyagurishijwe = ({ userId }: { userId: Id<"user"> | undefined }) => {
                 </span>
                 Rwf
               </p>
+              <p className="font-bold text-nowrap dark:text-red-500/70 text-sm">
+                Amadeni:{" "}
+                <span className=" text-red-800 text-base">
+                  {filteredData
+                    .reduce((acc, item) => {
+                      if (item.yishyuye === false) {
+                        console.log(item, "items");
+
+                        return acc + item.yishyuyeAngahe;
+                      }
+                      return acc;
+                    }, 0)
+                    .toLocaleString()}
+                </span>
+                Rwf
+              </p>
               <p className="font-bold text-nowrap dark:text-gray-400 text-xs">
                 Byose hamwe{" "}
                 <span className="text-sm ml-2 text-blue-800">

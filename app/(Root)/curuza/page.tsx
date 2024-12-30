@@ -1,11 +1,13 @@
 "use client";
 
-import CollapsibleComponents from "@/components/collapsibleComponents";
 import DataTable from "@/components/DataTable";
-import HeaderSection from "@/components/HeaderSection";
 import Ibyagurishijwe from "@/components/Ibyagurishijwe";
 import SellingButton from "@/components/SellingButton";
-import SkeletonLoader from "@/components/SkeletonLoader";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,12 +15,12 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useToast } from "@/hooks/use-toast";
 import { useClientInfoStore } from "@/lib/store/zustand";
-import { formatToday, getTranslatedDay, groupByDateInSaled } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { ProductType } from "@/types";
 import { useQuery } from "convex/react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronsDownUp, ChevronUp } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FocusEvent, useEffect, useState } from "react";
 
 // Start with empty array instead of undefined data
@@ -31,17 +33,19 @@ const SalesPage: React.FC = () => {
   const {
     setName,
     name,
-    setFactureNumber,
+    setPhone,
     factureNumber,
     clientData,
     addClientData,
     removeProduct,
     productData,
     isSubmitting,
+    phone,
   } = useClientInfoStore();
   const [nameInput, setNameInput] = useState("");
+  const [phoneInput, setPhoneInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isListOpen, setIsListOpen] = useState(false);
   const userId = session.data?.user;
 
   // Queries
@@ -69,9 +73,6 @@ const SalesPage: React.FC = () => {
   }, [data, addClientData, isSubmitting]);
 
   console.log(productData, "productData");
-
-  // Early return for loading and error states
-
   const handleBlur = (e: FocusEvent<HTMLInputElement, Element>) => {
     if (e.target.value === "") {
       toast({
@@ -81,30 +82,49 @@ const SalesPage: React.FC = () => {
       return;
     }
     setName(e.target.value);
-    setFactureNumber(1);
+    setPhone(phone);
     setNameInput("");
     setLoading(false);
     setIsOpen(true);
+    setIsListOpen(false);
 
     productData.forEach((product) => removeProduct(product.productId));
   };
   return (
-    <section className="flex flex-col w-full h-full lg:pl-0">
-      {/* <HeaderSection
-        title={`Urutonde rw'ibicuruzwa  ${getTranslatedDay(formatToday())}`}
-        className="cursor-pointer"
-      /> */}
+    <section className="flex flex-col w-full h-full lg:pl-0 space-y-4">
       <div className="w-full h-fit  flex items-center justify-between gap-4">
-        <div className="flex items-center w-full  justify-center h-full">
-          <CollapsibleComponents
-            title="Reba abakiriya buyumunsi"
-            setIsOpen={setIsOpen}
-            isOpen={isOpen}
+        <div className="flex items-center w-full  justify-center h-full ">
+          <Collapsible
+            open={isListOpen}
+            onOpenChange={(e) => {
+              setIsListOpen(e);
+              setIsOpen(false);
+            }}
+            className="w-full"
           >
-            <div className="w-full h-full">
-              {<Ibyagurishijwe userId={user?._id} />}
-            </div>
-          </CollapsibleComponents>
+            <CollapsibleTrigger
+              className={cn(
+                "flex items-center justify-between w-full text-lg text-balance border-b-2 border-blue-200 dark:border-stone-700 shadow-sm text-gray-800 dark:text-gray-200 shadow-background py-2 px-3 rounded-xl bg-background  dark:shadow-black/70"
+              )}
+              onClick={() => {
+                console.log(isListOpen);
+              }}
+            >
+              Reba abakiriya buyumunsi
+              <ChevronsDownUp
+                className={cn(
+                  "text-gray-800 dark:text-gray-200 transition-transform"
+                )}
+              />
+            </CollapsibleTrigger>
+            {isListOpen && (
+              <CollapsibleContent className="flex flex-col rounded-lg mt-4">
+                <div className="w-full h-full">
+                  {<Ibyagurishijwe userId={user?._id} />}
+                </div>
+              </CollapsibleContent>
+            )}
+          </Collapsible>
         </div>
       </div>
 
@@ -118,24 +138,56 @@ const SalesPage: React.FC = () => {
         </div>
       ) : (
         <div className="h-full w-full rounded-lg overflow-hidden px-1 lg:px-3 flex flex-col gap-4">
-          <div className="flex items-center gap-4 w-full lg:w-1/2 px-2 lg:px-3">
-            <Label
-              className="text-stone-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 rounded-lg dark:bg-stone-900 cursor-pointer dark:text-gray-200"
-              htmlFor={`name`}
-            >
-              Umukiriya
-            </Label>
-            <Input
-              id={`name`}
-              className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2 outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
-              value={nameInput === "" ? name : nameInput}
-              onChange={(e) => {
-                setNameInput(e.target.value);
-                setName(e.target.value);
-              }}
-              placeholder="Shyiramo umukiriya"
-              onBlur={handleBlur}
-            />
+          <div className="flex items-center flex-col lg:flex-row justify-between w-full gap-2 lg:gap-10 px-2 lg:px-3">
+            <div className="flex items-center gap-4 w-full ">
+              <Label
+                className="text-stone-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 rounded-lg dark:bg-stone-900 cursor-pointer dark:text-gray-200"
+                htmlFor={`name`}
+              >
+                Umukiriya
+              </Label>
+              <Input
+                id={`name`}
+                className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2 outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
+                value={nameInput === "" ? name : nameInput}
+                onChange={(e) => {
+                  setNameInput(e.target.value);
+                  setName(e.target.value);
+                }}
+                placeholder="Shyiramo umukiriya"
+                onBlur={handleBlur}
+              />
+            </div>
+            <div className="flex items-center gap-4 w-full">
+              <Label
+                className="text-stone-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 rounded-lg dark:bg-stone-900 cursor-pointer dark:text-gray-200"
+                htmlFor={`phone`}
+              >
+                phone
+              </Label>
+              <Input
+                id={`phone`}
+                type="number"
+                className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2 outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
+                value={phoneInput}
+                onChange={(e) => {
+                  setPhoneInput(e.target.value);
+                }}
+                onBlur={() => {
+                  console.log(phoneInput.length);
+
+                  if (phoneInput.length !== 10) {
+                    toast({
+                      title: `Ushyizemo imibare ${phoneInput.length} kandi yakabaye 10`,
+                      variant: "destructive",
+                    });
+                    return;
+                  }
+                  setPhone(Number(phoneInput));
+                }}
+                placeholder="Shyiramo telephone"
+              />
+            </div>
             {isOpen ? (
               <div className="w-fit h-fit boder-customer border-b-2 p-1 px-2 cursor-pointer">
                 <ChevronDown
@@ -146,7 +198,10 @@ const SalesPage: React.FC = () => {
             ) : (
               <div className="w-fit h-fit boder-customer border-b-2 p-1 px-2 cursor-pointer">
                 <ChevronUp
-                  onClick={() => setIsOpen(true)}
+                  onClick={() => {
+                    if (!name) return;
+                    setIsOpen(true);
+                  }}
                   className="h-4 w-4 text-gray-500 "
                 />
               </div>
@@ -163,7 +218,6 @@ const SalesPage: React.FC = () => {
           )}
 
           <SellingButton
-            factureNumber={factureNumber}
             name={name}
             key={factureNumber}
             setLoading={setLoading}

@@ -14,6 +14,9 @@ const CardComponents = () => {
   const userId = session.data?.user;
 
   // Fetch all queries (hooks must always be called)
+  if (!userId && session.status !== "loading") {
+    redirect("/login");
+  }
   const user = useQuery(api.user.getUserIndb, { email: userId?.email || "" });
   const product: ProductType[] | undefined = useQuery(api.product.getProduct, {
     userId: user?._id as Id<"user">,
@@ -33,9 +36,6 @@ const CardComponents = () => {
 
   if (session.status === "loading") return <SkeletonLoader />;
 
-  if (!userId) {
-    redirect("/login");
-  }
   console.log(saledProduct?.length);
 
   return (

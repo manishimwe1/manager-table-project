@@ -67,7 +67,7 @@ export const getClientByIden = query({
 });
 
 export const getSaledProduct = query({
-  args: { userId: v.id("user") },
+  args: { userId: v.optional(v.id("user")) },
   handler: async (ctx, args) => {
     try {
       // Get the start of the current day in UTC
@@ -78,7 +78,9 @@ export const getSaledProduct = query({
       // Query the database for products created today
       const products = await ctx.db
         .query("client")
-        .withIndex("by_userId", (q) => q.eq("userId", args.userId))
+        .withIndex("by_userId", (q) =>
+          q.eq("userId", args.userId ? args.userId : "")
+        )
         .filter(
           (q) => q.gte(q.field("_creationTime"), todayTimestamp) // Cast _creationTime to number
         )
