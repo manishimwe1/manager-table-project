@@ -57,7 +57,7 @@ const ActionComponents = ({
                 <Link href={`/rangura?q=${id}`}>Rangura indi</Link>
               </Button>
             )}{" "}
-            {bishyuye === false && (
+            {bishyuye === false ? (
               <>
                 <Button
                   className="w-full !text-start  !items-start flex justify-start "
@@ -75,6 +75,13 @@ const ActionComponents = ({
                   Mwoherereze sms
                 </Button>
               </>
+            ) : (
+              <Button
+                className="w-full !text-start !items-start flex justify-start "
+                variant={"ghost"}
+              >
+                Mwoherereze sms
+              </Button>
             )}
           </div>
         </PopoverContent>

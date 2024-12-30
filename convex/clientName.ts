@@ -52,7 +52,7 @@ export const getClientByIden = query({
     const Product = await ctx.db
       .query("client")
       .withIndex("by_userId", (q) => q.eq("userId", userId))
-      .filter((q) => q.eq(q.field("yishyuye"), true))
+      .filter((q) => q.eq(q.field("yishyuye"), false))
       .order("desc")
       .collect();
 
