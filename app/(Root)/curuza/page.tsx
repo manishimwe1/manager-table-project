@@ -137,56 +137,58 @@ const SalesPage: React.FC = () => {
           <Skeleton className="h-[200px] w-full" />
         </div>
       ) : (
-        <div className="h-full w-full rounded-lg overflow-hidden px-1 lg:px-3 flex flex-col gap-4">
-          <div className="flex items-center flex-col lg:flex-row justify-between w-full gap-2 lg:gap-10 px-2 lg:px-3">
-            <div className="flex items-center gap-4 w-full ">
-              <Label
-                className="text-stone-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 rounded-lg dark:bg-stone-900 cursor-pointer dark:text-gray-200"
-                htmlFor={`name`}
-              >
-                Umukiriya
-              </Label>
-              <Input
-                id={`name`}
-                className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2 outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
-                value={nameInput === "" ? name : nameInput}
-                onChange={(e) => {
-                  setNameInput(e.target.value);
-                  setName(e.target.value);
-                }}
-                placeholder="Shyiramo umukiriya"
-                onBlur={handleBlur}
-              />
-            </div>
-            <div className="flex items-center gap-4 w-full">
-              <Label
-                className="text-stone-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 rounded-lg dark:bg-stone-900 cursor-pointer dark:text-gray-200"
-                htmlFor={`phone`}
-              >
-                phone
-              </Label>
-              <Input
-                id={`phone`}
-                type="number"
-                className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2 outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
-                value={phoneInput}
-                onChange={(e) => {
-                  setPhoneInput(e.target.value);
-                }}
-                onBlur={() => {
-                  console.log(phoneInput.length);
+        <div className="h-full w-full rounded-lg overflow-hidden px-1 lg:px-3 flex flex-col gap-4 lg:gap-10">
+          <div className="flex items-center lg:flex-row justify-between w-full px-2 lg:px-3">
+            <div className="flex flex-col lg:flex-row justify-between w-full  gap-2 lg:gap-10">
+              <div className="flex items-center gap-4 w-full ">
+                <Label
+                  className="text-stone-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 rounded-lg dark:bg-stone-900 cursor-pointer dark:text-gray-200"
+                  htmlFor={`name`}
+                >
+                  Umukiriya
+                </Label>
+                <Input
+                  id={`name`}
+                  className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2 outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
+                  value={nameInput === "" ? name : nameInput}
+                  onChange={(e) => {
+                    setNameInput(e.target.value);
+                    setName(e.target.value);
+                  }}
+                  placeholder="Shyiramo umukiriya"
+                  onBlur={handleBlur}
+                />
+              </div>
+              <div className="flex items-center gap-4 w-full">
+                <Label
+                  className="text-stone-950 text-sm lg:text-lg border-r-2 px-3 py-1 border-gray-200 bg-gray-100 shadow-md shadow-white dark:shadow-black/70 rounded-lg dark:bg-stone-900 cursor-pointer dark:text-gray-200"
+                  htmlFor={`phone`}
+                >
+                  phone
+                </Label>
+                <Input
+                  id={`phone`}
+                  type="number"
+                  className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2 outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
+                  value={phoneInput}
+                  onChange={(e) => {
+                    setPhoneInput(e.target.value);
+                  }}
+                  onBlur={() => {
+                    console.log(phoneInput.length);
 
-                  if (phoneInput.length !== 10) {
-                    toast({
-                      title: `Ushyizemo imibare ${phoneInput.length} kandi yakabaye 10`,
-                      variant: "destructive",
-                    });
-                    return;
-                  }
-                  setPhone(Number(phoneInput));
-                }}
-                placeholder="Shyiramo telephone"
-              />
+                    if (phoneInput.length !== 10) {
+                      toast({
+                        title: `Ushyizemo imibare ${phoneInput.length} kandi yakabaye 10`,
+                        variant: "destructive",
+                      });
+                      return;
+                    }
+                    setPhone(Number(phoneInput));
+                  }}
+                  placeholder="Shyiramo telephone"
+                />
+              </div>
             </div>
             {isOpen ? (
               <div className="w-fit h-fit boder-customer border-b-2 p-1 px-2 cursor-pointer">

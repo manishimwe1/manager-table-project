@@ -58,6 +58,24 @@ export const getProduct = query({
     return Product;
   },
 });
+export const getAllProduct = query({
+  args: { userId: v.optional(v.id("user")) },
+  handler: async (ctx, args) => {
+    const Product = await ctx.db
+      .query("product")
+      .withIndex("by_userId", (q) => q.eq("userId", args.userId!))
+      .order("desc")
+      .collect();
+
+    if (!Product) {
+      console.log(
+        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT")
+      );
+      return [];
+    }
+    return Product;
+  },
+});
 
 export const getProductOutOfStock = query({
   args: { userId: v.optional(v.id("user")) },

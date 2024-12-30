@@ -38,6 +38,8 @@ export function PurchaseForm({
   className?: string;
   product: ProductType | null | undefined;
 }) {
+  console.log(product);
+
   const session = useSession();
   const router = useRouter();
   const { toast } = useToast();

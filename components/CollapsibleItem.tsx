@@ -31,12 +31,8 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
     userId?.email ? { email: userId.email } : "skip"
   );
   const data: ProductType[] | undefined = useQuery(
-    api.product.getProduct,
+    api.product.getAllProduct,
     user?._id ? { userId: user._id } : "skip"
-  );
-  const dataByDate: ProductType[] | undefined = useQuery(
-    api.product.getProductByDate,
-    { date: selectedDate || 0 }
   );
 
   if (session.status === "loading") {
@@ -59,13 +55,7 @@ const CollapsibleItem = ({ className }: { className?: string }) => {
     setSelectedDate(Number(date));
   };
 
-  if (!data) {
-    return (
-      <div className="flex w-full flex-col gap-4">{/* Render skeletons */}</div>
-    );
-  }
-
-  if (data.length === 0) {
+  if (data?.length === 0) {
     return (
       <div className="h-full w-full">
         <EmptyPlaceholder

@@ -38,7 +38,11 @@ export const columns: ColumnDef<ProductType>[] = [
             <span className="text-[12px] mr-1">ikesi </span>
           )}
 
-          {ndanguyeZingahe}
+          {ndanguyeZingahe === 0 ? (
+            <span className="text-red-500 animate-pulse">Byashize</span>
+          ) : (
+            ndanguyeZingahe
+          )}
         </p>
       );
     },

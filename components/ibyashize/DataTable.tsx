@@ -54,7 +54,7 @@ export function DataTable<outOfStock, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>
+        <TableBody className="dark:!text-gray-200">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow

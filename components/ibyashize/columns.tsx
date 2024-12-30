@@ -11,19 +11,11 @@ import { Id } from "@/convex/_generated/dataModel";
 
 export const columns: ColumnDef<outOfStock>[] = [
   {
-    accessorKey: "_creationTime",
-    header: "Tariki",
-    cell: ({ row }) => {
-      const tariki = row.getValue("_creationTime") as number;
-      return <p className="w-fit text-xs">{formatReadableDate(tariki)}</p>;
-    },
-  },
-  {
     accessorKey: "igicuruzwa",
     header: "Igicuruzwa",
     cell: ({ row }) => {
       const igicuruzwa = row.getValue("igicuruzwa") as string;
-      return <p>{igicuruzwa}</p>;
+      return <p className="text-nowrap">{igicuruzwa}</p>;
     },
   },
   {
@@ -32,7 +24,7 @@ export const columns: ColumnDef<outOfStock>[] = [
     cell: ({ row }) => {
       const ikiranguzo = row.getValue("ikiranguzo") as number;
       return (
-        <p className="text-blue-900/90 font-bold">
+        <p className="text-blue-900/90 font-bold text-nowrap">
           {ikiranguzo.toLocaleString()} Rwf
         </p>
       );
@@ -43,7 +35,9 @@ export const columns: ColumnDef<outOfStock>[] = [
     header: "Hasigaye",
     cell: ({ row }) => {
       const hasgaye = row.getValue("ingano") as number;
-      return <p className="text-blue-900/90 font-bold">{hasgaye}</p>;
+      return (
+        <p className="text-blue-900/90 font-bold text-center">{hasgaye}</p>
+      );
     },
   },
   {
@@ -51,41 +45,70 @@ export const columns: ColumnDef<outOfStock>[] = [
     header: "Naranguye",
     cell: ({ row }) => {
       const naranguye = row.getValue("ndanguyeZingahe") as number;
-      return <p className="text-blue-900/90 font-bold">{naranguye}</p>;
-    },
-  },
-  {
-    accessorKey: "uzishyuraAngahe",
-    header: "Ideni mwishyura",
-    cell: ({ row }) => {
-      const uzishyuraAngahe = row.getValue("uzishyuraAngahe") as number;
-      return <p>{uzishyuraAngahe.toLocaleString()} Rwf</p>;
+      return (
+        <p className="text-blue-900/90 font-bold text-center">{naranguye}</p>
+      );
     },
   },
 
   {
-    accessorKey: "inyungu",
-    header: "Inyungu ",
+    accessorKey: "status",
+    header: "Ideni narangujwe",
     cell: ({ row }) => {
-      const inyungu = row.getValue("inyungu") as number;
-      return <p className="text-left">{inyungu.toLocaleString()} Rwf</p>;
+      const status = row.getValue("status") as boolean;
+      console.log(status, "status");
+      const amaount = row.getValue("uzishyuraAngahe") as number;
+      return (
+        <div className="text-right">
+          <Badge
+            className={cn(
+              "!text-right",
+              status === false
+                ? "bg-red-500 hover:bg-red-600"
+                : "bg-green-500 hover:bg-green-600"
+            )}
+          >
+            {status === false ? (
+              <p className="flex items-center text-[11px] text-nowrap">
+                Ryari ideni
+                <span className="text-xs">{amaount.toLocaleString()}</span>
+                Rwf
+              </p>
+            ) : (
+              "Nashyuye cash"
+            )}
+          </Badge>
+        </div>
+      );
     },
   },
   {
-    accessorKey: "status",
-    header: "Nideni",
+    accessorKey: "_id",
+    header: undefined,
+    cell: ({ row }) => {
+      //   const status = row.getValue("status") as boolean;
+      //   console.log(status, "status");
+      //   const id = row.getValue("_id") as Id<"product">;
+      //   return (
+      //     <ActionComponents id={id} bishyuye={status}>
+      //       <MoreVertical />
+      //     </ActionComponents>
+      //   );
+      // },
+      undefined;
+    },
+  },
+  {
+    accessorKey: "uzishyuraAngahe",
+    header: undefined,
     cell: ({ row }) => {
       const status = row.getValue("status") as boolean;
+      console.log(status, "status");
+      const id = row.getValue("_id") as Id<"product">;
       return (
-        <Badge
-          className={cn(
-            status === true
-              ? "bg-red-500 hover:bg-red-600"
-              : "bg-green-500 hover:bg-green-600"
-          )}
-        >
-          {status === true ? "Nideni" : "Narishyuye"}
-        </Badge>
+        <ActionComponents id={id} bishyuye={status} ibyashize={true}>
+          <MoreVertical />
+        </ActionComponents>
       );
     },
   },

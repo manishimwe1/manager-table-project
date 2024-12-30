@@ -37,9 +37,9 @@ export default function DataTable({
     factureNumber: factureNumber,
   });
   return (
-    <div className="w-full flex flex-col gap-1 md:gap-2 lg:flex-row  h-full justify-between">
+    <div className="w-full flex flex-col gap-1 md:gap-2 lg:flex-row  h-full justify-between shadow-lg dark:shadow-black shadow-slate-100 rounded-md ">
       {data ? (
-        <Table className="dark:bg-stone-900">
+        <Table className="dark:bg-stone-900 rounded-md ">
           <TableHeader>
             <TableRow>
               <TableHead className="text-nowrap">Igicuruzwa</TableHead>

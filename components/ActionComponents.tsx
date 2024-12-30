@@ -22,10 +22,10 @@ const ActionComponents = ({
   ibyashize?: boolean;
   bishyuye: boolean;
 }) => {
-  const ClientWhoPaid = useQuery(api.clientName.getClientWhoPaidById, {
-    //@ts-ignore
-    id: id,
-  });
+  // const ClientWhoPaid = useQuery(api.clientName.getClientWhoPaidById, {
+  //   //@ts-ignore
+  //   id: id,
+  // });
 
   const updatePayedClient = useMutation(api.clientName.updatePayedClient);
   function handleClick() {
@@ -40,31 +40,11 @@ const ActionComponents = ({
   console.log(bishyuye);
 
   return (
-    <div className={cn(ibyashize ? "hidden border" : " text-right relative")}>
+    <div className={cn(" text-center relative")}>
       <Popover>
         <PopoverTrigger>{children}</PopoverTrigger>
         <PopoverContent asChild className="!p-0 !py-2 !px-2">
           <div className="flex items-start justify-center flex-col gap-2 !w-full">
-            {bishyuye === false && (
-              <Button
-                className="w-full !text-start  !items-start flex justify-start "
-                variant={"ghost"}
-                onClick={() => {
-                  if (ClientWhoPaid) {
-                    const data = [
-                      {
-                        name: ClientWhoPaid[0]?.name,
-                        igicuruzwa: ClientWhoPaid[0].igicuruzwa,
-                        yishyuyeAngahe: ClientWhoPaid[0].yishyuyeAngahe,
-                      },
-                    ];
-                    printData(data, "Company Name");
-                  }
-                }}
-              >
-                Print
-              </Button>
-            )}
             {ibyashize && (
               <Button
                 className="w-full !text-start  !items-start flex justify-start "
@@ -77,7 +57,7 @@ const ActionComponents = ({
                 <Link href={`/rangura?q=${id}`}>Rangura indi</Link>
               </Button>
             )}{" "}
-            {bishyuye === true && (
+            {bishyuye === false && (
               <>
                 <Button
                   className="w-full !text-start  !items-start flex justify-start "
@@ -86,7 +66,7 @@ const ActionComponents = ({
                     handleClick();
                   }}
                 >
-                  Yishyuye
+                  Ishyura ideni
                 </Button>
                 <Button
                   className="w-full !text-start !items-start flex justify-start "
