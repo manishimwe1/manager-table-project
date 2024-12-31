@@ -66,13 +66,19 @@ const ActionComponents = ({
                     handleClick();
                   }}
                 >
-                  Ishyura ideni
+                  Yishyuye ideni
                 </Button>
                 <Button
                   className="w-full !text-start !items-start flex justify-start "
                   variant={"ghost"}
                 >
                   Mwoherereze sms
+                </Button>
+                <Button
+                  className="w-full !text-start !items-start flex justify-start "
+                  variant={"ghost"}
+                >
+                  Sohora facture
                 </Button>
               </>
             ) : (

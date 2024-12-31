@@ -9,7 +9,8 @@ import { Badge } from "../ui/badge";
 import React from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { AlertTriangleIcon, HandCoins } from "lucide-react";
+import { AlertTriangleIcon, HandCoins, MoreVertical } from "lucide-react";
+import ActionComponents from "../ActionComponents";
 
 function ShowUkonyiranguza({ productId }: { productId: Id<"product"> }) {
   const product = useQuery(api.product.getProductById, { id: productId });
@@ -60,7 +61,7 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: "productId",
-    header: () => <p className="text-nowrap ">Uko nyiranguza</p>,
+    header: () => <p className="text-nowrap ">Uko nyigurisha</p>,
     cell: ({ row }) => {
       const productId = row.getValue("productId") as Id<"product">;
       return <ShowUkonyiranguza productId={productId} />;
@@ -96,6 +97,19 @@ export const columns: ColumnDef<Client>[] = [
             </Badge>
           )}
         </div>
+      );
+    },
+  },
+  {
+    accessorKey: "_id",
+    header: undefined,
+    cell: ({ row }) => {
+      const id = row.getValue("_id") as Id<"client">;
+      const bishyuye = row.getValue("yishyuye") as boolean;
+      return (
+        <ActionComponents id={id} bishyuye={bishyuye}>
+          <MoreVertical />
+        </ActionComponents>
       );
     },
   },
