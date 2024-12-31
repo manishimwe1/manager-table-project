@@ -54,7 +54,7 @@ export function PurchaseForm({
 
   // State hooks
   const [submitting, setSubmitting] = useState(false);
-  const [inganoValue, setInganoValue] = useState(0);
+  const [nishyuyeMake, setNishyuyeMake] = useState(false);
   const [wishyuye, setWishyuye] = useState(false);
   const [ntibyishyuye, setNtibyishyuye] = useState(false);
   const [ibyoUranguyeType, setIbyoUranguye] = useState<
@@ -87,7 +87,7 @@ export function PurchaseForm({
 
   useEffect(() => {
     if (product) {
-      setWishyuye(product.status);
+      setNishyuyeMake(product.status);
       setNtibyishyuye(!product.status);
     }
   }, [product]);
@@ -153,7 +153,7 @@ export function PurchaseForm({
     }
     setOpen(false);
     form.reset();
-    setWishyuye(false);
+    setNishyuyeMake(false);
     setNtibyishyuye(false);
     setSubmitting(false);
     toast({
@@ -301,14 +301,15 @@ export function PurchaseForm({
                   <div className="flex items-center gap-3">
                     <Badge
                       className={cn(
-                        "w-full rounded-full !p-2 text-sm cursor-pointer",
+                        "w-full rounded-full !p-2 text-sm cursor-pointer text-center place-content-center",
                         wishyuye
                           ? "bg-green-600 hover:bg-green-500 py-1 px-2 dark:text-white"
                           : "bg-gray-200 dark:bg-stone-900 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100 text-left hover:text-white"
                       )}
                       onClick={() => {
+                        setWishyuye(true);
                         setNtibyishyuye(false);
-                        setWishyuye(!wishyuye);
+                        setNishyuyeMake(false);
                         field.onChange(true);
                       }}
                     >
@@ -316,13 +317,30 @@ export function PurchaseForm({
                     </Badge>
                     <Badge
                       className={cn(
-                        "w-full rounded-full !p-2 text-sm cursor-pointer",
+                        "w-full rounded-full !p-2 text-sm cursor-pointer text-center place-content-center",
+                        nishyuyeMake
+                          ? "bg-blue-600 hover:bg-blue-500 py-1 px-2 dark:text-white"
+                          : "bg-gray-200 dark:bg-stone-900 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100 text-left hover:text-white"
+                      )}
+                      onClick={() => {
+                        setNtibyishyuye(false);
+                        setWishyuye(false);
+                        setNishyuyeMake(!nishyuyeMake);
+                        field.onChange(true);
+                      }}
+                    >
+                      Nishyuye Make
+                    </Badge>
+                    <Badge
+                      className={cn(
+                        "w-full rounded-full !p-2 text-sm cursor-pointer place-content-center",
                         ntibyishyuye
                           ? "bg-red-400 hover:bg-red-500 py-1 px-2 text-white"
                           : "bg-gray-300 dark:bg-stone-900 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100 text-left hover:text-white"
                       )}
                       onClick={() => {
                         setWishyuye(false);
+                        setNishyuyeMake(false);
                         setNtibyishyuye(!ntibyishyuye);
                         field.onChange(false);
                       }}
@@ -387,6 +405,56 @@ export function PurchaseForm({
               </FormItem>
             )}
           />
+        )}
+        {nishyuyeMake && (
+          <div className="flex w-full items-center justify-between gap-2">
+            <FormField
+              control={form.control}
+              name="uzishyuraAngahe"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel className="text-black dark:text-gray-200">
+                    Wishyuye angahe
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="eg:100"
+                      type="number"
+                      className="text-sm placeholder:text-xs bg-dark-1 dark:bg-stone-900 dark:text-gray-200 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1 disabled:dark:text-gray-100"
+                      value={
+                        Number(form.getValues("ikiranguzo")) *
+                        Number(form.getValues("ingano"))
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="uzishyuraAngahe"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel className="text-black dark:text-gray-200">
+                    Ingano yozo nishyuye
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="eg:100"
+                      type="number"
+                      className="text-sm placeholder:text-xs bg-dark-1 dark:bg-stone-900 dark:text-gray-200 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1 disabled:dark:text-gray-100"
+                      value={
+                        Number(form.getValues("ikiranguzo")) *
+                        Number(form.getValues("ingano"))
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         )}
         <div className="flex w-full gap-4 sm:flex-row flex-col"></div>
         <div className="w-full flex justify-end items-center gap-6">
