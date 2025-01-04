@@ -37,11 +37,7 @@ const ActionElement = ({
   id: Id<"product">;
   ndanguyeGute: "nishyuyeCash" | "mfasheIdeni" | "nishyuyeMake";
 }) => {
-  // const ClientWhoPaid = useQuery(api.clientName.getClientWhoPaidById, {
-  //   //@ts-ignore
-  //   id: id,
-  // });
-
+  const deleteAction = useMutation(api.product.deleteProduct);
   const updatePayedClient = useMutation(api.clientName.updatePayedClient);
   //   function handleClick() {
   //     if (!ibyashize && id) {
@@ -89,8 +85,13 @@ const ActionElement = ({
               </AlertDialogHeader>
               <AlertDialogFooter className="flex !flex-row !items-center justify-end space-x-3 w-full ">
                 <AlertDialogCancel className=" !m-0">Cancel</AlertDialogCancel>
-                <AlertDialogAction className="bg-red-500 hover:bg-red-600 text-gray-200">
-                  Continue
+                <AlertDialogAction
+                  className="bg-red-500 hover:bg-red-600 text-gray-200"
+                  onClick={() => {
+                    deleteAction({ id });
+                  }}
+                >
+                  Siba
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

@@ -251,3 +251,10 @@ export const getProductByKuriDetail = query({
     return Product;
   },
 });
+
+export const deleteProduct = mutation({
+  args: { id: v.id("product") },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.id);
+  },
+});
