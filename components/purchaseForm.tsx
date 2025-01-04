@@ -38,7 +38,7 @@ export function PurchaseForm({
   className?: string;
   product: ProductType | null | undefined;
 }) {
-  console.log(product);
+  // console.log(product);
 
   const session = useSession();
   const router = useRouter();
@@ -54,9 +54,10 @@ export function PurchaseForm({
 
   // State hooks
   const [submitting, setSubmitting] = useState(false);
-  const [nishyuyeMake, setNishyuyeMake] = useState(false);
-  const [wishyuye, setWishyuye] = useState(false);
-  const [ntibyishyuye, setNtibyishyuye] = useState(false);
+
+  const [ndanguyeGute, setNdanguyeGute] = useState<
+    "nishyuyeCash" | "mfasheIdeni" | "nishyuyeMake"
+  >();
   const [ibyoUranguyeType, setIbyoUranguye] = useState<
     | "Kuri detail"
     | "Ibiro"
@@ -66,7 +67,6 @@ export function PurchaseForm({
     | "Imifuka"
   >("Kuri detail");
   const [byoseHamwe, setByoseHamwe] = useState<number>(0);
-
   // Form initialization
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -76,21 +76,16 @@ export function PurchaseForm({
         ikiranguzo: product ? product.ikiranguzo : 0,
         ikiranguzoKuriDetail: product ? product.ikiranguzo : 0,
         ingano: product ? product.ingano : 0,
-        birishyuwe: product ? product.status : undefined,
+        birishyuwe: ndanguyeGute,
         ukonyigurishaKuriDetail: product ? product.ukonyigurishaKuriDetail : 0,
-
         byoseHamwe: byoseHamwe,
+        inganoYizoNishyuye: 0,
+        wishyuyeAngahe: 0,
+        uzishyuraAngahe: 0,
       }),
-      [product, byoseHamwe]
+      [product, ndanguyeGute, byoseHamwe]
     ),
   });
-
-  useEffect(() => {
-    if (product) {
-      setNishyuyeMake(product.status);
-      setNtibyishyuye(!product.status);
-    }
-  }, [product]);
 
   useEffect(() => {
     if (ibyoUranguyeType === "Ikesi x 12") {
@@ -110,16 +105,10 @@ export function PurchaseForm({
   }
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setSubmitting(true);
-
-    const uzishyuraAngahe = wishyuye
-      ? 0
-      : Number(form.getValues("ikiranguzo")) * Number(form.getValues("ingano"));
-    const inyungu = wishyuye
-      ? Number(form.getValues("ukonyigurishaKuriDetail")) * Number(byoseHamwe) -
-        Number(form.getValues("ikiranguzo")) * Number(form.getValues("ingano"))
-      : Number(form.getValues("ukonyigurishaKuriDetail")) * Number(byoseHamwe) -
-        uzishyuraAngahe;
-
+    const uzishyuraAngahe =
+      values.birishyuwe === "nishyuyeMake"
+        ? values.ikiranguzo * values.ingano - values.wishyuyeAngahe
+        : 0;
     if (product?._id) {
       await updateProduct({
         id: product._id,
@@ -127,13 +116,17 @@ export function PurchaseForm({
           igicuruzwa: values.igicuruzwa,
           ikiranguzo: values.ikiranguzo,
           ingano: values.ingano,
-          status: values.birishyuwe,
-          uzishyuraAngahe: uzishyuraAngahe,
-          ukonyigurishaKuriDetailKuriDetail: values.ukonyigurishaKuriDetail,
-          inyungu: inyungu,
+          ndanguyeGute: values.birishyuwe,
+          uzishyuraAngahe:
+            values.birishyuwe === "nishyuyeMake"
+              ? uzishyuraAngahe
+              : values.uzishyuraAngahe,
+          ukonyigurishaKuriDetail: values.ukonyigurishaKuriDetail,
           ndanguyeZingahe: values.ingano,
           ibyoUranguyeType: ibyoUranguyeType,
           byoseHamwe: byoseHamwe,
+          inganoYizoNishyuye: values.inganoYizoNishyuye,
+          wishyuyeAngahe: values.wishyuyeAngahe,
         },
       });
     } else {
@@ -142,19 +135,24 @@ export function PurchaseForm({
         igicuruzwa: values.igicuruzwa,
         ikiranguzo: values.ikiranguzo,
         ingano: values.ingano,
-        status: values.birishyuwe,
-        uzishyuraAngahe: uzishyuraAngahe,
+        ndanguyeGute: values.birishyuwe,
+        uzishyuraAngahe:
+          values.birishyuwe === "nishyuyeMake"
+            ? uzishyuraAngahe
+            : values.uzishyuraAngahe,
         ukonyigurishaKuriDetail: values.ukonyigurishaKuriDetail,
-        inyungu: inyungu,
         ndanguyeZingahe: values.ingano,
         ibyoUranguyeType: ibyoUranguyeType,
         byoseHamwe: byoseHamwe,
+        inganoYizoNishyuye: values.inganoYizoNishyuye,
+        wishyuyeAngahe: values.wishyuyeAngahe,
       });
     }
     setOpen(false);
     form.reset();
-    setNishyuyeMake(false);
-    setNtibyishyuye(false);
+    setNdanguyeGute(undefined);
+    setIbyoUranguye("Kuri detail");
+    setByoseHamwe(0);
     setSubmitting(false);
     toast({
       title: `Wongereye ${values.igicuruzwa} muri stock`,
@@ -213,6 +211,15 @@ export function PurchaseForm({
                           setByoseHamwe(Number(e.target.value));
                         }
                       }}
+                      onBlur={() => {
+                        if (ibyoUranguyeType === "Kuri detail") {
+                          setByoseHamwe(Number(form.getValues("ingano")));
+                        } else if (ibyoUranguyeType === "Ikesi x 12") {
+                          setByoseHamwe(Number(form.getValues("ingano")) * 12);
+                        } else if (ibyoUranguyeType === "Ikesi x 20") {
+                          setByoseHamwe(Number(form.getValues("ingano")) * 20);
+                        }
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -248,7 +255,8 @@ export function PurchaseForm({
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel className="text-black dark:text-gray-100 text-left">
-                  Ikiranguzo
+                  Ikiranguzo {ibyoUranguyeType.includes("Ikesi") ? "kw'" : null}{" "}
+                  {ibyoUranguyeType}
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -269,7 +277,7 @@ export function PurchaseForm({
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel className="text-black dark:text-gray-100 text-left">
-                  Uko Ngurisha detail
+                  Uko Ngurisha detaye
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -285,9 +293,6 @@ export function PurchaseForm({
             )}
           />
         </div>
-        {/* <div className="flex items-center justify-between w-full gap-4">
-          
-        </div> */}
         <div className="flex items-center justify-between w-full gap-4">
           <FormField
             control={form.control}
@@ -302,15 +307,21 @@ export function PurchaseForm({
                     <Badge
                       className={cn(
                         "w-full rounded-full !p-2 text-sm cursor-pointer text-center place-content-center",
-                        wishyuye
+                        ndanguyeGute === "nishyuyeCash"
                           ? "bg-green-600 hover:bg-green-500 py-1 px-2 dark:text-white"
                           : "bg-gray-200 dark:bg-stone-900 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100 text-left hover:text-white"
                       )}
                       onClick={() => {
-                        setWishyuye(true);
-                        setNtibyishyuye(false);
-                        setNishyuyeMake(false);
-                        field.onChange(true);
+                        setNdanguyeGute("nishyuyeCash");
+                        field.onChange("nishyuyeCash");
+                        form.setValue("inganoYizoNishyuye", 0);
+                        form.setValue("wishyuyeAngahe", 0);
+
+                        form.setValue(
+                          "wishyuyeAngahe",
+                          form.getValues("ikiranguzo") *
+                            form.getValues("ingano")
+                        );
                       }}
                     >
                       Nishyuye cash
@@ -318,15 +329,14 @@ export function PurchaseForm({
                     <Badge
                       className={cn(
                         "w-full rounded-full !p-2 text-sm cursor-pointer text-center place-content-center",
-                        nishyuyeMake
+                        ndanguyeGute === "nishyuyeMake"
                           ? "bg-blue-600 hover:bg-blue-500 py-1 px-2 dark:text-white"
                           : "bg-gray-200 dark:bg-stone-900 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100 text-left hover:text-white"
                       )}
                       onClick={() => {
-                        setNtibyishyuye(false);
-                        setWishyuye(false);
-                        setNishyuyeMake(!nishyuyeMake);
-                        field.onChange(true);
+                        setNdanguyeGute("nishyuyeMake");
+                        field.onChange("nishyuyeMake");
+                        form.setValue("uzishyuraAngahe", 0);
                       }}
                     >
                       Nishyuye Make
@@ -334,15 +344,20 @@ export function PurchaseForm({
                     <Badge
                       className={cn(
                         "w-full rounded-full !p-2 text-sm cursor-pointer place-content-center",
-                        ntibyishyuye
+                        ndanguyeGute === "mfasheIdeni"
                           ? "bg-red-400 hover:bg-red-500 py-1 px-2 text-white"
                           : "bg-gray-300 dark:bg-stone-900 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100 text-left hover:text-white"
                       )}
                       onClick={() => {
-                        setWishyuye(false);
-                        setNishyuyeMake(false);
-                        setNtibyishyuye(!ntibyishyuye);
-                        field.onChange(false);
+                        setNdanguyeGute("mfasheIdeni");
+                        field.onChange("mfasheIdeni");
+                        form.setValue("inganoYizoNishyuye", 0);
+                        form.setValue("wishyuyeAngahe", 0);
+                        form.setValue(
+                          "uzishyuraAngahe",
+                          form.getValues("ikiranguzo") *
+                            form.getValues("ingano")
+                        );
                       }}
                     >
                       Mfashe ideni
@@ -354,7 +369,7 @@ export function PurchaseForm({
             )}
           />
         </div>
-        {wishyuye && (
+        {ndanguyeGute === "nishyuyeCash" && (
           <FormField
             control={form.control}
             name="uzishyuraAngahe"
@@ -380,7 +395,7 @@ export function PurchaseForm({
             )}
           />
         )}
-        {ntibyishyuye && (
+        {ndanguyeGute === "mfasheIdeni" && (
           <FormField
             control={form.control}
             name="uzishyuraAngahe"
@@ -406,24 +421,32 @@ export function PurchaseForm({
             )}
           />
         )}
-        {nishyuyeMake && (
+        {ndanguyeGute === "nishyuyeMake" && (
           <div className="flex w-full items-center justify-between gap-2">
             <FormField
               control={form.control}
-              name="uzishyuraAngahe"
+              name="inganoYizoNishyuye"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel className="text-black dark:text-gray-200">
-                    Wishyuye angahe
+                    Ingano yibyo nishyuye
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="eg:100"
                       type="number"
                       className="text-sm placeholder:text-xs bg-dark-1 dark:bg-stone-900 dark:text-gray-200 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1 disabled:dark:text-gray-100"
-                      value={
-                        Number(form.getValues("ikiranguzo")) *
-                        Number(form.getValues("ingano"))
+                      {...field}
+                      onBlur={() => {
+                        form.setValue(
+                          "wishyuyeAngahe",
+                          form.getValues("ikiranguzo") * field.value
+                        );
+                      }}
+                      max={
+                        ibyoUranguyeType === "Kuri detail"
+                          ? form.getValues("ingano")
+                          : byoseHamwe
                       }
                     />
                   </FormControl>
@@ -433,20 +456,22 @@ export function PurchaseForm({
             />
             <FormField
               control={form.control}
-              name="uzishyuraAngahe"
+              name="wishyuyeAngahe"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel className="text-black dark:text-gray-200">
-                    Ingano yozo nishyuye
+                    Wishyuye angahe
                   </FormLabel>
                   <FormControl>
                     <Input
+                      disabled
                       placeholder="eg:100"
                       type="number"
                       className="text-sm placeholder:text-xs bg-dark-1 dark:bg-stone-900 dark:text-gray-200 focus-visible:border-white/20 focus:border-white/20 focus-visible:ring-white/20 flex-1 disabled:dark:text-gray-100"
+                      {...field}
                       value={
-                        Number(form.getValues("ikiranguzo")) *
-                        Number(form.getValues("ingano"))
+                        form.getValues("ikiranguzo") *
+                        form.getValues("inganoYizoNishyuye")
                       }
                     />
                   </FormControl>
@@ -456,7 +481,6 @@ export function PurchaseForm({
             />
           </div>
         )}
-        <div className="flex w-full gap-4 sm:flex-row flex-col"></div>
         <div className="w-full flex justify-end items-center gap-6">
           <Button
             asChild
@@ -472,11 +496,11 @@ export function PurchaseForm({
             disabled={submitting}
           >
             {submitting ? (
-              <div className="flex items-center gap-0.5 justify-center">
+              <div className="flex items-center gap-0.5 justify-center py-2">
                 <p>Ongera...</p> <Loader className="animate-spin h-5 w-5" />
               </div>
             ) : (
-              <div className="flex items-center gap-0.5 justify-center">
+              <div className="flex items-center gap-0.5 justify-center py-2">
                 <p>Ongera muri stock</p>
                 <Send className="h-4 w-4" />
               </div>

@@ -5,9 +5,11 @@ import { cn } from "@/lib/utils";
 const DisplayBadge = ({
   value,
   bishyuye,
+  ndanguyeGute,
 }: {
   value: string | number;
   bishyuye?: boolean;
+  ndanguyeGute: string;
 }) => {
   return (
     <div className="text-right">
@@ -20,7 +22,22 @@ const DisplayBadge = ({
             : "bg-red-600 hover:bg-red-500"
         )}
       >
-        {value.toLocaleString()} Rwf
+        {ndanguyeGute === "nishyuyeCash" && (
+          <span className="text-nowrap">
+            Nishyuye {value.toLocaleString()} Rwf
+          </span>
+        )}
+
+        {ndanguyeGute === "mfasheIdeni" && (
+          <span className="text-nowrap">
+            hasigaye {value.toLocaleString()} Rwf
+          </span>
+        )}
+        {ndanguyeGute === "nishyuyeMake" && (
+          <span className="text-nowrap">
+            hasigaye {value.toLocaleString()} Rwf
+          </span>
+        )}
       </Badge>
     </div>
   );

@@ -13,8 +13,8 @@ export const formSchema = z.object({
   ingano: z.coerce
     .number()
     .min(1, { message: "ingano igomba kuba hejuru ya 0" }),
-  birishyuwe: z.boolean(),
-  uzishyuraAngahe: z.undefined(),
+  birishyuwe: z.enum(["nishyuyeCash", "mfasheIdeni", "nishyuyeMake"]),
+  uzishyuraAngahe: z.number(),
   // ukonyigurishaKuriDetail: z.coerce
   //   .number()
   //   .min(1, { message: "ukonyigurishaKuriDetail igomba kuba hejuru ya 0" }),
@@ -29,7 +29,6 @@ export const formSchema = z.object({
   //   "Amakarito",
   //   "Imifuka",
   // ]),
-  // byoseHamwe: z.coerce
-  //   .number()
-  //   .min(1, { message: "byose hamwe bigomba kuba hejuru ya 0" }),
+  wishyuyeAngahe: z.coerce.number().min(0),
+  inganoYizoNishyuye: z.coerce.number().min(0),
 });

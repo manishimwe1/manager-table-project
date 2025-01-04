@@ -7,13 +7,14 @@ export default defineSchema({
     ikiranguzo: v.number(),
     ingano: v.number(),
     uzishyuraAngahe: v.number(),
-    status: v.boolean(),
     ukonyigurishaKuriDetail: v.number(),
     byoseHamwe: v.number(),
-    inyungu: v.number(),
     ndanguyeZingahe: v.number(),
     userId: v.string(),
     ibyoUranguyeType: v.string(),
+    ndanguyeGute: v.string(),
+    inganoYizoNishyuye: v.number(),
+    wishyuyeAngahe: v.number(),
   })
     .index("by_igicuruzwa", ["igicuruzwa"])
     .index("by_userId", ["userId"]),

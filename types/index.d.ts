@@ -6,7 +6,7 @@ export type ItemType = {
   ingano: number;
   total: number;
   wishyuyeAngahe: number;
-  status: string;
+  ndanguyeGute: string | undefined;
 };
 
 export interface TableRowType {
@@ -21,7 +21,7 @@ export interface TableRowType {
   arashaka?: string;
   uzishyuraAngahe?: number;
   yishyuyeAngahe?: number;
-  status?: boolean;
+  ndanguyeGute?: strin | undefinedgn;
   arashyuye: boolean;
   ibyoUranguyeType: string;
   byoseHamwe: number;
@@ -36,9 +36,8 @@ export interface PurchaseType {
   ikiranguzo: number;
   ingano: number;
   uzishyuraAngahe: number;
-  status: boolean;
+  ndanguyeGute: string | undefined;
   ukonyigurishaKuriDetail: number;
-  inyungu: number;
   ndanguyeZingahe: number;
 }
 [] | undefined;
@@ -49,9 +48,8 @@ export interface Purchase {
   ikiranguzo: number;
   ingano: number;
   uzishyuraAngahe: number;
-  status: boolean;
+  ndanguyeGute: string | undefined;
   ukonyigurishaKuriDetail: number;
-  inyungu: number;
 }
 export type ProductType = {
   _id: Id<"product">;
@@ -60,13 +58,13 @@ export type ProductType = {
   ikiranguzo: number;
   ingano: number;
   uzishyuraAngahe: number;
-  status: boolean;
+  ndanguyeGute: string | undefined;
   ukonyigurishaKuriDetail: number;
   byoseHamwe: number;
-  inyungu: number;
   ndanguyeZingahe: number;
   userId: string;
   ibyoUranguyeType: string;
+  inganoYizoNishyuye: number;
 };
 
 export interface Client {
@@ -88,9 +86,8 @@ export interface outOfStock {
   ikiranguzo: number;
   ingano: number;
   uzishyuraAngahe: number;
-  status: boolean;
+  ndanguyeGute: string | undefined;
   ukonyigurishaKuriDetail: number;
-  inyungu: number;
   ndanguyeZingahe: number;
 }
 

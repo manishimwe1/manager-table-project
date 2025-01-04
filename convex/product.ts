@@ -8,9 +8,10 @@ export const createTask = mutation({
     ikiranguzo: v.number(),
     ingano: v.number(),
     uzishyuraAngahe: v.number(),
-    status: v.boolean(),
+    ndanguyeGute: v.string(),
+    inganoYizoNishyuye: v.number(),
+    wishyuyeAngahe: v.number(),
     ukonyigurishaKuriDetail: v.number(),
-    inyungu: v.number(),
     ndanguyeZingahe: v.number(),
     userId: v.id("user"),
     ibyoUranguyeType: v.string(),
@@ -25,12 +26,13 @@ export const createTask = mutation({
       ikiranguzo: args.ikiranguzo,
       ingano: args.ingano,
       uzishyuraAngahe: args.uzishyuraAngahe,
-      status: args.status,
+      ndanguyeGute: args.ndanguyeGute,
       ukonyigurishaKuriDetail: args.ukonyigurishaKuriDetail,
-      inyungu: args.inyungu,
       ndanguyeZingahe: args.ndanguyeZingahe,
       ibyoUranguyeType: args.ibyoUranguyeType,
       byoseHamwe: args.byoseHamwe,
+      inganoYizoNishyuye: args.inganoYizoNishyuye,
+      wishyuyeAngahe: args.wishyuyeAngahe,
     });
     if (!newProduct) {
       return new ConvexError("SOMETHING WENT WRONNG WHILE CREATING ");
@@ -58,6 +60,7 @@ export const getProduct = query({
     return Product;
   },
 });
+
 export const getAllProduct = query({
   args: { userId: v.optional(v.id("user")) },
   handler: async (ctx, args) => {
@@ -107,12 +110,12 @@ export const updateProduct = mutation({
       ingano: v.optional(v.number()),
       ikiranguzo: v.optional(v.number()),
       uzishyuraAngahe: v.optional(v.number()),
-      status: v.optional(v.boolean()),
-      ukonyigurishaKuriDetailKuriDetail: v.optional(v.number()),
-      inyungu: v.optional(v.number()),
+      ndanguyeGute: v.optional(v.string()),
+      ukonyigurishaKuriDetail: v.optional(v.number()),
       ndanguyeZingahe: v.optional(v.number()),
       byoseHamwe: v.optional(v.number()),
       ibyoUranguyeType: v.optional(v.string()),
+      inganoYizoNishyuye: v.optional(v.number()),
     }),
   },
 
@@ -183,13 +186,11 @@ export const updateProdut = internalMutation({
     ) {
       return await ctx.db.patch(id, {
         byoseHamwe: Number(product?.byoseHamwe) - args.value,
-        inyungu: product?.inyungu,
       });
     } else if (args.productType === "Kuri detail") {
       return await ctx.db.patch(id, {
         ingano: Number(product?.ingano) - args.value,
         byoseHamwe: Number(product?.byoseHamwe) - args.value,
-        inyungu: product?.inyungu,
       });
     }
   },

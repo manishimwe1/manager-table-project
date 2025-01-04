@@ -16,8 +16,8 @@ const MobileMenu = () => {
   const pathname = usePathname();
   return (
     <Sheet>
-      <SheetTrigger>
-        <MenuIcon />
+      <SheetTrigger className="border rounded-sm">
+        <MenuIcon className="dark:text-gray-400 " />
       </SheetTrigger>
       <SheetContent side={"left"} className="space-y-3">
         <DialogTitle></DialogTitle>
