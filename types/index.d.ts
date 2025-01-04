@@ -27,8 +27,6 @@ export interface TableRowType {
   byoseHamwe: number;
 }
 
-uzishyuraAngahe: 15000;
-
 export interface PurchaseType {
   _id: Id<"product">;
   _creationTime: number;

@@ -6,6 +6,8 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import React from "react";
 import DisplayBadge from "../DisplayBadge";
+import ActionComponents from "../ActionComponents";
+import ActionElement from "./ActionElement";
 
 export const columns: ColumnDef<ProductType>[] = [
   {
@@ -97,11 +99,7 @@ export const columns: ColumnDef<ProductType>[] = [
       );
     },
   },
-  {
-    accessorKey: "wishyuyeAngahe",
-    header: undefined,
-    cell: () => undefined,
-  },
+
   {
     accessorKey: "ukonyigurishaKuriDetail",
     header: () => {
@@ -166,11 +164,13 @@ export const columns: ColumnDef<ProductType>[] = [
       const iden = row.getValue("uzishyuraAngahe") as number;
       const ndanguyeGute = row.getValue("ndanguyeGute") as string;
       const wishyuyeAngahe = row.getValue("wishyuyeAngahe") as number;
+      const uzishyuraAngahe = row.getValue("uzishyuraAngahe") as number;
+
       return (
         <DisplayBadge
           value={ndanguyeGute === "mfasheIdeni" ? iden : wishyuyeAngahe}
-          bishyuye={iden === 0 ? true : false}
           ndanguyeGute={ndanguyeGute}
+          uzishyuraAngahe={uzishyuraAngahe}
         />
       );
     },
@@ -193,17 +193,16 @@ export const columns: ColumnDef<ProductType>[] = [
       );
     },
   },
-  // {
-  //   accessorKey: "inyungu",
-  //   header: () => {
-  //     return <p className="text-right text-nowrap">Inyungu Niteze byashize</p>;
-  //   },
-
-  //   cell: ({ row }) => {
-  //     const id = row.getValue("_id") as Id<"product">;
-
-  //     const total = row.getValue("inyungu") as number;
-  //     return <DisplayBadge value={total} bishyuye={true} />;
-  //   },
-  // },
+  {
+    accessorKey: "wishyuyeAngahe",
+    header: undefined,
+    cell: ({ row }) => {
+      const id = row.getValue("_id") as Id<"product">;
+      const ndanguyeGute = row.getValue("ndanguyeGute") as
+        | "nishyuyeCash"
+        | "mfasheIdeni"
+        | "nishyuyeMake";
+      return <ActionElement id={id} ndanguyeGute={ndanguyeGute} />;
+    },
+  },
 ];
