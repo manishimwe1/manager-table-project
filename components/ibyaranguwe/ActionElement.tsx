@@ -29,6 +29,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import IshyuraFormAction from "./IshyuraFormAction";
 
 const ActionElement = ({
   id,
@@ -62,8 +63,34 @@ const ActionElement = ({
           </DropdownMenuItem>
         )}
         {ndanguyeGute === "nishyuyeMake" && (
-          <DropdownMenuItem className="cursor-pointer">
-            Ishyura asigaye
+          <DropdownMenuItem className="cursor-pointer" asChild>
+            <AlertDialog>
+              <AlertDialogTrigger className="px-2">
+                Ishyura asigaye
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Urabyemeza neza?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {/* <IshyuraForm /> */}
+                    <IshyuraFormAction />
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="flex !flex-row !items-center justify-end space-x-3 w-full ">
+                  <AlertDialogCancel className=" !m-0">
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    className="bg-red-500 hover:bg-red-600 text-gray-200"
+                    onClick={() => {
+                      deleteAction({ id });
+                    }}
+                  >
+                    Siba
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </DropdownMenuItem>
         )}
 
