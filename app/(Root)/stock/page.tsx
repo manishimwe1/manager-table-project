@@ -12,9 +12,22 @@ import { useQuery } from "convex/react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import React, { useMemo, useState, useEffect } from "react";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
+import { useClientInfoStore } from "@/lib/store/zustand";
 
 const StockPage = () => {
   const [searchValue, setSearchValue] = useState("");
+  const { openDrawer, setOpenDrawer } = useClientInfoStore();
   const session = useSession();
   const userId = session.data?.user;
 
@@ -32,7 +45,7 @@ const StockPage = () => {
   const data: ProductType[] | undefined = useQuery(api.product.getProduct, {
     userId: user?._id,
   });
-
+  console.log(openDrawer, "openDrawer");
   const filteredData = useMemo(() => {
     if (!searchValue) return data;
     return data?.filter((item) =>
@@ -64,6 +77,25 @@ const StockPage = () => {
             </div>
           </div>
           <DataTable columns={columns} data={filteredData || []} />
+          <Drawer
+            open={openDrawer}
+            onOpenChange={() => {
+              setOpenDrawer(!openDrawer);
+            }}
+          >
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+                <DrawerDescription>
+                  This action cannot be undone.
+                </DrawerDescription>
+              </DrawerHeader>
+              <DrawerFooter>
+                <Button>Submit</Button>
+                <DrawerClose>Cancel</DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
         </>
       )}
     </section>

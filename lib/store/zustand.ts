@@ -16,6 +16,8 @@ export interface ProductInfo {
 }
 
 interface ClientInfo {
+  openDrawer: boolean;
+  setOpenDrawer: (open: boolean) => void;
   productData: ProductInfo[]; // Array to store product information
   addProduct: (newProduct: ProductInfo) => void; // Add a product to the array
   updateProduct: (id: Id<"product">, updates: Partial<ProductInfo>) => void; // Update a product by ID
@@ -63,6 +65,11 @@ export const useClientInfoStore = create<ClientInfo>((set) => ({
   stock: 0, // Initialize stock as 0
   isSubmitting: false, // Initialize submission status
   phone: 0,
+  openDrawer: false,
+  setOpenDrawer: (open: boolean) =>
+    set(() => ({
+      openDrawer: open,
+    })),
   // Add a new product to the array
   addProduct: (newProduct: ProductInfo) =>
     set((state) => {

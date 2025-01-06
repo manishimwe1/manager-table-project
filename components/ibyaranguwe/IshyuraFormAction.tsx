@@ -8,59 +8,71 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Id } from "@/convex/_generated/dataModel";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+  hasigaye: z.number(),
+  wishyuyeAngahe: z.number(),
 });
-const IshyuraFormAction = () => {
+
+const IshyuraFormAction = ({ id }: { id: Id<"product"> }) => {
+  const product = useQuery(api.product.getProductById, { id: id });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      hasigaye: 0,
+      wishyuyeAngahe: 0,
     },
   });
 
-  // 2. Define a submit handler.
+  // Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values);
   }
+
+  let hasigaye = 0;
+  if (product) {
+    hasigaye = product.ndanguyeZingahe - product.inganoYizoNishyuye;
+  }
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-x-8 flex items-center justify-center border"
+        className="space-x-3 flex items-center justify-center"
       >
         <FormField
           control={form.control}
-          name="username"
+          name="hasigaye"
           render={({ field }) => (
             <FormItem className="text-left">
               <FormLabel className="text-left">Hari hasigaye</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input
+                  className="text-sm"
+                  placeholder={`hasigaye ${hasigaye} zitishyuwe`}
+                  {...field}
+                />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
-          name="username"
+          name="wishyuyeAngahe"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Bihagaze </FormLabel>
+            <FormItem className="text-left">
+              <FormLabel>Bihagaze</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Ugiye kwishyura angahe"
@@ -68,11 +80,11 @@ const IshyuraFormAction = () => {
                   {...field}
                 />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
         />
+        <Button type="submit">Submit</Button>
       </form>
     </Form>
   );

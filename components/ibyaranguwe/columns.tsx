@@ -103,13 +103,13 @@ export const columns: ColumnDef<ProductType>[] = [
   {
     accessorKey: "ukonyigurishaKuriDetail",
     header: () => {
-      return <p className="text-nowrap">Uko Nyigurisha</p>;
+      return <p className="text-nowrap text-center">Uko Nyigurisha</p>;
     },
     cell: ({ row }) => {
       const iden = row.getValue("ukonyigurishaKuriDetail") as number;
       const productType = row.getValue("ibyoUranguyeType") as string;
       return (
-        <p className="text-nowrap">
+        <p className="text-nowrap text-center">
           {iden.toLocaleString()} Rwf{" "}
           {productType === "Ikesi x 12" && (
             <span className="text-[12px] mr-1">Kw'icupa </span>
@@ -132,7 +132,7 @@ export const columns: ColumnDef<ProductType>[] = [
       const wishyuyeAngahe = row.getValue("wishyuyeAngahe") as number;
       const ndanguyeGute = row.getValue("ndanguyeGute") as string;
       return (
-        <p className="text-nowrap text-right">
+        <p className="text-nowrap text-center">
           {ndanguyeGute === "mfasheIdeni" ? (
             <span className="text-red-500">Nafashe ideni</span>
           ) : ndanguyeGute === "nishyuyeCash" ? (
@@ -158,7 +158,7 @@ export const columns: ColumnDef<ProductType>[] = [
   {
     accessorKey: "uzishyuraAngahe",
     header: () => {
-      return <p className="text-nowrap  text-right">Ideni mfite</p>;
+      return <p className="text-nowrap  text-center">Ideni mfite</p>;
     },
     cell: ({ row }) => {
       const iden = row.getValue("uzishyuraAngahe") as number;
