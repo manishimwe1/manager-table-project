@@ -172,12 +172,12 @@ const TakeInputValue = ({
   return (
     <div
       className={cn(
-        "px-1 placeholder:text-xs border-stone-900 dark:border-stone-500 w-[100px] overflow-hidden"
+        "px-1 placeholder:text-xs border-stone-900 dark:border-stone-500 w-[100px] overflow-hidden flex items-center justify-between border rounded-md relative"
       )}
     >
       <Input
         className={cn(
-          "px-1 placeholder:text-xs border-none dark:border-stone-500 w-full"
+          "px-1 focus-visible:border-none focus:ring-0 focus:outline-none w flex-1 border-none focus-visible:ring-0"
         )}
         type="number"
         value={localInputValue}
@@ -187,7 +187,7 @@ const TakeInputValue = ({
         max={MAX_VALUE}
         placeholder="0"
       />
-      <Plus />
+      <Plus className="h-5 w-5 absolute right-1.5 top-[50%] translate-y-[-50%] hover:scale-110 cursor-pointer border dark:bg-stone-700 rounded-md" />
     </div>
   );
 };

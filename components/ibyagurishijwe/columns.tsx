@@ -2,7 +2,7 @@
 
 import { Id } from "@/convex/_generated/dataModel";
 import { cn, formatReadableDate } from "@/lib/utils";
-import { Client } from "@/types";
+import { Client, NdanguyeGute } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "../ui/badge";
 
@@ -19,6 +19,51 @@ function ShowUkonyiranguza({ productId }: { productId: Id<"product"> }) {
     <p className="text-left">
       {product ? product.ukonyigurishaKuriDetail.toLocaleString() : 0} Rwf
     </p>
+  );
+}
+function ShowBadge({
+  productId,
+  yishyuyeAngahe,
+}: {
+  productId: Id<"product">;
+  yishyuyeAngahe: number;
+}) {
+  const product = useQuery(api.product.getProductById, { id: productId });
+  console.log(product, "product");
+  const ndanguyeGute = product?.ndanguyeGute as string;
+  const uzishyuraAngahe = product?.uzishyuraAngahe as number;
+  return (
+    <div className="text-right">
+      {" "}
+      <Badge
+        className={cn(
+          "cursor-pointer text-stone-900 shadow-sm shadow-black/15 text-nowrap",
+          ndanguyeGute === "nishyuyeCash" &&
+            " bg-green-600 hover:bg-green-500 text-black -rotate-2 shadow-sm shadow-green-500",
+          ndanguyeGute === "mfasheIdeni" &&
+            " bg-red-600 hover:bg-red-500 text-black rotate-2 shadow-sm shadow-red-500",
+          ndanguyeGute === "nishyuyeMake" &&
+            " bg-blue-600 hover:bg-blue-500 text- shadow-sm shadow-blue-500"
+        )}
+      >
+        {ndanguyeGute === "nishyuyeCash" && (
+          <span className="text-nowrap">
+            Nishyuye {yishyuyeAngahe.toLocaleString()} Rwf
+          </span>
+        )}
+
+        {ndanguyeGute === "mfasheIdeni" && (
+          <span className="text-nowrap">
+            hasigaye {yishyuyeAngahe.toLocaleString()} Rwf
+          </span>
+        )}
+        {ndanguyeGute === "nishyuyeMake" && (
+          <span className="text-nowrap">
+            Nsigajemo {uzishyuraAngahe.toLocaleString()} Rwf
+          </span>
+        )}
+      </Badge>
+    </div>
   );
 }
 
@@ -78,25 +123,9 @@ export const columns: ColumnDef<Client>[] = [
     header: undefined,
     cell: ({ row }) => {
       const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as number;
-      const yishyuye = row.getValue("yishyuye") as boolean;
+      const productId = row.getValue("productId") as Id<"product">;
       return (
-        <div className="flex gap-1 items-center  justify-end text-nowrap">
-          {yishyuye ? (
-            <Badge
-              className={cn(
-                " flex items-center  space-x-1 !text-[10px] !px-1 bg-green-500 hover:bg-green-700 cursor-pointer !gap-1 text-green-950 font-semibold"
-              )}
-            >
-              <HandCoins className="h-4 w-4 text-slate-300" />
-              Yishyuye: {yishyuyeAngahe.toLocaleString()} Rwf
-            </Badge>
-          ) : (
-            <Badge className="flex items-center !text-[10px] !px-1 bg-red-500 hover:bg-red-700 cursor-pointer !gap-1 text-red-950">
-              <AlertTriangleIcon className="h-4 w-4 text-slate-300 " />
-              afite ideni: {yishyuyeAngahe.toLocaleString()} Rwf
-            </Badge>
-          )}
-        </div>
+        <ShowBadge productId={productId} yishyuyeAngahe={yishyuyeAngahe} />
       );
     },
   },

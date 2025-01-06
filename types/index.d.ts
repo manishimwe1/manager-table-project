@@ -105,3 +105,10 @@ export interface DraftPurchaseType {
   name: string;
   factureNumber: number;
 }
+
+export type NdanguyeGute = {
+  nishyuyeCash: "nishyuyeCash";
+  mfasheIdeni: "mfasheIdeni";
+  nishyuyeMake: "nishyuyeMake";
+  undefined;
+};

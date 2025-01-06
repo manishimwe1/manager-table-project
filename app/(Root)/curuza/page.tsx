@@ -18,7 +18,7 @@ import { useClientInfoStore } from "@/lib/store/zustand";
 import { cn } from "@/lib/utils";
 import { ProductType } from "@/types";
 import { useQuery } from "convex/react";
-import { ChevronDown, ChevronsDownUp, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronsDownUp, ChevronUp, Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FocusEvent, useEffect, useState } from "react";
@@ -149,7 +149,7 @@ const SalesPage: React.FC = () => {
                 </Label>
                 <Input
                   id={`name`}
-                  className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2 outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200"
+                  className="w-full flex-1 bg-transparent border dark:border-stone-700 lg:border-2 outline-none focus:outline-none focus-visible:ring-2 placeholder:text-xs px-2 dark:text-gray-200 relative"
                   value={nameInput === "" ? name : nameInput}
                   onChange={(e) => {
                     setNameInput(e.target.value);
