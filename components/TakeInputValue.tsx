@@ -14,6 +14,7 @@ import { api } from "@/convex/_generated/api";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
 import { ProductType } from "@/types";
+import { Plus } from "lucide-react";
 
 const TakeInputValue = ({
   setActiveRow,
@@ -169,10 +170,14 @@ const TakeInputValue = ({
   ]);
 
   return (
-    <>
+    <div
+      className={cn(
+        "px-1 placeholder:text-xs border-stone-900 dark:border-stone-500 w-[100px] overflow-hidden"
+      )}
+    >
       <Input
         className={cn(
-          "px-1 placeholder:text-xs border-stone-900 dark:border-stone-500 w-[100px]"
+          "px-1 placeholder:text-xs border-none dark:border-stone-500 w-full"
         )}
         type="number"
         value={localInputValue}
@@ -182,7 +187,8 @@ const TakeInputValue = ({
         max={MAX_VALUE}
         placeholder="0"
       />
-    </>
+      <Plus />
+    </div>
   );
 };
 

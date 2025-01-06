@@ -72,7 +72,7 @@ const SellingButton = ({
           productType: product.productType,
           phone: phone,
           aratwaraZingahe: product.aratwaraZingahe,
-          yishyuyeAngahe: product.yishyuyeAngahe,
+          yishyuyeAngahe: value === "Yego" ? product.yishyuyeAngahe : 0,
           yishyuye: value === "Yego" ? true : false,
         });
       }

@@ -141,11 +141,14 @@ export const getClientByProductId = internalQuery({
 });
 
 export const updatePayedClient = mutation({
-  args: { id: v.id("client") },
+  args: { id: v.id("client"), yishyuyeAngahe: v.optional(v.number()) },
   handler: async (ctx, args) => {
     const { id } = args;
 
-    await ctx.db.patch(id, { yishyuye: false });
+    await ctx.db.patch(id, {
+      yishyuye: args.yishyuyeAngahe ? false : true,
+      yishyuyeAngahe: args.yishyuyeAngahe,
+    });
   },
 });
 
@@ -186,5 +189,19 @@ export const getClientWhoPaidById = query({
       return [];
     }
     return Product;
+  },
+});
+
+export const getClientById = query({
+  args: { id: v.id("client") },
+  handler: async (ctx, args) => {
+    try {
+      const client = await ctx.db.get(args.id);
+
+      return client;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      return null; // Return an empty array in case of an error
+    }
   },
 });

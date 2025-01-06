@@ -53,7 +53,7 @@ const CardComponents = () => {
           link="/ibyashize"
         />
         <HomeCard
-          title="Ibyagurishijwe"
+          title="Ibyacurujwe"
           content={saledProduct?.length}
           link="/ibyagurishijwe"
         />

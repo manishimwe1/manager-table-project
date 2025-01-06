@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -10,6 +10,19 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import Link from "next/link";
 import { cn, printData } from "@/lib/utils";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import IshyuraFormAction from "./ibyaranguwe/IshyuraFormAction";
+import YishyuyeIdeni from "./ibyagurishijwe/YishyuyeIdeni";
 
 const ActionComponents = ({
   children,
@@ -18,14 +31,11 @@ const ActionComponents = ({
   bishyuye,
 }: {
   children: ReactNode;
-  id: Id<"client"> | Id<"product">;
+  id: Id<"client">;
   ibyashize?: boolean;
   bishyuye: boolean;
 }) => {
-  // const ClientWhoPaid = useQuery(api.clientName.getClientWhoPaidById, {
-  //   //@ts-ignore
-  //   id: id,
-  // });
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const updatePayedClient = useMutation(api.clientName.updatePayedClient);
   function handleClick() {
@@ -50,24 +60,33 @@ const ActionComponents = ({
                 className="w-full !text-start  !items-start flex justify-start "
                 variant={"ghost"}
                 onClick={() => {
-                  handleClick();
+                  // handleClick();
                 }}
-                asChild
               >
-                <Link href={`/rangura?q=${id}`}>Rangura indi</Link>
+                Rangura indi
               </Button>
             )}{" "}
             {bishyuye === false ? (
               <>
-                <Button
-                  className="w-full !text-start  !items-start flex justify-start "
-                  variant={"ghost"}
-                  onClick={() => {
-                    handleClick();
+                <AlertDialog
+                  open={dialogOpen}
+                  onOpenChange={() => {
+                    setDialogOpen(!dialogOpen);
                   }}
                 >
-                  Yishyuye ideni
-                </Button>
+                  <AlertDialogTrigger className="px-1 py-1 hover:bg-stone-700 w-full rounded-sm">
+                    Yishyuye ideni
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle></AlertDialogTitle>
+                      <div>
+                        <YishyuyeIdeni id={id} setDialogOpen={setDialogOpen} />
+                      </div>
+                    </AlertDialogHeader>
+                  </AlertDialogContent>
+                </AlertDialog>
+
                 <Button
                   className="w-full !text-start !items-start flex justify-start "
                   variant={"ghost"}
@@ -82,12 +101,20 @@ const ActionComponents = ({
                 </Button>
               </>
             ) : (
-              <Button
-                className="w-full !text-start !items-start flex justify-start "
-                variant={"ghost"}
-              >
-                Mwoherereze sms
-              </Button>
+              <>
+                <Button
+                  className="w-full !text-start !items-start flex justify-start "
+                  variant={"ghost"}
+                >
+                  Mwoherereze sms
+                </Button>
+                <Button
+                  className="w-full !text-start !items-start flex justify-start "
+                  variant={"ghost"}
+                >
+                  Sohora facture
+                </Button>
+              </>
             )}
           </div>
         </PopoverContent>
