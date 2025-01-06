@@ -155,7 +155,7 @@ export const getClientWhoPaid = query({
     const Product = await ctx.db
       .query("client")
       .withIndex("by_userId", (q) => q.eq("userId", args.userId!))
-      .filter((q) => q.eq(q.field("yishyuye"), false))
+      .filter((q) => q.eq(q.field("yishyuye"), true))
       .order("desc")
       .collect();
 
@@ -174,7 +174,7 @@ export const getClientWhoPaidById = query({
     const Product = await ctx.db
       .query("client")
       .filter(
-        (q) => q.eq(q.field("yishyuye"), false) && q.eq(q.field("_id"), args.id)
+        (q) => q.eq(q.field("yishyuye"), true) && q.eq(q.field("_id"), args.id)
       )
       .order("desc")
       .collect();
