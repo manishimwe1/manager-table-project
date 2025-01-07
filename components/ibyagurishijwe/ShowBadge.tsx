@@ -1,13 +1,14 @@
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
+import { useEffect, useMemo } from "react";
 
 export default function ShowBadge({
   productId,
-  yishyuyeAngahe,
   yatwaye,
+  yishyuyeAngahe,
   amazeKwishyura,
 }: {
   productId: Id<"product">;
@@ -16,8 +17,9 @@ export default function ShowBadge({
   amazeKwishyura: number;
 }) {
   const product = useQuery(api.product.getProductById, { id: productId });
-  console.log(product, "product");
+
   const ukonyigurishaKuriDetail = product?.ukonyigurishaKuriDetail as number;
+  useMemo(() => amazeKwishyura === yishyuyeAngahe, [amazeKwishyura]);
   return (
     <div className="text-right">
       {" "}

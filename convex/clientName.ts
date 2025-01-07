@@ -157,9 +157,8 @@ export const updatePayedClient = mutation({
     if (!client) return;
     await ctx.db.patch(id, {
       yishyuye: args.ideniRishizemo ? true : false,
-      amazeKwishyura: args.yishyuyeAngahe,
-      yishyuyezingahe: args.yishyuyezingahe,
-      aratwaraZingahe: client?.aratwaraZingahe - args.yishyuyezingahe,
+      amazeKwishyura: client?.amazeKwishyura! + args.yishyuyeAngahe,
+      yishyuyezingahe: client?.yishyuyezingahe! + args.yishyuyezingahe,
     });
   },
 });

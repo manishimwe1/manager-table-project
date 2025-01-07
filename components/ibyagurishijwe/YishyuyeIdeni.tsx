@@ -67,88 +67,144 @@ const YishyuyeIdeni = ({
         type: "manual",
         message: "Ushyizemo byinshi  kuruta ibyo yatwaye",
       });
-      form.setFocus("hasigaye");
-      toast({
+      form.setFocus("wishyuyeAngahe");
+
+      form.setError("wishyuyeAngahe", {
+        message: "Ushyizemo menshi kurusha ayo yatwaye",
+      });
+      return toast({
         title: "Ushyizemo byinshi  kuruta ibyo yatatwaye",
         description: "Mwongere mubikore",
         variant: "destructive",
       });
-      return;
     }
-
-    if (Math.floor(values.hasigaye) === 0) {
-      const yishyuyezingahe = 0;
+    const ukonyigurishaKuriDetail = productById.ukonyigurishaKuriDetail;
+    if (values.wishyuyeAngahe === yarikwishyura) {
+      console.log("Wishyuye nkayo warikwishyura ");
+      const yishyuyezingahe = values.hasigaye;
       const yishyuyeAngahe = values.wishyuyeAngahe;
-
-      if (values.wishyuyeAngahe === yarikwishyura) {
-        updateClient({
-          id: id,
-          yishyuyeAngahe: yishyuyeAngahe,
-          ideniRishizemo: true,
-          yishyuyezingahe: yishyuyezingahe,
-        });
-        toast({
-          title: `hey✋ ${product.name} yishyuye ideni ryose yaragufitiye`,
-          description: "ideni ryose rishizemo",
-          variant: "success",
-        });
-      } else {
-        updateClient({
-          id: id,
-          yishyuyeAngahe: yishyuyeAngahe,
-          ideniRishizemo: false,
-          yishyuyezingahe: yishyuyezingahe,
-        });
-        toast({
-          title: `hey✋ ${product.name} yishyuye make kw' ideni yaragufitiye hasigaye ${(
-            product.aratwaraZingahe * productById.ukonyigurishaKuriDetail -
-            product?.amazeKwishyura!
-          ).toLocaleString()} Rwf`,
-          description: "ideni ryose rishizemo",
-          variant: "success",
-        });
-      }
-
+      updateClient({
+        id: id,
+        yishyuyeAngahe: yishyuyeAngahe,
+        ideniRishizemo: true,
+        yishyuyezingahe: yishyuyezingahe,
+      });
       form.reset();
       setDialogOpen(false);
-      return;
-    } else {
-      const yishyuyezingahe = Math.floor(values.hasigaye);
-      const yishyuyeAngahe = values.wishyuyeAngahe;
+      return toast({
+        title: `hey✋ ${product.name} yishyuye ideni ryose yaragufitiye`,
+        description: "ideni ryose rishizemo",
+        variant: "success",
+      });
+    } else if (values.wishyuyeAngahe < ukonyigurishaKuriDetail) {
+      console.log("WishyuyeAngahe niyo make");
 
-      if (values.wishyuyeAngahe === yarikwishyura) {
-        updateClient({
-          id: id,
-          yishyuyeAngahe: yishyuyeAngahe,
-          ideniRishizemo: true,
-          yishyuyezingahe: yishyuyezingahe,
-        });
-        toast({
-          title: `hey✋ ${product.name} yishyuye ideni ryose yaragufitiye`,
-          description: "ideni ryose rishizemo",
-          variant: "success",
-        });
-        form.reset();
-        setDialogOpen(false);
-        return;
-      } else {
-        const restBalance = yarikwishyura - values.wishyuyeAngahe;
-        updateClient({
-          id: id,
-          yishyuyeAngahe: yishyuyeAngahe,
-          ideniRishizemo: false,
-          yishyuyezingahe: yishyuyezingahe,
-        });
-        toast({
-          title: `hey✋ ${product.name} yishyuye ideni yaragufitiye hasigaye ${restBalance}`,
-          description: "ideni ryose rishizemo",
-          variant: "success",
-        });
-        form.reset();
-        setDialogOpen(false);
-        return;
-      }
+      const yishyuyezingahe = 0;
+      const yishyuyeAngahe = values.wishyuyeAngahe;
+      updateClient({
+        id: id,
+        yishyuyeAngahe: yishyuyeAngahe,
+        ideniRishizemo: false,
+        yishyuyezingahe: yishyuyezingahe,
+      });
+      form.reset();
+      setDialogOpen(false);
+      return toast({
+        title: `hey✋ ${product.name} yishyuye ideni ryose yaragufitiye`,
+        description: "ideni ryose rishizemo",
+        variant: "success",
+      });
+    } else if (values.wishyuyeAngahe > ukonyigurishaKuriDetail) {
+      console.log("WishyuyeAngahe menshi kurusha ayo ndangurira imwe ");
+      const yishyuyezingahe = values.hasigaye;
+      const yishyuyeAngahe = values.wishyuyeAngahe;
+      updateClient({
+        id: id,
+        yishyuyeAngahe: yishyuyeAngahe,
+        ideniRishizemo: false,
+        yishyuyezingahe: yishyuyezingahe,
+      });
+      form.reset();
+      setDialogOpen(false);
+      return toast({
+        title: `hey✋ ${product.name} yishyuye ideni  yaragufitiye hasigaye ${yarikwishyura - values.wishyuyeAngahe}`,
+        description: "ideni ryose rishizemo",
+        variant: "success",
+      });
     }
+    // if (Math.floor(values.hasigaye) === 0) {
+    //   const yishyuyezingahe = 0;
+    //   const yishyuyeAngahe = values.wishyuyeAngahe;
+
+    //   if (values.wishyuyeAngahe === yarikwishyura) {
+    //     updateClient({
+    //       id: id,
+    //       yishyuyeAngahe: yishyuyeAngahe,
+    //       ideniRishizemo: true,
+    //       yishyuyezingahe: yishyuyezingahe,
+    //     });
+    //     toast({
+    //       title: `hey✋ ${product.name} yishyuye ideni ryose yaragufitiye`,
+    //       description: "ideni ryose rishizemo",
+    //       variant: "success",
+    //     });
+    //   } else {
+    //     updateClient({
+    //       id: id,
+    //       yishyuyeAngahe: yishyuyeAngahe,
+    //       ideniRishizemo: false,
+    //       yishyuyezingahe: yishyuyezingahe,
+    //     });
+    //     toast({
+    //       title: `hey✋ ${product.name} yishyuye make kw' ideni yaragufitiye hasigaye ${(
+    //         product.aratwaraZingahe * productById.ukonyigurishaKuriDetail -
+    //         product?.amazeKwishyura!
+    //       ).toLocaleString()} Rwf`,
+    //       description: "ideni ryose rishizemo",
+    //       variant: "success",
+    //     });
+    //   }
+
+    //   form.reset();
+    //   setDialogOpen(false);
+    //   return;
+    // } else {
+    //   const yishyuyezingahe = Math.floor(values.hasigaye);
+    //   const yishyuyeAngahe = values.wishyuyeAngahe;
+
+    //   if (values.wishyuyeAngahe === yarikwishyura) {
+    //     updateClient({
+    //       id: id,
+    //       yishyuyeAngahe: yishyuyeAngahe,
+    //       ideniRishizemo: true,
+    //       yishyuyezingahe: yishyuyezingahe,
+    //     });
+    //     toast({
+    //       title: `hey✋ ${product.name} yishyuye ideni ryose yaragufitiye`,
+    //       description: "ideni ryose rishizemo",
+    //       variant: "success",
+    //     });
+    //     form.reset();
+    //     setDialogOpen(false);
+    //     return;
+    //   } else {
+    //     const restBalance = yarikwishyura - values.wishyuyeAngahe;
+    //     updateClient({
+    //       id: id,
+    //       yishyuyeAngahe: yishyuyeAngahe,
+    //       ideniRishizemo: false,
+    //       yishyuyezingahe: yishyuyezingahe,
+    //     });
+    //     toast({
+    //       title: `hey✋ ${product.name} yishyuye ideni yaragufitiye hasigaye ${restBalance}`,
+    //       description: "ideni ryose rishizemo",
+    //       variant: "success",
+    //     });
+    //     form.reset();
+    //     setDialogOpen(false);
+    //     return;
+    //   }
+    // }
     // if (!product || !productById) return;
     //
     // if (values.wishyuyeAngahe > Number(productById?.ukonyigurishaKuriDetail)) {
