@@ -74,7 +74,7 @@ const ActionComponents = ({
                     setDialogOpen(!dialogOpen);
                   }}
                 >
-                  <AlertDialogTrigger className="px-1 py-1 hover:bg-stone-700 w-full rounded-sm">
+                  <AlertDialogTrigger className="p-2 hover:bg-stone-700 w-full rounded-sm text-sm text-left">
                     Yishyuye ideni
                   </AlertDialogTrigger>
                   <AlertDialogContent>

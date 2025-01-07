@@ -49,20 +49,20 @@ export const getClientByIden = query({
   args: { userId: v.optional(v.id("user")) },
   handler: async (ctx, args) => {
     const userId = args.userId as Id<"user">;
-    const Product = await ctx.db
+    const Client = await ctx.db
       .query("client")
       .withIndex("by_userId", (q) => q.eq("userId", userId))
       .filter((q) => q.eq(q.field("yishyuye"), false))
       .order("desc")
       .collect();
 
-    if (!Product) {
+    if (!Client) {
       console.log(
-        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING PRODUCT")
+        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING Client")
       );
       return [];
     }
-    return Product;
+    return Client;
   },
 });
 

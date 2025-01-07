@@ -20,6 +20,8 @@ import { api } from "@/convex/_generated/api";
 import { Client } from "@/types";
 import { Dispatch, SetStateAction } from "react";
 import { useToast } from "@/hooks/use-toast";
+import SkeletonLoader from "../SkeletonLoader";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   hasigaye: z.coerce.number(),
@@ -42,11 +44,17 @@ const YishyuyeIdeni = ({
     id: product?.productId,
   });
   const updateClient = useMutation(api.clientName.updatePayedClient);
+
+  if (!product || !productById)
+    return (
+      <Loader2 className="text-center h-5 w-5 text-stone-700 animate-spin" />
+    );
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       hasigaye: product?.aratwaraZingahe === 1 ? 1 : undefined,
-      wishyuyeAngahe: undefined,
+      wishyuyeAngahe:
+        productById?.ukonyigurishaKuriDetail * product?.aratwaraZingahe,
     },
   });
   console.log(product, "product");

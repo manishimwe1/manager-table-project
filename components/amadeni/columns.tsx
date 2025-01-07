@@ -10,24 +10,21 @@ import DisplayBadge from "../DisplayBadge";
 import { MoreVertical } from "lucide-react";
 import ActionComponents from "../ActionComponents";
 import ShowUkonyigurishije from "../ShowUkonyigurishije";
-
-function displayBadge() {}
+import ShowBadge from "../ibyagurishijwe/ShowBadge";
+import { ShowUkonyiranguza } from "../ibyagurishijwe/columns";
 
 export const columns: ColumnDef<Client>[] = [
   {
     accessorKey: "_id",
     header: "",
-    cell: () => null,
+    cell: ({ row }) => {
+      return (
+        <p className="text-sm dark:text-stone-400 text-stone-800">
+          {row.index + 1}
+        </p>
+      );
+    },
   },
-  // {
-  //   accessorKey: "_creationTime",
-  //   header: "Tariki",
-  //   cell: ({ row }) => {
-  //     const tariki = row.getValue("_creationTime") as number;
-  //     return <p className="w-fit text-xs">{formatReadableDate(tariki)}</p>;
-  //   },
-  // },
-
   {
     accessorKey: "name",
     header: "Izina ry'umu client",
@@ -35,7 +32,7 @@ export const columns: ColumnDef<Client>[] = [
       const name = row.getValue("name") as string;
 
       return (
-        <p className="text-left text-nowrap">
+        <p className="text-left text-nowrap text-blue-500">
           {name === "" ? "Unkwown" : name}{" "}
         </p>
       );
@@ -46,7 +43,7 @@ export const columns: ColumnDef<Client>[] = [
     header: "Phone",
     cell: ({ row }) => {
       const phone = row.getValue("phone") as number;
-      return <p className="text-left text-nowrap">{phone}</p>;
+      return <p className="text-left text-nowrap">0{phone}</p>;
     },
   },
   {
@@ -78,17 +75,34 @@ export const columns: ColumnDef<Client>[] = [
       return <p className="text-center">{total}</p>;
     },
   },
+  {
+    accessorKey: "_creationTime",
+    header: () => {
+      return <p className="text-center text-nowrap">Uko nyigurisha</p>;
+    },
+
+    cell: ({ row }) => {
+      const productId = row.getValue("productId") as Id<"product">;
+      return <ShowUkonyiranguza productId={productId} />;
+    },
+  },
 
   {
     accessorKey: "yishyuyeAngahe",
     header: () => {
       return <p className="text-center">Bishyuye</p>;
     },
-    size: 20,
     cell: ({ row }) => {
-      const total = row.getValue("yishyuyeAngahe") as number;
-      const bishyuye = row.getValue("yishyuye") as boolean;
-      return <DisplayBadge bishyuye={bishyuye} value={total} />;
+      const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as number;
+      const productId = row.getValue("productId") as Id<"product">;
+      const yatwaye = row.getValue("aratwaraZingahe") as number;
+      return (
+        <ShowBadge
+          productId={productId}
+          yishyuyeAngahe={yishyuyeAngahe}
+          yatwaye={yatwaye}
+        />
+      );
     },
   },
   {

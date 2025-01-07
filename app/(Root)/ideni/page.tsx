@@ -13,11 +13,13 @@ import React, { useMemo, useState } from "react";
 const IdeniPage = () => {
   const [searchValue, setSearchValue] = useState("");
   const session = useSession();
-    const userId = session.data?.user;
-  
-    // Fetch all queries (hooks must always be called)
-    const user = useQuery(api.user.getUserIndb, { email: userId?.email || "" });
-  const Client = useQuery(api.clientName.getClientByIden,{userId:user?._id as Id<"user">});
+  const userId = session.data?.user;
+
+  // Fetch all queries (hooks must always be called)
+  const user = useQuery(api.user.getUserIndb, { email: userId?.email || "" });
+  const Client = useQuery(api.clientName.getClientByIden, {
+    userId: user?._id as Id<"user">,
+  });
 
   const filteredData = useMemo(() => {
     if (!searchValue) return Client;
@@ -29,9 +31,9 @@ const IdeniPage = () => {
   return (
     <section className="w-full mt-2 space-y-4">
       <HeaderSection title="Urutonde rw'abagufitiye ideni" />
-      <div className=" flex items-center justify-between  w-full">
-        <p className="text-blue-400 text-nowrap hidden lg:flex ">
-          Byose hamwe: {Client?.length}
+      <div className=" flex items-center justify-between  w-full flex-row-reverse lg:flex-row">
+        <p className="text-blue-400 text-nowrap lg:text-base text-sm ">
+          Yose hamwe: {Client?.length}
         </p>
         <div className="lg:w-[600px] w-full">
           <SearchBox
