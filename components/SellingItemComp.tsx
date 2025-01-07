@@ -28,6 +28,7 @@ const SellingItemComp = ({
     productData,
     name,
     setName,
+    setPhone,
     removeProduct,
   } = useClientInfoStore();
 
@@ -119,6 +120,7 @@ const SellingItemComp = ({
                 className="mt-4 w-fit h-fit p-2 text-stone-950 border-t-2 border-gray-200 bg-gray-100 shadow-md rounded-lg dark:bg-stone-900 dark:text-gray-200 cursor-pointer text-nowrap text-sm "
                 onClick={() => {
                   setName("");
+                  setPhone(0);
                   setLoading(false);
                   setIsOpen(true);
                   productData.forEach((product) =>

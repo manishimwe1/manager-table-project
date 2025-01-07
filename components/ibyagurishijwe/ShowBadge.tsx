@@ -27,8 +27,11 @@ export default function ShowBadge({
         <span className="text-nowrap">
           Afite ideni{" "}
           {yishyuyeAngahe === 0
-            ? ukonyigurishaKuriDetail * yatwaye
-            : ukonyigurishaKuriDetail - yishyuyeAngahe}{" "}
+            ? (ukonyigurishaKuriDetail * yatwaye).toLocaleString()
+            : (
+                ukonyigurishaKuriDetail * yatwaye -
+                yishyuyeAngahe
+              ).toLocaleString()}{" "}
           Rwf
         </span>
       </Badge>

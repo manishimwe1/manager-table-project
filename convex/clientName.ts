@@ -15,6 +15,7 @@ export const createClient = mutation({
     productType: v.string(),
     facture: v.number(),
     yishyuyezingahe: v.optional(v.number()),
+    amazeKwishyura: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const product = await ctx.db.get(args.productId);
@@ -33,6 +34,7 @@ export const createClient = mutation({
       yishyuye: args.yishyuye,
       facture: args.facture,
       yishyuyezingahe: args.yishyuyezingahe,
+      amazeKwishyura: args.amazeKwishyura,
     });
 
     await ctx.runMutation(internal.product.updateProdut, {
@@ -147,15 +149,17 @@ export const updatePayedClient = mutation({
     id: v.id("client"),
     yishyuyeAngahe: v.number(),
     ideniRishizemo: v.boolean(),
-    yishyuyezingahe: v.optional(v.number()),
+    yishyuyezingahe: v.number(),
   },
   handler: async (ctx, args) => {
     const { id } = args;
-
+    const client = await ctx.db.get(id);
+    if (!client) return;
     await ctx.db.patch(id, {
       yishyuye: args.ideniRishizemo ? true : false,
-      yishyuyeAngahe: args.yishyuyeAngahe,
+      amazeKwishyura: args.yishyuyeAngahe,
       yishyuyezingahe: args.yishyuyezingahe,
+      aratwaraZingahe: client?.aratwaraZingahe - args.yishyuyezingahe,
     });
   },
 });

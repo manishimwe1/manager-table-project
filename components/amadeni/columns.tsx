@@ -111,7 +111,7 @@ export const columns: ColumnDef<Client>[] = [
   {
     accessorKey: "yishyuyeAngahe",
     header: () => {
-      return <p className="text-center">Azishura</p>;
+      return <p className="text-center">Azishyura</p>;
     },
     cell: ({ row }) => {
       const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as number;
