@@ -37,18 +37,6 @@ const ActionComponents = ({
 }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const updatePayedClient = useMutation(api.clientName.updatePayedClient);
-  function handleClick() {
-    if (!ibyashize && id) {
-      console.log("here", id);
-      //@ts-ignore
-      const clientId: Id<"client"> = id;
-      updatePayedClient({ id: clientId });
-    }
-  }
-
-  console.log(bishyuye);
-
   return (
     <div className={cn(" text-center relative")}>
       <Popover>

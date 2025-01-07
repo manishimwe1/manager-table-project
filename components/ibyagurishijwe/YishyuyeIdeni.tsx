@@ -22,6 +22,7 @@ import { Dispatch, SetStateAction } from "react";
 import { useToast } from "@/hooks/use-toast";
 import SkeletonLoader from "../SkeletonLoader";
 import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 const formSchema = z.object({
   hasigaye: z.coerce.number(),
@@ -36,6 +37,7 @@ const YishyuyeIdeni = ({
   setDialogOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
   const { toast } = useToast();
+  const session = useSession();
   const product: Client | null | undefined = useQuery(
     api.clientName.getClientById,
     { id: id }
@@ -45,16 +47,11 @@ const YishyuyeIdeni = ({
   });
   const updateClient = useMutation(api.clientName.updatePayedClient);
 
-  if (!product || !productById)
-    return (
-      <Loader2 className="text-center h-5 w-5 text-stone-700 animate-spin" />
-    );
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      hasigaye: product?.aratwaraZingahe === 1 ? 1 : undefined,
-      wishyuyeAngahe:
-        productById?.ukonyigurishaKuriDetail * product?.aratwaraZingahe,
+      hasigaye: 0,
+      wishyuyeAngahe: 0,
     },
   });
   console.log(product, "product");
@@ -63,25 +60,81 @@ const YishyuyeIdeni = ({
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     console.log(values);
-    if (values.hasigaye > Number(product?.aratwaraZingahe)) {
-      return toast({
-        title: "Ushyuzemo byinshi kuruta ibyo yatwaye",
-        description: "Mwongere mubikore",
-        variant: "destructive",
+    if (!product || !productById) return;
+    if (values.hasigaye > product.aratwaraZingahe) {
+      form.setError("hasigaye", {
+        type: "manual",
+        message: "Ushyizemo byinshi  kuruta ibyo yatatwaye",
       });
-    } else if (values.wishyuyeAngahe > Number(product?.yishyuyeAngahe)) {
+      form.setFocus("hasigaye");
       return toast({
-        title: "Ushyuzemo amafaranga menshi kuruta iyo agufitiye",
+        title: "Ushyizemo byinshi  kuruta ibyo yatatwaye",
         description: "Mwongere mubikore",
         variant: "destructive",
       });
     }
-    if (values.wishyuyeAngahe === Number(product?.yishyuyeAngahe)) {
-      updateClient({ id: id });
+    if (values.wishyuyeAngahe > Number(productById?.ukonyigurishaKuriDetail)) {
+      const yarikwishyura =
+        productById?.ukonyigurishaKuriDetail * product?.aratwaraZingahe;
+      const restBalance = yarikwishyura - values.wishyuyeAngahe;
+
+      updateClient({
+        id: id,
+        yishyuyeAngahe: yarikwishyura,
+        ideniRishizemo: true,
+      });
+
+      toast({
+        title: `hey✋ yishyuye menshi umugarurire ${restBalance} kubyo atwaye`,
+        description: "ideni ryose rishizemo",
+        variant: "success",
+      });
+      form.reset();
+      setDialogOpen(false);
+      return;
+    } else if (
+      values.wishyuyeAngahe < Number(productById?.ukonyigurishaKuriDetail)
+    ) {
+      const restBalance =
+        Number(productById?.ukonyigurishaKuriDetail) - values.wishyuyeAngahe;
+      console.log("product2");
+
+      updateClient({
+        id: id,
+        yishyuyeAngahe: product.yishyuyeAngahe + values.wishyuyeAngahe,
+        ideniRishizemo: false,
+        yishyuyezingahe: 0,
+      });
+      toast({
+        title: `Akwishyuye  make agusigayemo ${restBalance} iyo agufitiye",
+        description: "Mwongere mubikore`,
+        variant: "default",
+      });
+      form.reset();
+      setDialogOpen(false);
+      return;
+    } else if (
+      values.wishyuyeAngahe === Number(productById?.ukonyigurishaKuriDetail)
+    ) {
+      console.log("product3");
+
+      // updateClient({ id: id });
+      return toast({
+        title: "Yishyuye bingana",
+        description: "Mwongere mubikore",
+        variant: "destructive",
+      });
     } else {
-      const yishyuyeAngahe =
-        Number(product?.yishyuyeAngahe) - values.wishyuyeAngahe;
-      updateClient({ id: id, yishyuyeAngahe });
+      console.log("product4");
+
+      // const yishyuyeAngahe =
+      //   Number(product?.yishyuyeAngahe) - values.wishyuyeAngahe;
+      // updateClient({ id: id, yishyuyeAngahe });
+      return toast({
+        title: "Ntibishyuye byinshi",
+        description: "Mwongere mubikore",
+        variant: "destructive",
+      });
     }
   }
 
@@ -90,10 +143,32 @@ const YishyuyeIdeni = ({
   //     hasigaye = product.aratwaraZingahe - product.inganoYizoNishyuye;
   //   }
 
-  if (product) {
+  if (product && productById) {
     return (
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <div>
+            <p className="text-sm text-balance">
+              hey✋{" "}
+              <span className="text-blue-500">
+                {session.data?.user.firstName?.split(" ")[0]}
+              </span>{" "}
+              umukiriya witwa{" "}
+              <span className="text-blue-300 underline">{product.name}</span>{" "}
+              agufitiye ideni rya{" "}
+              <span className="text-red-700 font-bold">
+                {(
+                  product.aratwaraZingahe * productById.ukonyigurishaKuriDetail
+                ).toLocaleString()}{" "}
+                Rwf
+              </span>{" "}
+              yatwaye{" "}
+              <span className="bg-stone-950 py-1 text-blue-100 px-2 rounded-sm shadow-md shadow-stone-900 font-bold">
+                {product.igicuruzwa} {product.aratwaraZingahe}
+              </span>{" "}
+              zitishyuwe
+            </p>
+          </div>
           <div className="space-x-3 flex items-center justify-center">
             <FormField
               control={form.control}
@@ -114,6 +189,10 @@ const YishyuyeIdeni = ({
                       min={1}
                       max={product?.aratwaraZingahe}
                       {...field}
+                      onBlur={() => {
+                        const arishyura =
+                          field.value * productById?.ukonyigurishaKuriDetail;
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -125,13 +204,7 @@ const YishyuyeIdeni = ({
               name="wishyuyeAngahe"
               render={({ field }) => (
                 <FormItem className="text-left">
-                  <FormLabel>
-                    Hasigayemo
-                    <span className="text-lg text-blue-500 font-bold">
-                      {productById?.ukonyigurishaKuriDetail.toLocaleString()}
-                    </span>{" "}
-                    Rwf
-                  </FormLabel>
+                  <FormLabel>Yishyuye angahe</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Ugiye kwishyura angahe"
@@ -158,7 +231,7 @@ const YishyuyeIdeni = ({
             </Button>
             <Button
               type="submit"
-              className="!text-sm bg-blue-700 text-gray-200"
+              className="!text-sm bg-blue-700 hover:bg-blue-600 text-gray-200"
             >
               Yishyuye
             </Button>

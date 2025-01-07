@@ -13,7 +13,11 @@ export const columns: ColumnDef<ProductType>[] = [
   {
     accessorKey: "_id",
     header: "",
-    cell: () => null,
+    cell: ({ row }) => {
+      <p className="text-sm dark:text-stone-400 text-stone-800">
+        {row.index + 1}
+      </p>;
+    },
   },
   {
     accessorKey: "igicuruzwa",
@@ -21,6 +25,27 @@ export const columns: ColumnDef<ProductType>[] = [
     cell: ({ row }) => {
       const igicuruzwa = row.getValue("igicuruzwa") as string;
       return <p className="text-nowrap">{igicuruzwa}</p>;
+    },
+  },
+  {
+    accessorKey: "ingano",
+    header: " hasigaye",
+    cell: ({ row }) => {
+      const ingano = row.getValue("ingano") as number;
+      const byoseHamwe = row.getValue("byoseHamwe") as number;
+      const productType = row.getValue("ibyoUranguyeType") as string;
+      return (
+        <p className=" text-nowrap">
+          {productType === "Ikesi x 12" && (
+            <span className="text-[12px] mr-1">amacupa </span>
+          )}
+          {productType === "Ikesi x 20" && (
+            <span className="text-[12px] mr-1">amacupa </span>
+          )}
+
+          {byoseHamwe}
+        </p>
+      );
     },
   },
 
@@ -59,27 +84,7 @@ export const columns: ColumnDef<ProductType>[] = [
     header: undefined,
     cell: () => undefined,
   },
-  {
-    accessorKey: "ingano",
-    header: " hasigaye",
-    cell: ({ row }) => {
-      const ingano = row.getValue("ingano") as number;
-      const byoseHamwe = row.getValue("byoseHamwe") as number;
-      const productType = row.getValue("ibyoUranguyeType") as string;
-      return (
-        <p className=" text-nowrap">
-          {productType === "Ikesi x 12" && (
-            <span className="text-[12px] mr-1">amacupa </span>
-          )}
-          {productType === "Ikesi x 20" && (
-            <span className="text-[12px] mr-1">amacupa </span>
-          )}
 
-          {byoseHamwe}
-        </p>
-      );
-    },
-  },
   {
     accessorKey: "ikiranguzo",
     header: "Ikiranguzo",

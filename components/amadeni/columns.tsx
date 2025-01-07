@@ -12,6 +12,27 @@ import ActionComponents from "../ActionComponents";
 import ShowUkonyigurishije from "../ShowUkonyigurishije";
 import ShowBadge from "../ibyagurishijwe/ShowBadge";
 import { ShowUkonyiranguza } from "../ibyagurishijwe/columns";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+
+function ShowNibaYishyuyeIdeni({
+  productId,
+  yishyuyeAngahe,
+}: {
+  productId: Id<"product">;
+  yishyuyeAngahe: number;
+}) {
+  const product = useQuery(api.product.getProductById, { id: productId });
+  return (
+    <>
+      {yishyuyeAngahe !== 0 ? (
+        <p className="text-sm text-blue-700 text-center animate-pulse">
+          +{yishyuyeAngahe.toLocaleString()} Rwf
+        </p>
+      ) : null}
+    </>
+  );
+}
 
 export const columns: ColumnDef<Client>[] = [
   {
@@ -90,7 +111,7 @@ export const columns: ColumnDef<Client>[] = [
   {
     accessorKey: "yishyuyeAngahe",
     header: () => {
-      return <p className="text-center">Bishyuye</p>;
+      return <p className="text-center">Azishura</p>;
     },
     cell: ({ row }) => {
       const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as number;
@@ -101,6 +122,23 @@ export const columns: ColumnDef<Client>[] = [
           productId={productId}
           yishyuyeAngahe={yishyuyeAngahe}
           yatwaye={yatwaye}
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "yishyuyezingahe",
+    header: () => {
+      return <p className="text-center text-nowrap">Amaze kw'ishyura</p>;
+    },
+
+    cell: ({ row }) => {
+      const productId = row.getValue("productId") as Id<"product">;
+      const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as number;
+      return (
+        <ShowNibaYishyuyeIdeni
+          productId={productId}
+          yishyuyeAngahe={yishyuyeAngahe}
         />
       );
     },

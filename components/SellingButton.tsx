@@ -74,6 +74,7 @@ const SellingButton = ({
           aratwaraZingahe: product.aratwaraZingahe,
           yishyuyeAngahe: value === "Yego" ? product.yishyuyeAngahe : 0,
           yishyuye: value === "Yego" ? true : false,
+          yishyuyezingahe: value === "Yego" ? product.aratwaraZingahe : 0,
         });
       }
 

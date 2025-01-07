@@ -14,6 +14,7 @@ export const createClient = mutation({
     yishyuye: v.boolean(),
     productType: v.string(),
     facture: v.number(),
+    yishyuyezingahe: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const product = await ctx.db.get(args.productId);
@@ -31,6 +32,7 @@ export const createClient = mutation({
       yishyuyeAngahe: args.yishyuyeAngahe,
       yishyuye: args.yishyuye,
       facture: args.facture,
+      yishyuyezingahe: args.yishyuyezingahe,
     });
 
     await ctx.runMutation(internal.product.updateProdut, {
@@ -141,13 +143,19 @@ export const getClientByProductId = internalQuery({
 });
 
 export const updatePayedClient = mutation({
-  args: { id: v.id("client"), yishyuyeAngahe: v.optional(v.number()) },
+  args: {
+    id: v.id("client"),
+    yishyuyeAngahe: v.number(),
+    ideniRishizemo: v.boolean(),
+    yishyuyezingahe: v.optional(v.number()),
+  },
   handler: async (ctx, args) => {
     const { id } = args;
 
     await ctx.db.patch(id, {
-      yishyuye: args.yishyuyeAngahe ? false : true,
+      yishyuye: args.ideniRishizemo ? true : false,
       yishyuyeAngahe: args.yishyuyeAngahe,
+      yishyuyezingahe: args.yishyuyezingahe,
     });
   },
 });
@@ -197,11 +205,15 @@ export const getClientById = query({
   handler: async (ctx, args) => {
     try {
       const client = await ctx.db.get(args.id);
-
+      if (!client) {
+        console.log(
+          new ConvexError("SOMETHING WENT WRONNG WHILE GETTING client")
+        );
+      }
       return client;
     } catch (error) {
       console.error("Error fetching products:", error);
-      return null; // Return an empty array in case of an error
+      // Return an empty array in case of an error
     }
   },
 });

@@ -75,6 +75,7 @@ export interface Client {
   aratwaraZingahe: number;
   yishyuyeAngahe: number;
   yishyuye: boolean;
+  yishyuyezingahe?: number;
 }
 
 export interface outOfStock {

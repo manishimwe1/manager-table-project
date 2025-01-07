@@ -28,7 +28,7 @@ export default function ShowBadge({
           Afite ideni{" "}
           {yishyuyeAngahe === 0
             ? ukonyigurishaKuriDetail * yatwaye
-            : yishyuyeAngahe}{" "}
+            : ukonyigurishaKuriDetail - yishyuyeAngahe}{" "}
           Rwf
         </span>
       </Badge>
