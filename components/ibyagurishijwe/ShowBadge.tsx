@@ -8,10 +8,12 @@ export default function ShowBadge({
   productId,
   yishyuyeAngahe,
   yatwaye,
+  amazeKwishyura,
 }: {
   productId: Id<"product">;
   yishyuyeAngahe: number;
   yatwaye: number;
+  amazeKwishyura: number;
 }) {
   const product = useQuery(api.product.getProductById, { id: productId });
   console.log(product, "product");
@@ -26,11 +28,11 @@ export default function ShowBadge({
       >
         <span className="text-nowrap">
           Afite ideni{" "}
-          {yishyuyeAngahe === 0
+          {amazeKwishyura === 0
             ? (ukonyigurishaKuriDetail * yatwaye).toLocaleString()
             : (
                 ukonyigurishaKuriDetail * yatwaye -
-                yishyuyeAngahe
+                amazeKwishyura
               ).toLocaleString()}{" "}
           Rwf
         </span>

@@ -7,7 +7,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import React from "react";
 import DisplayBadge from "../DisplayBadge";
-import { MoreVertical } from "lucide-react";
+import { MoreVertical, PlusCircle } from "lucide-react";
 import ActionComponents from "../ActionComponents";
 import ShowUkonyigurishije from "../ShowUkonyigurishije";
 import ShowBadge from "../ibyagurishijwe/ShowBadge";
@@ -23,14 +23,19 @@ function ShowNibaYishyuyeIdeni({
   yishyuyeAngahe: number;
 }) {
   const product = useQuery(api.product.getProductById, { id: productId });
+  console.log(yishyuyeAngahe);
+
   return (
-    <>
+    <p className="text-sm text-blue-700 text-center animate-pulse text-nowrap">
       {yishyuyeAngahe !== 0 ? (
-        <p className="text-sm text-blue-700 text-center animate-pulse">
-          +{yishyuyeAngahe.toLocaleString()} Rwf
-        </p>
-      ) : null}
-    </>
+        <span className="flex items-center !gap-0.5 text-nowrap">
+          <PlusCircle className="h-4 w-4" />
+          {yishyuyeAngahe.toLocaleString()} Rwf
+        </span>
+      ) : (
+        0
+      )}{" "}
+    </p>
   );
 }
 
@@ -77,7 +82,7 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: "productId",
-    header: "ukonyigurisha",
+    header: "Uko nyirangura",
     cell: ({ row }) => {
       const ukonyigurishaKuriDetail = row.getValue(
         "productId"
@@ -107,25 +112,6 @@ export const columns: ColumnDef<Client>[] = [
       return <ShowUkonyiranguza productId={productId} />;
     },
   },
-
-  {
-    accessorKey: "yishyuyeAngahe",
-    header: () => {
-      return <p className="text-center">Azishyura</p>;
-    },
-    cell: ({ row }) => {
-      const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as number;
-      const productId = row.getValue("productId") as Id<"product">;
-      const yatwaye = row.getValue("aratwaraZingahe") as number;
-      return (
-        <ShowBadge
-          productId={productId}
-          yishyuyeAngahe={yishyuyeAngahe}
-          yatwaye={yatwaye}
-        />
-      );
-    },
-  },
   {
     accessorKey: "yishyuyezingahe",
     header: () => {
@@ -134,15 +120,37 @@ export const columns: ColumnDef<Client>[] = [
 
     cell: ({ row }) => {
       const productId = row.getValue("productId") as Id<"product">;
-      const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as number;
+
+      const amazeKwishyura = row.getValue("amazeKwishyura") as number;
       return (
         <ShowNibaYishyuyeIdeni
           productId={productId}
-          yishyuyeAngahe={yishyuyeAngahe}
+          yishyuyeAngahe={amazeKwishyura}
         />
       );
     },
   },
+  {
+    accessorKey: "yishyuyeAngahe",
+    header: () => {
+      return <p className="text-center">Ideni afite</p>;
+    },
+    cell: ({ row }) => {
+      const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as number;
+      const productId = row.getValue("productId") as Id<"product">;
+      const amazeKwishyura = row.getValue("amazeKwishyura") as number;
+      const yatwaye = row.getValue("aratwaraZingahe") as number;
+      return (
+        <ShowBadge
+          productId={productId}
+          yishyuyeAngahe={yishyuyeAngahe}
+          amazeKwishyura={amazeKwishyura}
+          yatwaye={yatwaye}
+        />
+      );
+    },
+  },
+
   {
     accessorKey: "yishyuye",
     header: "",
@@ -156,6 +164,13 @@ export const columns: ColumnDef<Client>[] = [
           </p>
         </ActionComponents>
       );
+    },
+  },
+  {
+    accessorKey: "amazeKwishyura",
+    header: undefined,
+    cell: ({ row }) => {
+      return undefined;
     },
   },
 ];

@@ -68,27 +68,51 @@ const YishyuyeIdeni = ({
         message: "Ushyizemo byinshi  kuruta ibyo yatwaye",
       });
       form.setFocus("hasigaye");
-      return toast({
+      toast({
         title: "Ushyizemo byinshi  kuruta ibyo yatatwaye",
         description: "Mwongere mubikore",
         variant: "destructive",
       });
+      return;
     }
 
     if (Math.floor(values.hasigaye) === 0) {
       const yishyuyezingahe = 0;
       const yishyuyeAngahe = values.wishyuyeAngahe;
 
-      updateClient({
-        id: id,
-        yishyuyeAngahe: yishyuyeAngahe,
-        ideniRishizemo: true,
-        yishyuyezingahe: yishyuyezingahe,
-      });
+      if (values.wishyuyeAngahe === yarikwishyura) {
+        updateClient({
+          id: id,
+          yishyuyeAngahe: yishyuyeAngahe,
+          ideniRishizemo: true,
+          yishyuyezingahe: yishyuyezingahe,
+        });
+        toast({
+          title: `hey✋ ${product.name} yishyuye ideni ryose yaragufitiye`,
+          description: "ideni ryose rishizemo",
+          variant: "success",
+        });
+      } else {
+        updateClient({
+          id: id,
+          yishyuyeAngahe: yishyuyeAngahe,
+          ideniRishizemo: false,
+          yishyuyezingahe: yishyuyezingahe,
+        });
+        toast({
+          title: `hey✋ ${product.name} yishyuye make kw' ideni yaragufitiye hasigaye ${(
+            product.aratwaraZingahe * productById.ukonyigurishaKuriDetail -
+            product?.amazeKwishyura!
+          ).toLocaleString()} Rwf`,
+          description: "ideni ryose rishizemo",
+          variant: "success",
+        });
+      }
 
-      console.log(yishyuyezingahe, yishyuyeAngahe, "values");
+      form.reset();
+      setDialogOpen(false);
+      return;
     } else {
-      console.log(values, "values");
       const yishyuyezingahe = Math.floor(values.hasigaye);
       const yishyuyeAngahe = values.wishyuyeAngahe;
 
@@ -204,12 +228,12 @@ const YishyuyeIdeni = ({
               <span className="text-blue-300 underline">{product.name}</span>{" "}
               agufitiye ideni rya{" "}
               <span className="text-red-700 font-bold">
-                {(product.yishyuyeAngahe !== 0
+                {(product.amazeKwishyura === 0
                   ? productById.ukonyigurishaKuriDetail *
-                      product.aratwaraZingahe -
-                    product.yishyuyeAngahe
+                    product.aratwaraZingahe
                   : product.aratwaraZingahe *
-                    productById.ukonyigurishaKuriDetail
+                      productById.ukonyigurishaKuriDetail -
+                    product?.amazeKwishyura!
                 ).toLocaleString()}{" "}
                 Rwf
               </span>{" "}
@@ -277,6 +301,7 @@ const YishyuyeIdeni = ({
                   </FormLabel>
                   <FormControl>
                     <Input
+                      disabled
                       className="text-sm"
                       placeholder={`yatwaye ${product?.aratwaraZingahe} zitishyuwe`}
                       min={1}
