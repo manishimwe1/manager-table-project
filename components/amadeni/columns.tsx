@@ -22,8 +22,7 @@ function ShowNibaYishyuyeIdeni({
   productId: Id<"product">;
   yishyuyeAngahe: number;
 }) {
-  const product = useQuery(api.product.getProductById, { id: productId });
-  console.log(yishyuyeAngahe);
+  // const product = useQuery(api.product.getProductById, { id: productId });
 
   return (
     <p className="text-sm text-blue-700 text-center animate-pulse text-nowrap">

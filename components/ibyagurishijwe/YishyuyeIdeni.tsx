@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -20,13 +19,12 @@ import { api } from "@/convex/_generated/api";
 import { Client } from "@/types";
 import { Dispatch, SetStateAction } from "react";
 import { useToast } from "@/hooks/use-toast";
-import SkeletonLoader from "../SkeletonLoader";
-import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
+import SkeletonLoader from "../SkeletonLoader";
 
 const formSchema = z.object({
-  hasigaye: z.coerce.number(),
-  wishyuyeAngahe: z.coerce.number(),
+  hasigaye: z.coerce.number().min(0, "Hasigaye must be at least 0"),
+  wishyuyeAngahe: z.coerce.number().min(1, "WishyuyeAngahe must be at least 1"),
 });
 
 const YishyuyeIdeni = ({
@@ -54,221 +52,60 @@ const YishyuyeIdeni = ({
       wishyuyeAngahe: 0,
     },
   });
-  // console.log(product, "product");
 
-  // Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
     if (!product || !productById) return;
-    const yarikwishyura =
-      productById?.ukonyigurishaKuriDetail * product?.aratwaraZingahe;
-    if (values.wishyuyeAngahe > yarikwishyura) {
-      form.setError("hasigaye", {
-        type: "manual",
-        message: "Ushyizemo byinshi  kuruta ibyo yatwaye",
-      });
-      form.setFocus("wishyuyeAngahe");
 
+    // Calculate total amount owed and the remaining amount
+    const totalAmount =
+      productById.ukonyigurishaKuriDetail * product.aratwaraZingahe;
+    const totalPaid = product.amazeKwishyura || 0;
+    const remainingAmount = totalAmount - totalPaid;
+
+    if (values.wishyuyeAngahe > remainingAmount) {
+      // Error: Payment is greater than the remaining amount
       form.setError("wishyuyeAngahe", {
-        message: "Ushyizemo menshi kurusha ayo yatwaye",
+        message: "Ushyizemo menshi kurusha ideni yose.",
       });
       return toast({
-        title: "Ushyizemo byinshi  kuruta ibyo yatatwaye",
-        description: "Mwongere mubikore",
+        title: "Error",
+        description: "Ushyizemo menshi kurusha ideni yose.",
         variant: "destructive",
       });
-    }
-    const ukonyigurishaKuriDetail = productById.ukonyigurishaKuriDetail;
-    if (values.wishyuyeAngahe === yarikwishyura) {
-      console.log("Wishyuye nkayo warikwishyura ");
-      const yishyuyezingahe = values.hasigaye;
-      const yishyuyeAngahe = values.wishyuyeAngahe;
+    } else if (values.wishyuyeAngahe === remainingAmount) {
+      // Payment equals the remaining amount: Debt is fully paid
       updateClient({
         id: id,
-        yishyuyeAngahe: yishyuyeAngahe,
+        yishyuyeAngahe: values.wishyuyeAngahe,
         ideniRishizemo: true,
-        yishyuyezingahe: yishyuyezingahe,
+        yishyuyezingahe: 0,
       });
       form.reset();
       setDialogOpen(false);
       return toast({
-        title: `hey✋ ${product.name} yishyuye ideni ryose yaragufitiye`,
-        description: "ideni ryose rishizemo",
+        title: `Congratulations 🎉`,
+        description: `${product.name} yishyuye ideni ryose yaragufitiye.`,
         variant: "success",
       });
-    } else if (values.wishyuyeAngahe < ukonyigurishaKuriDetail) {
-      console.log("WishyuyeAngahe niyo make");
+    } else {
+      // Payment is less than the remaining amount
+      const newRemainingAmount = remainingAmount - values.wishyuyeAngahe;
 
-      const yishyuyezingahe = 0;
-      const yishyuyeAngahe = values.wishyuyeAngahe;
       updateClient({
         id: id,
-        yishyuyeAngahe: yishyuyeAngahe,
+        yishyuyeAngahe: values.wishyuyeAngahe,
         ideniRishizemo: false,
-        yishyuyezingahe: yishyuyezingahe,
+        yishyuyezingahe: newRemainingAmount,
       });
       form.reset();
       setDialogOpen(false);
       return toast({
-        title: `hey✋ ${product.name} yishyuye ideni ryose yaragufitiye`,
-        description: "ideni ryose rishizemo",
-        variant: "success",
-      });
-    } else if (values.wishyuyeAngahe > ukonyigurishaKuriDetail) {
-      console.log("WishyuyeAngahe menshi kurusha ayo ndangurira imwe ");
-      const yishyuyezingahe = values.hasigaye;
-      const yishyuyeAngahe = values.wishyuyeAngahe;
-      updateClient({
-        id: id,
-        yishyuyeAngahe: yishyuyeAngahe,
-        ideniRishizemo: false,
-        yishyuyezingahe: yishyuyezingahe,
-      });
-      form.reset();
-      setDialogOpen(false);
-      return toast({
-        title: `hey✋ ${product.name} yishyuye ideni  yaragufitiye hasigaye ${yarikwishyura - values.wishyuyeAngahe}`,
-        description: "ideni ryose rishizemo",
-        variant: "success",
+        title: `Partial Payment`,
+        description: `${product.name} yishyuye ideni ariko hasigaye ${newRemainingAmount.toLocaleString()} Rwf.`,
+        variant: "default",
       });
     }
-    // if (Math.floor(values.hasigaye) === 0) {
-    //   const yishyuyezingahe = 0;
-    //   const yishyuyeAngahe = values.wishyuyeAngahe;
-
-    //   if (values.wishyuyeAngahe === yarikwishyura) {
-    //     updateClient({
-    //       id: id,
-    //       yishyuyeAngahe: yishyuyeAngahe,
-    //       ideniRishizemo: true,
-    //       yishyuyezingahe: yishyuyezingahe,
-    //     });
-    //     toast({
-    //       title: `hey✋ ${product.name} yishyuye ideni ryose yaragufitiye`,
-    //       description: "ideni ryose rishizemo",
-    //       variant: "success",
-    //     });
-    //   } else {
-    //     updateClient({
-    //       id: id,
-    //       yishyuyeAngahe: yishyuyeAngahe,
-    //       ideniRishizemo: false,
-    //       yishyuyezingahe: yishyuyezingahe,
-    //     });
-    //     toast({
-    //       title: `hey✋ ${product.name} yishyuye make kw' ideni yaragufitiye hasigaye ${(
-    //         product.aratwaraZingahe * productById.ukonyigurishaKuriDetail -
-    //         product?.amazeKwishyura!
-    //       ).toLocaleString()} Rwf`,
-    //       description: "ideni ryose rishizemo",
-    //       variant: "success",
-    //     });
-    //   }
-
-    //   form.reset();
-    //   setDialogOpen(false);
-    //   return;
-    // } else {
-    //   const yishyuyezingahe = Math.floor(values.hasigaye);
-    //   const yishyuyeAngahe = values.wishyuyeAngahe;
-
-    //   if (values.wishyuyeAngahe === yarikwishyura) {
-    //     updateClient({
-    //       id: id,
-    //       yishyuyeAngahe: yishyuyeAngahe,
-    //       ideniRishizemo: true,
-    //       yishyuyezingahe: yishyuyezingahe,
-    //     });
-    //     toast({
-    //       title: `hey✋ ${product.name} yishyuye ideni ryose yaragufitiye`,
-    //       description: "ideni ryose rishizemo",
-    //       variant: "success",
-    //     });
-    //     form.reset();
-    //     setDialogOpen(false);
-    //     return;
-    //   } else {
-    //     const restBalance = yarikwishyura - values.wishyuyeAngahe;
-    //     updateClient({
-    //       id: id,
-    //       yishyuyeAngahe: yishyuyeAngahe,
-    //       ideniRishizemo: false,
-    //       yishyuyezingahe: yishyuyezingahe,
-    //     });
-    //     toast({
-    //       title: `hey✋ ${product.name} yishyuye ideni yaragufitiye hasigaye ${restBalance}`,
-    //       description: "ideni ryose rishizemo",
-    //       variant: "success",
-    //     });
-    //     form.reset();
-    //     setDialogOpen(false);
-    //     return;
-    //   }
-    // }
-    // if (!product || !productById) return;
-    //
-    // if (values.wishyuyeAngahe > Number(productById?.ukonyigurishaKuriDetail)) {
-    //   const yarikwishyura =
-    //     productById?.ukonyigurishaKuriDetail * product?.aratwaraZingahe;
-    //   const restBalance = yarikwishyura - values.wishyuyeAngahe;
-
-    //   updateClient({
-    //     id: id,
-    //     yishyuyeAngahe: yarikwishyura,
-    //     ideniRishizemo: true,
-    //   });
-
-    //
-    // } else if (
-    //   values.wishyuyeAngahe < Number(productById?.ukonyigurishaKuriDetail)
-    // ) {
-    //   const restBalance =
-    //     Number(productById?.ukonyigurishaKuriDetail) - values.wishyuyeAngahe;
-    //   console.log("product2");
-
-    //   updateClient({
-    //     id: id,
-    //     yishyuyeAngahe: product.yishyuyeAngahe + values.wishyuyeAngahe,
-    //     ideniRishizemo: false,
-    //     yishyuyezingahe: 0,
-    //   });
-    //   toast({
-    //     title: `Akwishyuye  make agusigayemo ${restBalance} iyo agufitiye",
-    //     description: "Mwongere mubikore`,
-    //     variant: "default",
-    //   });
-    //   form.reset();
-    //   setDialogOpen(false);
-    //   return;
-    // } else if (
-    //   values.wishyuyeAngahe === Number(productById?.ukonyigurishaKuriDetail)
-    // ) {
-    //   console.log("product3");
-
-    //   // updateClient({ id: id });
-    //   return toast({
-    //     title: "Yishyuye bingana",
-    //     description: "Mwongere mubikore",
-    //     variant: "destructive",
-    //   });
-    // } else {
-    //   console.log("product4");
-
-    //   // const yishyuyeAngahe =
-    //   //   Number(product?.yishyuyeAngahe) - values.wishyuyeAngahe;
-    //   // updateClient({ id: id, yishyuyeAngahe });
-    //   return toast({
-    //     title: "Ntibishyuye byinshi",
-    //     description: "Mwongere mubikore",
-    //     variant: "destructive",
-    //   });
-    // }
-  }
-
-  //   let hasigaye = 0;
-  //   if (product) {
-  //     hasigaye = product.aratwaraZingahe - product.inganoYizoNishyuye;
-  //   }
+  };
 
   if (product && productById) {
     return (
@@ -276,7 +113,7 @@ const YishyuyeIdeni = ({
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div>
             <p className="text-sm text-balance">
-              hey✋{" "}
+              Hey✋{" "}
               <span className="text-blue-500">
                 {session.data?.user.firstName?.split(" ")[0]}
               </span>{" "}
@@ -300,7 +137,7 @@ const YishyuyeIdeni = ({
               <span className="text-blue-500 text-lg font-bold mr-2">
                 {product.aratwaraZingahe}
               </span>{" "}
-              zitishyuwe
+              zitishyuwe.
             </p>
           </div>
           <div className="space-x-3 flex items-center justify-center">
@@ -315,25 +152,14 @@ const YishyuyeIdeni = ({
                       placeholder="Ugiye kwishyura angahe"
                       className="placeholder:text-xs"
                       {...field}
-                      min={1}
-                      max={product?.yishyuyeAngahe}
                       onBlur={() => {
-                        if (
-                          field.value >
-                          productById?.ukonyigurishaKuriDetail *
-                            product.aratwaraZingahe
-                        ) {
-                          form.setFocus("wishyuyeAngahe");
-                          form.reset();
-                          return toast({
-                            title: "Ushyizemo byinshi  kuruta ibyo yatatwaye",
-                            description: "Mwongere mubikore",
-                            variant: "destructive",
-                          });
-                        }
                         form.setValue(
                           "hasigaye",
-                          field.value / productById?.ukonyigurishaKuriDetail
+                          (productById.ukonyigurishaKuriDetail *
+                            product.aratwaraZingahe -
+                            product?.amazeKwishyura! -
+                            field.value) /
+                            productById.ukonyigurishaKuriDetail
                         );
                       }}
                     />
@@ -347,26 +173,25 @@ const YishyuyeIdeni = ({
               name="hasigaye"
               render={({ field }) => (
                 <FormItem className="text-left">
-                  <FormLabel className="text-left line-clamp-1">
-                    hasigaye{" "}
+                  <FormLabel>
+                    Hasigaye{" "}
                     <span className="text-lg text-red-700 font-bold">
-                      {product?.aratwaraZingahe -
-                        Math.floor(form.getValues("hasigaye"))}{" "}
+                      {Math.max(
+                        product.aratwaraZingahe -
+                          Math.floor(
+                            form.getValues("wishyuyeAngahe") /
+                              productById.ukonyigurishaKuriDetail
+                          ),
+                        0
+                      )}
                     </span>
-                    atarishyura
                   </FormLabel>
                   <FormControl>
                     <Input
                       disabled
                       className="text-sm"
-                      placeholder={`yatwaye ${product?.aratwaraZingahe} zitishyuwe`}
-                      min={1}
-                      max={product?.aratwaraZingahe}
+                      placeholder={`Yatwaye ${product.aratwaraZingahe} zitishyuwe`}
                       {...field}
-                      value={Math.floor(
-                        form.getValues("wishyuyeAngahe") /
-                          productById?.ukonyigurishaKuriDetail
-                      )}
                     />
                   </FormControl>
                   <FormMessage />
@@ -382,7 +207,7 @@ const YishyuyeIdeni = ({
               variant={"outline"}
               onClick={() => setDialogOpen(false)}
             >
-              cancel
+              Cancel
             </Button>
             <Button
               type="submit"
@@ -395,6 +220,8 @@ const YishyuyeIdeni = ({
       </Form>
     );
   }
+
+  return <SkeletonLoader />;
 };
 
 export default YishyuyeIdeni;

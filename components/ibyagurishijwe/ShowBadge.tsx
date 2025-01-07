@@ -19,13 +19,13 @@ export default function ShowBadge({
   const product = useQuery(api.product.getProductById, { id: productId });
 
   const ukonyigurishaKuriDetail = product?.ukonyigurishaKuriDetail as number;
-  useMemo(() => amazeKwishyura === yishyuyeAngahe, [amazeKwishyura]);
+
   return (
     <div className="text-right">
       {" "}
       <Badge
         className={cn(
-          "cursor-pointer text-stone-900 shadow-sm text-nowrap bg-red-600 hover:bg-red-500  rotate-2 shadow-red-500"
+          "cursor-pointer text-stone-900 shadow-sm text-nowrap bg-red-600 hover:bg-red-500  shadow-red-500"
         )}
       >
         <span className="text-nowrap">
