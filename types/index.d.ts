@@ -63,6 +63,7 @@ export type ProductType = {
   userId: string;
   ibyoUranguyeType: string;
   inganoYizoNishyuye: number;
+  wishyuyeAngahe: number;
 };
 
 export interface Client {

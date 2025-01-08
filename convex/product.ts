@@ -258,3 +258,28 @@ export const deleteProduct = mutation({
     await ctx.db.delete(args.id);
   },
 });
+
+export const getProductInIdeni = query({
+  args: { userId: v.optional(v.id("user")) },
+  handler: async (ctx, args) => {
+    const Product = await ctx.db
+      .query("product")
+      .withIndex("by_userId", (q) => q.eq("userId", args.userId!))
+      .filter((q) =>
+        q.or(
+          q.eq(q.field("ndanguyeGute"), "mfasheIdeni"),
+          q.eq(q.field("ndanguyeGute"), "nishyuyeMake")
+        )
+      )
+      .order("desc")
+      .collect();
+
+    if (!Product) {
+      console.log(
+        new ConvexError("SOMETHING WENT WRONG WHILE GETTING PRODUCT")
+      );
+      return [];
+    }
+    return Product;
+  },
+});

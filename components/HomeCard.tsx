@@ -24,7 +24,7 @@ const HomeCard = ({
         )}
       >
         <CardHeader className="!p-2">
-          <CardTitle className="text-gray-800  dark:text-gray-200 gray-200balance tracking-wider font-bold  text-sm capitalize !p-0 line-clamp-1">
+          <CardTitle className="text-gray-800  dark:text-gray-200 balance tracking-wider font-bold  text-sm capitalize !p-0 line-clamp-1">
             {title}
           </CardTitle>
         </CardHeader>
@@ -35,6 +35,7 @@ const HomeCard = ({
               transformTiming={{ duration: 750, easing: "ease-out" }}
               spinTiming={{ duration: 750, easing: "ease-out" }}
               opacityTiming={{ duration: 350, easing: "ease-out" }}
+              className=" text-base font-bold "
             />
           ) : content === 0 ? (
             <NumberFlow

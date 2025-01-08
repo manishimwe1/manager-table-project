@@ -104,6 +104,13 @@ export function PurchaseForm({
     redirect("/login");
   }
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (values.inganoYizoNishyuye > values.ingano) {
+      form.setError("inganoYizoNishyuye", {
+        message: "Wishyizemo nyinshi",
+      });
+      form.reset();
+      return null;
+    }
     setSubmitting(true);
     const uzishyuraAngahe =
       values.birishyuwe === "nishyuyeMake"
@@ -314,7 +321,10 @@ export function PurchaseForm({
                       onClick={() => {
                         setNdanguyeGute("nishyuyeCash");
                         field.onChange("nishyuyeCash");
-                        form.setValue("inganoYizoNishyuye", 0);
+                        form.setValue(
+                          "inganoYizoNishyuye",
+                          form.getValues("ingano")
+                        );
                         form.setValue("wishyuyeAngahe", 0);
 
                         form.setValue(

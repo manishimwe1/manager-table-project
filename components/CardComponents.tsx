@@ -33,6 +33,9 @@ const CardComponents = () => {
   const ClientWhoPaid = useQuery(api.clientName.getClientWhoPaid, {
     userId: user?._id as Id<"user">,
   });
+  const productInIdeni = useQuery(api.product.getProductInIdeni, {
+    userId: user?._id as Id<"user">,
+  });
 
   if (session.status === "loading") return <SkeletonLoader />;
 
@@ -43,7 +46,7 @@ const CardComponents = () => {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4  w-full ">
         <HomeCard title="Muri stock" content={product?.length} link="/stock" />
         <HomeCard
-          title="Abagufitiye Ideni"
+          title="Abakiriya bafite Ideni"
           content={Client?.length}
           link="/ideni"
         />
@@ -53,7 +56,7 @@ const CardComponents = () => {
           link="/ibyashize"
         />
         <HomeCard
-          title="Ibyacurujwe"
+          title="Ibyacurujwe uyu munsi"
           content={saledProduct?.length}
           link="/ibyagurishijwe"
         />
@@ -61,6 +64,11 @@ const CardComponents = () => {
           title="abamaze kw'ishyura"
           content={ClientWhoPaid?.length}
           link="/abishyuye"
+        />
+        <HomeCard
+          title="amadeni mfite ndangura"
+          content={productInIdeni?.length}
+          link="/ideniryokurangura"
         />
       </div>
     </div>
