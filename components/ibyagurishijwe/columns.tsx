@@ -81,14 +81,23 @@ export const columns: ColumnDef<Client>[] = [
       const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as number;
       const productId = row.getValue("productId") as Id<"product">;
       const yatwaye = row.getValue("aratwaraZingahe") as number;
+      const amazeKwishyura = row.getValue("amazeKwishyura") as number;
+      const yarishyuye = row.getValue("yishyuye") as boolean;
       return (
         <ShowBadge
-          productId={productId}
           yishyuyeAngahe={yishyuyeAngahe}
+          yarishyuye={yarishyuye}
+          amazeKwishyura={amazeKwishyura}
+          productId={productId}
           yatwaye={yatwaye}
         />
       );
     },
+  },
+  {
+    accessorKey: "amazeKwishyura",
+    header: "",
+    cell: () => null,
   },
   {
     accessorKey: "_id",

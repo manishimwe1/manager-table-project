@@ -41,8 +41,8 @@ const ActionComponents = ({
     <div className={cn(" text-center relative")}>
       <Popover>
         <PopoverTrigger>{children}</PopoverTrigger>
-        <PopoverContent asChild className="!p-0 !py-2 !px-2">
-          <div className="flex items-start justify-center flex-col gap-2 !w-full">
+        <PopoverContent asChild className="!p-0 !gap-0.5">
+          <div className="flex items-start justify-center flex-col  !w-full">
             {ibyashize && (
               <Button
                 className="w-full !text-start  !items-start flex justify-start "

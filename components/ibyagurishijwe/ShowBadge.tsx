@@ -8,13 +8,15 @@ import { useEffect, useMemo } from "react";
 export default function ShowBadge({
   productId,
   yatwaye,
-  yishyuyeAngahe,
+  yarishyuye,
   amazeKwishyura,
+  yishyuyeAngahe,
 }: {
   productId: Id<"product">;
-  yishyuyeAngahe: number;
+  yarishyuye?: boolean;
   yatwaye: number;
   amazeKwishyura: number;
+  yishyuyeAngahe?: number;
 }) {
   const product = useQuery(api.product.getProductById, { id: productId });
 
@@ -23,22 +25,34 @@ export default function ShowBadge({
   return (
     <div className="text-right">
       {" "}
-      <Badge
-        className={cn(
-          "cursor-pointer text-stone-900 shadow-sm text-nowrap bg-red-600 hover:bg-red-500  shadow-red-500"
-        )}
-      >
-        <span className="text-nowrap">
-          Afite ideni{" "}
-          {amazeKwishyura === 0
-            ? (ukonyigurishaKuriDetail * yatwaye).toLocaleString()
-            : (
-                ukonyigurishaKuriDetail * yatwaye -
-                amazeKwishyura
-              ).toLocaleString()}{" "}
-          Rwf
-        </span>
-      </Badge>
+      {yarishyuye ? (
+        <Badge
+          className={cn(
+            "cursor-pointer text-stone-900 shadow-sm text-nowrap bg-green-600 hover:bg-green-500  shadow-green-500"
+          )}
+        >
+          <span className="text-nowrap">
+            Yishyuye {yishyuyeAngahe ? yishyuyeAngahe.toLocaleString() : 0} Rwf
+          </span>
+        </Badge>
+      ) : (
+        <Badge
+          className={cn(
+            "cursor-pointer text-stone-900 shadow-sm text-nowrap bg-red-600 hover:bg-red-500  shadow-red-500"
+          )}
+        >
+          <span className="text-nowrap">
+            Afite ideni{" "}
+            {amazeKwishyura === 0
+              ? (ukonyigurishaKuriDetail * yatwaye).toLocaleString()
+              : (
+                  ukonyigurishaKuriDetail * yatwaye -
+                  amazeKwishyura
+                ).toLocaleString()}{" "}
+            Rwf
+          </span>
+        </Badge>
+      )}
     </div>
   );
 }

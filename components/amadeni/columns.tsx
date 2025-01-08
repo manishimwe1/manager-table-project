@@ -52,7 +52,9 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: "name",
-    header: "Izina ry'umu client",
+    header: () => {
+      return <p className="text-nowrap">Izina ry'umu client</p>;
+    },
     cell: ({ row }) => {
       const name = row.getValue("name") as string;
 
@@ -81,7 +83,9 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: "productId",
-    header: "Uko nyirangura",
+    header: () => {
+      return <p className="text-nowrap">Uko nyirangura</p>;
+    },
     cell: ({ row }) => {
       const ukonyigurishaKuriDetail = row.getValue(
         "productId"
@@ -135,14 +139,12 @@ export const columns: ColumnDef<Client>[] = [
       return <p className="text-center">Ideni afite</p>;
     },
     cell: ({ row }) => {
-      const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as number;
       const productId = row.getValue("productId") as Id<"product">;
       const amazeKwishyura = row.getValue("amazeKwishyura") as number;
       const yatwaye = row.getValue("aratwaraZingahe") as number;
       return (
         <ShowBadge
           productId={productId}
-          yishyuyeAngahe={yishyuyeAngahe}
           amazeKwishyura={amazeKwishyura}
           yatwaye={yatwaye}
         />

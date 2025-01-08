@@ -60,11 +60,7 @@ const ActionElement = ({
           </DropdownMenuItem>
         )}
         {ndanguyeGute === "nishyuyeMake" && (
-          <DropdownMenuItem
-            asChild
-            className="cursor-pointer"
-            // onClick={() => setOpenDrawer(true)}
-          >
+          <DropdownMenuItem asChild className="cursor-pointer">
             <AlertDialog>
               <AlertDialogTrigger className="px-2 py-1">
                 Ishyura asigaye

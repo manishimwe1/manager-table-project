@@ -35,7 +35,7 @@ export const columns: ColumnDef<ProductType>[] = [
       const byoseHamwe = row.getValue("byoseHamwe") as number;
       const productType = row.getValue("ibyoUranguyeType") as string;
       return (
-        <p className=" text-nowrap">
+        <p className=" text-nowrap text-center">
           {productType === "Ikesi x 12" && (
             <span className="text-[12px] mr-1">amacupa </span>
           )}
@@ -57,7 +57,7 @@ export const columns: ColumnDef<ProductType>[] = [
       const ndanguyeZingahe = row.getValue("ndanguyeZingahe") as number;
 
       return (
-        <p>
+        <p className="text-center">
           {productType === "Ikesi x 12" && (
             <span className="text-[12px] mr-1">ikesi </span>
           )}

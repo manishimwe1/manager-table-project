@@ -77,25 +77,6 @@ const StockPage = () => {
             </div>
           </div>
           <DataTable columns={columns} data={filteredData || []} />
-          <Drawer
-            open={openDrawer}
-            onOpenChange={() => {
-              setOpenDrawer(!openDrawer);
-            }}
-          >
-            <DrawerContent>
-              <DrawerHeader>
-                <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-                <DrawerDescription>
-                  This action cannot be undone.
-                </DrawerDescription>
-              </DrawerHeader>
-              <DrawerFooter>
-                <Button>Submit</Button>
-                <DrawerClose>Cancel</DrawerClose>
-              </DrawerFooter>
-            </DrawerContent>
-          </Drawer>
         </>
       )}
     </section>
