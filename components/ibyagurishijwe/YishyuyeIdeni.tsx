@@ -155,11 +155,9 @@ const YishyuyeIdeni = ({
                       onBlur={() => {
                         form.setValue(
                           "hasigaye",
-                          (productById.ukonyigurishaKuriDetail *
-                            product.aratwaraZingahe -
-                            product?.amazeKwishyura! -
-                            field.value) /
-                            productById.ukonyigurishaKuriDetail
+                          Math.floor(
+                            field.value / productById.ukonyigurishaKuriDetail
+                          )
                         );
                       }}
                     />
