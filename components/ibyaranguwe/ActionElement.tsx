@@ -47,6 +47,7 @@ const ActionElement = ({
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle></AlertDialogTitle>
+
                   <div>
                     <IshyuyeIdeni id={id} setDialogOpen={setDialogOpen} />
                   </div>
@@ -57,6 +58,47 @@ const ActionElement = ({
             <Button
               className="w-full !text-start !items-start flex justify-start "
               variant={"ghost"}
+              onClick={async () => {
+                console.log(
+                  "START TO SEND...",
+                  `${process.env.NEXT_PUBLIC_SITE_URL}`
+                );
+                await fetch(
+                  `${process.env.NEXT_PUBLIC_SITE_URL}/api/send-sms`,
+                  {
+                    method: "POST",
+                    body: JSON.stringify({
+                      isWhatsApp: true,
+                      message: "Hello from WhatsApp!",
+                      to: "+250798894137",
+                      provider: "twilio",
+                    }),
+                  }
+                );
+              }}
+            >
+              Mwoherereze WhatsApp
+            </Button>
+            <Button
+              className="w-full !text-start !items-start flex justify-start "
+              variant={"ghost"}
+              onClick={async () => {
+                console.log(
+                  "START TO SEND...",
+                  `${process.env.NEXT_PUBLIC_SITE_URL}`
+                );
+                await fetch(
+                  `${process.env.NEXT_PUBLIC_SITE_URL}/api/send-sms`,
+                  {
+                    method: "POST",
+                    body: JSON.stringify({
+                      to: "+250798894137",
+                      message: "hey....testing",
+                      provider: "twilio",
+                    }),
+                  }
+                );
+              }}
             >
               Mwoherereze sms
             </Button>

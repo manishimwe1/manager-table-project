@@ -25,6 +25,7 @@
     "@radix-ui/react-toast": "^1.2.2",
     "@sentry/nextjs": "^8.42.0",
     "@tanstack/react-table": "^8.20.5",
+    "africastalking": "^0.7.2",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -40,11 +41,13 @@
     "react-hook-form": "^7.53.2",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
+    "twilio": "^5.4.0",
     "vaul": "^1.1.2",
     "zod": "^3.23.8",
     "zustand": "^5.0.1"
   },
   "devDependencies": {
+    "@types/africastalking": "^0.6.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^18",
