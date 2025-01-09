@@ -17,6 +17,7 @@ import { Button } from "../ui/button";
 import YishyuyeIdeni from "../ibyagurishijwe/YishyuyeIdeni";
 import { MoreVertical } from "lucide-react";
 import IshyuyeIdeni from "./IshyuraFormAction";
+import SendSmsButton from "../SendSmsButton";
 
 const ActionElement = ({
   id,
@@ -55,30 +56,7 @@ const ActionElement = ({
               </AlertDialogContent>
             </AlertDialog>
 
-            <Button
-              className="w-full !text-start !items-start flex justify-start "
-              variant={"ghost"}
-              onClick={async () => {
-                console.log(
-                  "START TO SEND...",
-                  `${process.env.NEXT_PUBLIC_SITE_URL}`
-                );
-                await fetch(
-                  `${process.env.NEXT_PUBLIC_SITE_URL}/api/send-sms`,
-                  {
-                    method: "POST",
-                    body: JSON.stringify({
-                      isWhatsApp: true,
-                      message: "Hello from WhatsApp!",
-                      to: "+250798894137",
-                      provider: "twilio",
-                    }),
-                  }
-                );
-              }}
-            >
-              Mwoherereze WhatsApp
-            </Button>
+            <SendSmsButton productId={id} />
             <Button
               className="w-full !text-start !items-start flex justify-start "
               variant={"ghost"}

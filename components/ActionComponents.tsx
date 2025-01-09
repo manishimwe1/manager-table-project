@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import IshyuraFormAction from "./ibyaranguwe/IshyuraFormAction";
 import YishyuyeIdeni from "./ibyagurishijwe/YishyuyeIdeni";
+import SendSmsButton from "./SendSmsButton";
 
 const ActionComponents = ({
   children,
@@ -75,12 +76,7 @@ const ActionComponents = ({
                   </AlertDialogContent>
                 </AlertDialog>
 
-                <Button
-                  className="w-full !text-start !items-start flex justify-start "
-                  variant={"ghost"}
-                >
-                  Mwoherereze sms
-                </Button>
+                <SendSmsButton clientId={id} />
                 <Button
                   className="w-full !text-start !items-start flex justify-start "
                   variant={"ghost"}

@@ -78,7 +78,7 @@ export const columns: ColumnDef<Client>[] = [
     header: "Igicuruzwa",
     cell: ({ row }) => {
       const igicuruzwa = row.getValue("igicuruzwa") as string;
-      return <p className="text-nowrap">{igicuruzwa}</p>;
+      return <p className="text-nowrap px-5">{igicuruzwa}</p>;
     },
   },
   {

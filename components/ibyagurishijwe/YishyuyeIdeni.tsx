@@ -78,7 +78,7 @@ const YishyuyeIdeni = ({
         id: id,
         yishyuyeAngahe: values.wishyuyeAngahe,
         ideniRishizemo: true,
-        yishyuyezingahe: 0,
+        yishyuyezingahe: product.aratwaraZingahe,
       });
       form.reset();
       setDialogOpen(false);
@@ -95,7 +95,7 @@ const YishyuyeIdeni = ({
         id: id,
         yishyuyeAngahe: values.wishyuyeAngahe,
         ideniRishizemo: false,
-        yishyuyezingahe: newRemainingAmount,
+        yishyuyezingahe: values.hasigaye,
       });
       form.reset();
       setDialogOpen(false);
