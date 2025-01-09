@@ -28,11 +28,63 @@ const SohoraFacturePage = () => {
     // Dynamically import html-to-image only when needed
     const htmlToImage = await import("html-to-image");
     const image = await htmlToImage.toPng(invoiceRef.current);
+    if (image) {
+      const newWindow = window.open("", "_blank");
+      if (!newWindow) {
+        alert("Pop-up was blocked. Please allow pop-ups for this site.");
+        return;
+      }
+
+      // Ensure the base64 string has the correct prefix
+      const imageSource = image.startsWith("data:")
+        ? image
+        : `data:image/png;base64,${image}`;
+
+      // Write the HTML content to the new window
+      newWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Image preview</title>
+          <style>
+            body {
+              margin: 0;
+              padding: 20px;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              background-color: #f5f5f5;
+              min-height: 100vh;
+            }
+            img {
+              max-width: 100%;
+              height: auto;
+              border: 1px solid #ddd;
+              border-radius: 4px;
+              box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            h1 {
+              font-family: system-ui, -apple-system, sans-serif;
+              color: #333;
+              margin-bottom: 20px;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>Image preview</h1>
+          <img src="${imageSource}" alt="Preview" />
+        </body>
+      </html>
+    `);
+    }
   };
   return (
     <section className="container  w-full h-full flex flex-col gap-10 px-3 lg:px-20 lg:py-10">
       {product ? (
-        <div className="border shadow-md shadow-gray-200 dark:shadow-black p-4 rounded-md">
+        <div
+          className="border shadow-md shadow-gray-200 dark:shadow-black p-4 rounded-md"
+          ref={invoiceRef}
+        >
           <div className="flex items-center justify-between">
             <p className="text-xl font-bold text-black dark:text-gray-50 capitalize">
               {buzName}
@@ -135,9 +187,6 @@ const SohoraFacturePage = () => {
             <p className="dark:text-blue-200 text-sm">No refund</p>
             <p className="dark:text-blue-200 text-sm">warranty 3 month</p>
           </div>
-          {buzPhone}
-          {buzName}
-          {product?.map((item) => <p key={item._id}>{item.igicuruzwa}</p>)}
         </div>
       ) : null}
       <button
