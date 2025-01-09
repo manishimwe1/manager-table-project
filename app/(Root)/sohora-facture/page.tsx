@@ -146,12 +146,12 @@ const SohoraFacturePage = () => {
               </p>
             </div>
           </div>
-          <div className="grid grid-cols-8 border border-blue-400 rounded-sm shadow-sm shadow-gray-200 dark:shadow-black overflow-hidden">
+          <div className="grid grid-cols-8 border border-blue-400 rounded-sm shadow-sm shadow-gray-200 dark:shadow-black overflow-hidden ">
             <div className=" col-span-3">
               <div className="w-full h-fit py-2 bg-blue-400">
                 <p className="text-center text-black">Description</p>
               </div>
-              <div className="border text-lg py-4 px-2 dark:text-blue-200">
+              <div className="border text-sm lg:text-lg py-4 px-2 dark:text-blue-200">
                 {product[0].igicuruzwa}
               </div>
             </div>
@@ -159,19 +159,22 @@ const SohoraFacturePage = () => {
               <div className="w-full h-fit py-2 bg-blue-400">
                 <p className="text-center text-black">QtY</p>
               </div>
-              <div className=" text-lg py-4 px-2 dark:text-blue-200">
+              <div className=" text-sm lg:text-lg py-4 px-2 dark:text-blue-200">
                 {product[0].aratwaraZingahe}
               </div>
-              <div className="border-t text-lg py-4 px-2 dark:text-blue-200"></div>
+              <div className="border-t text-sm lg:text-lg py-4 px-2 dark:text-blue-200"></div>
             </div>
             <div className=" col-span-2">
               <div className="w-full h-fit py-2 bg-blue-400">
                 <p className="text-center text-black">Price</p>
               </div>
-              <div className="border border-b-0 text-lg py-4 px-2 dark:text-blue-200">
-                {product[0].yishyuyeAngahe.toLocaleString()} Rwf
+              <div className="border border-b-0 text-sm lg:text-lg py-4 px-2 dark:text-blue-200">
+                {(
+                  product[0].yishyuyeAngahe / product[0].aratwaraZingahe
+                ).toLocaleString()}{" "}
+                Rwf
               </div>
-              <div className=" border-t text-lg py-4 px-2 dark:text-blue-200">
+              <div className=" border-t text-sm lg:text-lg py-4 px-2 dark:text-blue-200">
                 Total
               </div>
             </div>
@@ -179,13 +182,13 @@ const SohoraFacturePage = () => {
               <div className="w-full h-fit py-2 bg-blue-400">
                 <p className="text-center text-black">Amount</p>
               </div>
-              <div className=" text-lg py-4 px-2 dark:text-blue-200">
+              <div className=" text-sm lg:text-lg py-4 px-2 dark:text-blue-200">
                 {(
                   product[0].yishyuyeAngahe * product[0].aratwaraZingahe
                 ).toLocaleString()}{" "}
                 Rwf
               </div>
-              <div className="border text-lg py-4 px-2 c">
+              <div className="border text-sm lg:text-lg py-4 px-2 c">
                 {(
                   product[0].yishyuyeAngahe * product[0].aratwaraZingahe
                 ).toLocaleString()}{" "}
