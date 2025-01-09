@@ -1,27 +1,183 @@
-import { printData } from "@/lib/utils";
-import React from "react";
-import { Button } from "./ui/button";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import { useQuery } from "convex/react";
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Input } from "./ui/input";
+import { invoiceSchema } from "@/lib/validations";
+import useBusinessStore from "@/lib/store/zustand";
+import { useRouter } from "next/navigation";
+import { Client } from "@/types";
 
-const SohoraFacture = () => {
+function SohoraFactureForm({ client }: { client: Client | null | undefined }) {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { setBusinessData } = useBusinessStore();
+
+  const form = useForm<z.infer<typeof invoiceSchema>>({
+    resolver: zodResolver(invoiceSchema),
+    defaultValues: {
+      buzName: "",
+      buzPhone: 0,
+      email: "",
+      streetNo: "",
+    },
+  });
+
+  // 2. Define a submit handler.
+  function onSubmit(values: z.infer<typeof invoiceSchema>) {
+    setLoading(true);
+    setBusinessData({
+      buzName: values.buzName,
+      buzPhone: values.buzPhone,
+      name: client?.name,
+      email: values.email,
+      streetNo: values.streetNo,
+    });
+    setLoading(false);
+    form.reset();
+    router.push("/sohora-facture");
+  }
   return (
-    <Button
-      className="w-full !text-start  !items-start flex justify-start "
-      variant={"ghost"}
-      onClick={() => {
-        if (ClientWhoPaid) {
-          const data = [
-            {
-              name: ClientWhoPaid[0]?.name,
-              igicuruzwa: ClientWhoPaid[0].igicuruzwa,
-              yishyuyeAngahe: ClientWhoPaid[0].yishyuyeAngahe,
-            },
-          ];
-          printData(data, "Company Name");
-        }
-      }}
-    >
-      Print
-    </Button>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8 text-left"
+      >
+        <div className="flex items-start">
+          <FormField
+            control={form.control}
+            name="buzName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bussiness Name</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm"
+                    placeholder="easyfix ltd"
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="buzPhone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bussiness phone</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm"
+                    placeholder="easyfix ltd"
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="flex items-start">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bussiness email</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm"
+                    placeholder="easyfixsupport@gmail.com"
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="streetNo"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Location</FormLabel>
+                <FormControl>
+                  <Input className="text-sm" placeholder="KN74str" {...field} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="w-full  flex justify-end">
+          <Button
+            type="submit"
+            className="bg-blue-600 font-bold text-white hover:bg-blue-700"
+            disabled={loading}
+          >
+            {loading ? "Ohereza..." : "Ohereza"}
+          </Button>
+        </div>
+      </form>
+    </Form>
+  );
+}
+
+const SohoraFacture = ({
+  clientId,
+  productId,
+}: {
+  clientId?: Id<"client">;
+  productId?: Id<"product">;
+}) => {
+  const client = clientId
+    ? useQuery(api.clientName.getClientById, { id: clientId })
+    : null;
+  const product = productId
+    ? useQuery(api.product.getProductById, { id: productId })
+    : null;
+
+  return (
+    <Dialog>
+      <DialogTrigger className=" hover:bg-stone-700 w-full rounded-sm text-sm text-left">
+        <span className="w-full !text-start !items-start flex justify-start p-2">
+          Sohora facture
+        </span>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle></DialogTitle>
+          <SohoraFactureForm client={client} />
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   );
 };
 

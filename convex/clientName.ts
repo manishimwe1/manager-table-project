@@ -220,3 +220,23 @@ export const getClientById = query({
     }
   },
 });
+
+export const getClientInIdenByName = query({
+  args: { name: v.string() },
+  handler: async (ctx, args) => {
+    const Client = await ctx.db
+      .query("client")
+      .withIndex("by_name", (q) => q.eq("name", args.name))
+      .filter((q) => q.eq(q.field("yishyuye"), false))
+      .order("desc")
+      .collect();
+
+    if (!Client) {
+      console.log(
+        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING Client")
+      );
+      return [];
+    }
+    return Client;
+  },
+});

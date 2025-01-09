@@ -249,3 +249,35 @@ export const useClientInfoStore = create<ClientInfo>((set) => ({
       draftPurchaseByClient: {},
     })),
 }));
+
+interface BusinessData {
+  buzName: string;
+  buzPhone: number;
+  email: string;
+  name: string;
+  streetNo: string;
+  setBusinessData: (data: Partial<BusinessData>) => void;
+  clearBusinessData: () => void;
+}
+
+const useBusinessStore = create<BusinessData>((set) => ({
+  buzName: "",
+  buzPhone: 0,
+  email: "",
+  name: "",
+  streetNo: "",
+  setBusinessData: (data) =>
+    set((state) => ({
+      ...state,
+      ...data,
+    })),
+  clearBusinessData: () =>
+    set(() => ({
+      buzName: "",
+      buzPhone: 0,
+      email: "",
+      streetNo: "",
+    })),
+}));
+
+export default useBusinessStore;

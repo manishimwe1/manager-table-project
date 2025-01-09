@@ -32,3 +32,10 @@ export const formSchema = z.object({
   wishyuyeAngahe: z.coerce.number().min(0),
   inganoYizoNishyuye: z.coerce.number().min(0),
 });
+
+export const invoiceSchema = z.object({
+  buzName: z.string().min(2).max(500),
+  email: z.string().email(),
+  streetNo: z.string(),
+  buzPhone: z.coerce.number(),
+});

@@ -24,6 +24,7 @@ import {
 import IshyuraFormAction from "./ibyaranguwe/IshyuraFormAction";
 import YishyuyeIdeni from "./ibyagurishijwe/YishyuyeIdeni";
 import SendSmsButton from "./SendSmsButton";
+import SohoraFacture from "./SohoraFacture";
 
 const ActionComponents = ({
   children,
@@ -77,12 +78,7 @@ const ActionComponents = ({
                 </AlertDialog>
 
                 <SendSmsButton clientId={id} />
-                <Button
-                  className="w-full !text-start !items-start flex justify-start "
-                  variant={"ghost"}
-                >
-                  Sohora facture
-                </Button>
+                <SohoraFacture clientId={id} />
               </>
             ) : (
               <>
