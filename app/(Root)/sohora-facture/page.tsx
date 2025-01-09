@@ -1,6 +1,6 @@
 "use client";
 import useBusinessStore from "@/lib/store/zustand";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
@@ -12,72 +12,85 @@ const SohoraFacturePage = () => {
   const invoiceRef = useRef<HTMLDivElement>(null);
   const session = useSession();
   const [isLoading, setIsLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const { buzName, buzPhone, email, streetNo, name } = useBusinessStore();
-  if (buzName === "" || !name) {
-    router.back();
-  }
+
+  useEffect(() => {
+    setIsMounted(true);
+    if (buzName === "" || !name) {
+      router.back();
+    }
+  }, [buzName, name, router]);
+
   const product = useQuery(api.clientName.getClientInIdenByName, {
     name: name,
   });
-  console.log(product);
+
   const handleSendInvoice = async () => {
     if (!invoiceRef.current || isLoading) return;
 
     setIsLoading(true);
+    try {
+      // Dynamically import html-to-image only when needed
+      const htmlToImage = await import("html-to-image");
+      const image = await htmlToImage.toPng(invoiceRef.current);
 
-    // Dynamically import html-to-image only when needed
-    const htmlToImage = await import("html-to-image");
-    const image = await htmlToImage.toPng(invoiceRef.current);
-    if (image) {
-      const newWindow = window.open("", "_blank");
-      if (!newWindow) {
-        alert("Pop-up was blocked. Please allow pop-ups for this site.");
-        return;
+      if (image && typeof window !== "undefined") {
+        const newWindow = window.open("", "_blank");
+        if (!newWindow) {
+          alert("Pop-up was blocked. Please allow pop-ups for this site.");
+          return;
+        }
+
+        const imageSource = image.startsWith("data:")
+          ? image
+          : `data:image/png;base64,${image}`;
+
+        newWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <title>Image preview</title>
+              <style>
+                body {
+                  margin: 0;
+                  padding: 20px;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  background-color: #f5f5f5;
+                  min-height: 100vh;
+                }
+                img {
+                  max-width: 100%;
+                  height: auto;
+                  border: 1px solid #ddd;
+                  border-radius: 4px;
+                  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                }
+                h1 {
+                  font-family: system-ui, -apple-system, sans-serif;
+                  color: #333;
+                  margin-bottom: 20px;
+                }
+              </style>
+            </head>
+            <body>
+              <h1>Image preview</h1>
+              <img src="${imageSource}" alt="Preview" />
+            </body>
+          </html>
+        `);
       }
-
-      // Ensure the base64 string has the correct prefix
-      const imageSource = image.startsWith("data:")
-        ? image
-        : `data:image/png;base64,${image}`;
-
-      // Write the HTML content to the new window
-      newWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Image preview</title>
-          <style>
-            body {
-              margin: 0;
-              padding: 20px;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              background-color: #f5f5f5;
-              min-height: 100vh;
-            }
-            img {
-              max-width: 100%;
-              height: auto;
-              border: 1px solid #ddd;
-              border-radius: 4px;
-              box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            }
-            h1 {
-              font-family: system-ui, -apple-system, sans-serif;
-              color: #333;
-              margin-bottom: 20px;
-            }
-          </style>
-        </head>
-        <body>
-          <h1>Image preview</h1>
-          <img src="${imageSource}" alt="Preview" />
-        </body>
-      </html>
-    `);
+    } catch (error) {
+      console.error("Error generating invoice:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  // Don't render anything until mounted
+  if (!isMounted) return null;
   return (
     <section className="container  w-full h-full flex flex-col gap-10 px-3 lg:px-20 lg:py-10">
       {product ? (
