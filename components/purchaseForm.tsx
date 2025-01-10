@@ -313,10 +313,10 @@ export function PurchaseForm({
                   <div className="flex items-center gap-3">
                     <Badge
                       className={cn(
-                        "w-full rounded-full !p-2 text-sm cursor-pointer text-center place-content-center",
+                        "w-full rounded-full !p-2 text-xs text-nowrap md:text-sm cursor-pointer text-center place-content-center",
                         ndanguyeGute === "nishyuyeCash"
                           ? "bg-green-600 hover:bg-green-500 py-1 px-2 dark:text-white"
-                          : "bg-gray-200 dark:bg-stone-900 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100 text-left hover:text-white"
+                          : "bg-gray-200 dark:bg-stone-900 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100  hover:text-white"
                       )}
                       onClick={() => {
                         setNdanguyeGute("nishyuyeCash");
@@ -338,7 +338,7 @@ export function PurchaseForm({
                     </Badge>
                     <Badge
                       className={cn(
-                        "w-full rounded-full !p-2 text-sm cursor-pointer text-center place-content-center",
+                        "w-full rounded-full !p-2 text-xs text-nowrap md:text-sm cursor-pointer text-center place-content-center",
                         ndanguyeGute === "nishyuyeMake"
                           ? "bg-blue-600 hover:bg-blue-500 py-1 px-2 dark:text-white"
                           : "bg-gray-200 dark:bg-stone-900 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100 text-left hover:text-white"
@@ -353,7 +353,7 @@ export function PurchaseForm({
                     </Badge>
                     <Badge
                       className={cn(
-                        "w-full rounded-full !p-2 text-sm cursor-pointer place-content-center",
+                        "w-full rounded-full !p-2 text-xs text-nowrap md:text-sm cursor-pointer place-content-center",
                         ndanguyeGute === "mfasheIdeni"
                           ? "bg-red-400 hover:bg-red-500 py-1 px-2 text-white"
                           : "bg-gray-300 dark:bg-stone-900 hover:bg-gray-700 py-1 px-2 text-black dark:text-gray-100 text-left hover:text-white"
@@ -502,15 +502,15 @@ export function PurchaseForm({
           </Button>
           <Button
             type="submit"
-            className="text-white font-bold w-full rounded-full capitalize hover:bg-[#141416] bg-[#212124] !py-3 hover:transition-all duration-200 hover:ease-in-out"
+            className="text-white font-bold w-full rounded-full capitalize hover:bg-blue-600 bg-blue-500 !py-3 hover:transition-all duration-200 hover:ease-in-out shadow-sm shadow-blue-200"
             disabled={submitting}
           >
             {submitting ? (
-              <div className="flex items-center gap-0.5 justify-center py-2">
+              <div className="flex items-center justify-center py-3">
                 <p>Ongera...</p> <Loader className="animate-spin h-5 w-5" />
               </div>
             ) : (
-              <div className="flex items-center gap-0.5 justify-center py-2">
+              <div className="flex items-center justify-center py-3 ">
                 <p>Ongera muri stock</p>
                 <Send className="h-4 w-4" />
               </div>

@@ -34,7 +34,7 @@ const NdanguraIdeniPage = () => {
 
   return (
     <section className="w-full mt-2 space-y-4">
-      <HeaderSection title="Urutonde rw'abagufitiye ideni" />
+      <HeaderSection title="Amadeni mfite ndangura" />
       <div className=" flex items-center justify-between  w-full flex-row-reverse lg:flex-row">
         <p className="text-blue-400 text-nowrap lg:text-base text-sm ">
           Yose hamwe: {product?.length}
