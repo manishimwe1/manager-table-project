@@ -72,7 +72,7 @@ const Ibyagurishijwe = ({ userId }: { userId: Id<"user"> | undefined }) => {
           </>
         ) : (
           <p className="text-center mt-3 text-red-200 underline">
-            Ntagicuruzwa kiragurishishwa
+            Ntagicuruzwa kiragurishwa
           </p>
         ))}
     </>

@@ -75,18 +75,7 @@ const TakeInputValue = ({
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (name === "") {
-        return toast({
-          description: "Shyiramo izina ry'umukiriya",
-          variant: "destructive",
-        });
-      }
-
       const newValue = e.target.value;
-
-      if (Number(newValue) <= 0 || isNaN(Number(newValue))) {
-        return;
-      }
 
       setLocalInputValue(newValue);
       setLocalCalculatedValue(Number(newValue) * ukonyigurishaKuriDetail);

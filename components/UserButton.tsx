@@ -1,4 +1,3 @@
-import { signOut } from "@/auth";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,6 +8,8 @@ import {
 import { User2 } from "lucide-react";
 import { User } from "next-auth";
 import Image from "next/image";
+import { Button } from "./ui/button";
+import { signOut } from "next-auth/react";
 
 const UserButton = ({ user }: { user: User }) => {
   return (
@@ -32,22 +33,13 @@ const UserButton = ({ user }: { user: User }) => {
         <DropdownMenuItem>Setting</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <button
-            onClick={async () => {
-              try {
-                await signOut({
-                  redirectTo: "/login",
-                  redirect: true,
-                });
-                localStorage.clear();
-                window.location.href = "/login";
-              } catch (error) {
-                console.error("Sign out error:", error);
-              }
+          <form
+            action={() => {
+              signOut();
             }}
           >
-            Sign Out
-          </button>
+            <Button type="submit">Sign Out</Button>
+          </form>
         </DropdownMenuItem>
         {/* <DropdownMenuItem>Team</DropdownMenuItem>
         <DropdownMenuItem>Subscription</DropdownMenuItem> */}

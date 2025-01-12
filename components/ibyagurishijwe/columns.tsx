@@ -15,6 +15,7 @@ import ShowBadge from "./ShowBadge";
 
 export function ShowUkonyiranguza({ productId }: { productId: Id<"product"> }) {
   const product = useQuery(api.product.getProductById, { id: productId });
+  console.log(productId);
 
   return (
     <p className="text-left">
@@ -24,6 +25,17 @@ export function ShowUkonyiranguza({ productId }: { productId: Id<"product"> }) {
 }
 
 export const columns: ColumnDef<Client>[] = [
+  {
+    accessorKey: "_id",
+    header: "",
+    cell: ({ row }) => {
+      return (
+        <p className="text-sm dark:text-stone-400 text-stone-800">
+          {row.index + 1}
+        </p>
+      );
+    },
+  },
   {
     accessorKey: "igicuruzwa",
     header: "Igicuruzwa",
@@ -100,7 +112,7 @@ export const columns: ColumnDef<Client>[] = [
     cell: () => null,
   },
   {
-    accessorKey: "_id",
+    accessorKey: "_creationTime",
     header: undefined,
     cell: ({ row }) => {
       const id = row.getValue("_id") as Id<"client">;

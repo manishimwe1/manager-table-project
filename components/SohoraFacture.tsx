@@ -27,9 +27,15 @@ import { Input } from "./ui/input";
 import { invoiceSchema } from "@/lib/validations";
 import useBusinessStore from "@/lib/store/zustand";
 import { useRouter } from "next/navigation";
-import { Client } from "@/types";
+import { Client, ProductType } from "@/types";
 
-function SohoraFactureForm({ client }: { client: Client | null | undefined }) {
+function SohoraFactureForm({
+  client,
+  product,
+}: {
+  client: Client | null | undefined;
+  product: ProductType | null | undefined;
+}) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { setBusinessData } = useBusinessStore();
@@ -50,7 +56,7 @@ function SohoraFactureForm({ client }: { client: Client | null | undefined }) {
     setBusinessData({
       buzName: values.buzName,
       buzPhone: values.buzPhone,
-      name: client?.name,
+      name: product ? product._id : client?.productId,
       email: values.email,
       streetNo: values.streetNo,
     });
@@ -174,7 +180,7 @@ const SohoraFacture = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle></DialogTitle>
-          <SohoraFactureForm client={client} />
+          <SohoraFactureForm client={client} product={product} />
         </DialogHeader>
       </DialogContent>
     </Dialog>

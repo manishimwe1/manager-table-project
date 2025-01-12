@@ -18,6 +18,7 @@ import YishyuyeIdeni from "../ibyagurishijwe/YishyuyeIdeni";
 import { MoreVertical } from "lucide-react";
 import IshyuyeIdeni from "./IshyuraFormAction";
 import SendSmsButton from "../SendSmsButton";
+import SohoraFacture from "../SohoraFacture";
 
 const ActionElement = ({
   id,
@@ -55,37 +56,7 @@ const ActionElement = ({
                 </AlertDialogHeader>
               </AlertDialogContent>
             </AlertDialog>
-
-            <SendSmsButton productId={id} />
-            <Button
-              className="w-full !text-start !items-start flex justify-start "
-              variant={"ghost"}
-              onClick={async () => {
-                console.log(
-                  "START TO SEND...",
-                  `${process.env.NEXT_PUBLIC_SITE_URL}`
-                );
-                await fetch(
-                  `${process.env.NEXT_PUBLIC_SITE_URL}/api/send-sms`,
-                  {
-                    method: "POST",
-                    body: JSON.stringify({
-                      to: "+250798894137",
-                      message: "hey....testing",
-                      provider: "twilio",
-                    }),
-                  }
-                );
-              }}
-            >
-              Mwoherereze sms
-            </Button>
-            <Button
-              className="w-full !text-start !items-start flex justify-start "
-              variant={"ghost"}
-            >
-              Sohora facture
-            </Button>
+            <SohoraFacture productId={id} />
           </div>
         </PopoverContent>
       </Popover>
