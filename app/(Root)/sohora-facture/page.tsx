@@ -6,6 +6,8 @@ import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { useSession } from "next-auth/react";
 import { cn, formatReadableDate } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Check, X } from "lucide-react";
 
 const SohoraFacturePage = () => {
   const router = useRouter();
@@ -24,7 +26,7 @@ const SohoraFacturePage = () => {
   }, [buzName, name, router]);
 
   console.log(clientFacture, "clientFacture");
-
+  const handleDownload = () => {};
   const handleSendInvoice = async () => {
     if (!invoiceRef.current || isLoading) return;
 
@@ -57,19 +59,19 @@ const SohoraFacturePage = () => {
                   display: flex;
                   flex-direction: column;
                   align-items: center;
-                  background-color: #f5f5f5;
+                  background-color: #ffffff;
                   min-height: 100vh;
                 }
                 img {
                   max-width: 100%;
                   height: auto;
-                  border: 1px solid #ddd;
+                  border: 1px solid rgb(96 165 250 / 0.4);
                   border-radius: 4px;
                   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                 }
                 h1 {
                   font-family: system-ui, -apple-system, sans-serif;
-                  color: #333;
+                  color: #000000;
                   margin-bottom: 20px;
                 }
               </style>
@@ -120,11 +122,19 @@ const SohoraFacturePage = () => {
                   : "text-red-500 border-red-500"
               )}
             >
-              {clientFacture
-                ? clientFacture[0].yishyuye === true
-                  ? "paid"
-                  : "not paid"
-                : null}
+              {clientFacture ? (
+                clientFacture[0].yishyuye === true ? (
+                  <div className="flex items-center ">
+                    <Check className="h-4 w-4" />
+                    <p>paid</p>
+                  </div>
+                ) : (
+                  <div className="flex items-center ">
+                    <X className="h-4 w-4" />
+                    <p>not paid</p>
+                  </div>
+                )
+              ) : null}
             </div>
           </div>
 
@@ -223,16 +233,33 @@ const SohoraFacturePage = () => {
           </div>
         </div>
       ) : null}
-      <button
-        onClick={handleSendInvoice}
-        disabled={isLoading}
-        className={cn(
-          "mt-4 px-4 py-2 bg-blue-500 text-white rounded-md",
-          "disabled:opacity-50 disabled:cursor-not-allowed"
-        )}
-      >
-        {isLoading ? "Sending..." : "Send Invoice to Client"}
-      </button>
+      <div className="w-full flex items-center justify-end">
+        <div className="flex items-center justify-end gap-2">
+          <Button
+            onClick={handleSendInvoice}
+            disabled={isLoading}
+            variant={"outline"}
+            className={cn(
+              "mt-4 px-4 py-2 border-blue-400/40 text-blue-400  rounded-md disabled:opacity-50 disabled:cursor-not-allowed relative"
+            )}
+          >
+            {isLoading ? "Sending..." : "Send Invoice to whatsapp"}
+            <p className="-top-2 -right-2 absolute text-xs text-blue-400 rotate-2">
+              soon!
+            </p>
+          </Button>
+          <button
+            onClick={handleSendInvoice}
+            disabled={isLoading}
+            className={cn(
+              "mt-4 px-4 py-2 bg-blue-500/70 text-white rounded-md",
+              "disabled:opacity-50 disabled:cursor-not-allowed"
+            )}
+          >
+            {isLoading ? "Download..." : "Download Invoice"}
+          </button>
+        </div>
+      </div>
     </section>
   );
 };
