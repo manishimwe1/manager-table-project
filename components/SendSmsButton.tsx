@@ -116,7 +116,7 @@ const SendSmsButton = ({
   return (
     <Dialog>
       <DialogTrigger>
-        <span className="hover:bg-stone-700 p-2 w-full rounded-sm text-sm text-left">
+        <span className=" dark:hover:bg-stone-700 hover:bg-stone-200 p-2 w-full rounded-sm text-sm text-left">
           Mwohereze sms
         </span>
       </DialogTrigger>

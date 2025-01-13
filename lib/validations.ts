@@ -39,3 +39,6 @@ export const invoiceSchema = z.object({
   streetNo: z.string(),
   buzPhone: z.coerce.number(),
 });
+export const ingaruSchema = z.object({
+  agaruyeZingahe: z.coerce.number(),
+});

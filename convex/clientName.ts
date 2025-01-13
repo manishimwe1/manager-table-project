@@ -1,6 +1,11 @@
 import { internal } from "./_generated/api";
 import { Id } from "./_generated/dataModel";
-import { internalQuery, mutation, query } from "./_generated/server";
+import {
+  internalMutation,
+  internalQuery,
+  mutation,
+  query,
+} from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 
 export const createClient = mutation({
@@ -259,5 +264,39 @@ export const getClientWhoPaidByName = query({
       return [];
     }
     return Client;
+  },
+});
+
+export const updateClient = mutation({
+  args: {
+    id: v.id("client"),
+    fields: v.object({
+      aratwaraZingahe: v.number(),
+      yishyuyeAngahe: v.number(),
+      yishyuyezingahe: v.optional(v.number()),
+      amazeKwishyura: v.optional(v.number()),
+    }),
+  },
+
+  handler: async (ctx, args) => {
+    const { id, fields } = args;
+
+    // Only update fields that are provided
+    await ctx.db.patch(id, fields);
+
+    const client = await ctx.db.get(id);
+    if (!client) return;
+    if (client.yishyuyezingahe === 0 && client.aratwaraZingahe === 0) {
+      console.log("HERE IN DELETING");
+
+      ctx.runMutation(internal.clientName.deleteClient, { id });
+    }
+  },
+});
+
+export const deleteClient = internalMutation({
+  args: { id: v.id("client") },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.id);
   },
 });

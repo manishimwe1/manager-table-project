@@ -79,6 +79,7 @@ export interface Client {
   yishyuyezingahe?: number;
   amazeKwishyura?: number;
   facture: number;
+  userId: Id<"user">;
 }
 
 export interface outOfStock {

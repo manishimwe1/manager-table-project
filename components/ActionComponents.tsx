@@ -25,6 +25,7 @@ import IshyuraFormAction from "./ibyaranguwe/IshyuraFormAction";
 import YishyuyeIdeni from "./ibyagurishijwe/YishyuyeIdeni";
 import SendSmsButton from "./SendSmsButton";
 import SohoraFacture from "./SohoraFacture";
+import IngaruProduct from "./IngaruProduct";
 
 const ActionComponents = ({
   children,
@@ -64,7 +65,7 @@ const ActionComponents = ({
                     setDialogOpen(!dialogOpen);
                   }}
                 >
-                  <AlertDialogTrigger className="p-2 hover:bg-stone-700 w-full rounded-sm text-sm text-left">
+                  <AlertDialogTrigger className="p-2  dark:hover:bg-stone-700 hover:bg-stone-200 w-full rounded-sm text-sm text-left">
                     Yishyuye ideni
                   </AlertDialogTrigger>
                   <AlertDialogContent>
@@ -80,11 +81,14 @@ const ActionComponents = ({
                 <SendSmsButton clientId={id} />
 
                 <SohoraFacture clientId={id} />
+
+                <IngaruProduct clientId={id} />
               </>
             ) : (
               <>
                 <SendSmsButton />
                 <SohoraFacture clientId={id} />
+                <IngaruProduct clientId={id} />
               </>
             )}
           </div>

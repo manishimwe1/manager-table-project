@@ -64,6 +64,7 @@ function SohoraFactureForm({
     form.reset();
     router.push("/sohora-facture");
   }
+
   return (
     <>
       {loading ? (
@@ -178,7 +179,7 @@ const SohoraFacture = ({ clientId }: { clientId?: Id<"client"> }) => {
 
   return (
     <Dialog>
-      <DialogTrigger className=" hover:bg-stone-700 w-full rounded-sm text-sm text-left">
+      <DialogTrigger className="  dark:hover:bg-stone-700 hover:bg-stone-200 w-full rounded-sm text-sm text-left">
         <span className="w-full !text-start !items-start flex justify-start p-2">
           Sohora facture
         </span>

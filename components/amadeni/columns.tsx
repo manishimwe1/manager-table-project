@@ -16,14 +16,11 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
 function ShowNibaYishyuyeIdeni({
-  productId,
   yishyuyeAngahe,
 }: {
   productId: Id<"product">;
   yishyuyeAngahe: number;
 }) {
-  // const product = useQuery(api.product.getProductById, { id: productId });
-
   return (
     <p className="text-sm text-blue-700 text-center animate-pulse text-nowrap">
       {yishyuyeAngahe !== 0 ? (
@@ -75,10 +72,10 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: "igicuruzwa",
-    header: "Igicuruzwa",
+    header: () => <p className="text-center">Igicuruzwa</p>,
     cell: ({ row }) => {
       const igicuruzwa = row.getValue("igicuruzwa") as string;
-      return <p className="text-nowrap px-5">{igicuruzwa}</p>;
+      return <p className="text-nowrap px-5 text-center">{igicuruzwa}</p>;
     },
   },
   {

@@ -25,10 +25,16 @@ const SohoraFacturePage = () => {
     }
   }, [buzName, name, router]);
 
-  console.log(clientFacture, "clientFacture");
-  const handleDownload = () => {};
+  useEffect(() => {
+    const theme = localStorage.setItem("theme", "light");
+    document.documentElement.classList.toggle("light");
+  }, []);
   const handleSendInvoice = async () => {
     if (!invoiceRef.current || isLoading) return;
+
+    const theme = localStorage.getItem("theme") || "light";
+    document.documentElement.classList.toggle("dark", theme === "light");
+    console.log(theme, "theme");
 
     setIsLoading(true);
     try {
@@ -155,7 +161,7 @@ const SohoraFacturePage = () => {
               </p>
             </div>
           </div>
-          <div className="grid grid-cols-8 border border-blue-400/40 rounded-sm shadow-sm shadow-gray-200 dark:shadow-black overflow-hidden ">
+          <div className="grid grid-cols-8 border mt-4 border-blue-400/40 rounded-sm shadow-sm shadow-gray-200 dark:shadow-black overflow-hidden ">
             <div className=" col-span-3 ">
               <div className="w-full h-fit  py-2 bg-blue-400">
                 <p className="text-center text-black">Description</p>
