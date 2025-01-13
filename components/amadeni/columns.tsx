@@ -135,21 +135,23 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: "yishyuyeAngahe",
-    header: () => {
-      return <p className="text-center">Ideni afite</p>;
-    },
-    cell: ({ row }) => {
-      const productId = row.getValue("productId") as Id<"product">;
-      const amazeKwishyura = row.getValue("amazeKwishyura") as number;
-      const yatwaye = row.getValue("aratwaraZingahe") as number;
-      return (
-        <ShowBadge
-          productId={productId}
-          amazeKwishyura={amazeKwishyura}
-          yatwaye={yatwaye}
-        />
-      );
-    },
+    header: undefined,
+    // () => {
+    //   return <p className="text-center">Ideni afite</p>;
+    // },
+    cell: undefined,
+    // ({ row }) => {
+    //   const productId = row.getValue("productId") as Id<"product">;
+    //   const amazeKwishyura = row.getValue("amazeKwishyura") as number;
+    //   const yatwaye = row.getValue("aratwaraZingahe") as number;
+    //   return (
+    //     <ShowBadge
+    //       productId={productId}
+    //       amazeKwishyura={amazeKwishyura}
+    //       yatwaye={yatwaye}
+    //     />
+    //   );
+    // },
   },
 
   {

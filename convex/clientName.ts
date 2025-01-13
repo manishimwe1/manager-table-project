@@ -240,3 +240,24 @@ export const getClientInIdenByName = query({
     return Client;
   },
 });
+
+export const getClientWhoPaidByName = query({
+  args: { name: v.string(), facture: v.number() },
+  handler: async (ctx, args) => {
+    const Client = await ctx.db
+      .query("client")
+      .withIndex("by_name", (q) => q.eq("name", args.name))
+      .filter((q) => q.eq(q.field("yishyuye"), true))
+      .filter((q) => q.eq(q.field("facture"), args.facture))
+      .order("desc")
+      .collect();
+
+    if (!Client) {
+      console.log(
+        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING Client")
+      );
+      return [];
+    }
+    return Client;
+  },
+});

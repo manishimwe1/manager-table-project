@@ -1,5 +1,5 @@
 import { Id } from "@/convex/_generated/dataModel";
-import { DraftPurchaseType, ProductType, TableRowType } from "@/types";
+import { Client, DraftPurchaseType, ProductType, TableRowType } from "@/types";
 import { Row } from "@tanstack/react-table";
 import { create } from "zustand";
 
@@ -258,6 +258,7 @@ interface BusinessData {
   streetNo: string;
   setBusinessData: (data: Partial<BusinessData>) => void;
   clearBusinessData: () => void;
+  clientFacture: Client[] | undefined;
 }
 
 const useBusinessStore = create<BusinessData>((set) => ({
@@ -266,6 +267,7 @@ const useBusinessStore = create<BusinessData>((set) => ({
   email: "",
   name: "",
   streetNo: "",
+  clientFacture: undefined,
   setBusinessData: (data) =>
     set((state) => ({
       ...state,

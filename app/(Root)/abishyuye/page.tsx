@@ -17,20 +17,13 @@ const AbishyuyePage = () => {
   const session = useSession();
   const userId = session.data?.user;
 
-  // Fetch all products
+  // Fetch user from the database
   const user = useQuery(api.user.getUserIndb, { email: userId?.email! });
 
+  // Fetch clients who paid
   const Client = useQuery(api.clientName.getClientWhoPaid, {
     userId: user?._id!,
   });
-
-  if (session.status === "loading") return <SkeletonLoader />;
-
-  // Handle unauthenticated state
-  if (!userId) {
-    redirect("/login");
-    return null; // Ensure React knows the component renders nothing
-  }
 
   const filteredData = useMemo(() => {
     if (!searchValue) return Client;
@@ -38,6 +31,16 @@ const AbishyuyePage = () => {
       item.name.toLowerCase().includes(searchValue.toLowerCase())
     );
   }, [searchValue, Client]);
+
+  // Loading state
+  if (session.status === "loading") {
+    return <SkeletonLoader />;
+  }
+
+  // Redirect if the user is not authenticated
+  if (!userId) {
+    redirect("/login");
+  }
 
   return (
     <section className="w-full mt-2 space-y-4">
@@ -52,6 +55,17 @@ const AbishyuyePage = () => {
             searchValue={searchValue}
             setSearchValue={setSearchValue}
           />
+        </div>
+        <div className="flex items-center justify-end ">
+          <p className="font-light text-nowrap ">
+            Inyungu:{" "}
+            <span className="text-green-600">
+              {filteredData
+                ?.reduce((total, item) => total + item?.amazeKwishyura!, 0)
+                .toLocaleString()}{" "}
+              Rwf
+            </span>
+          </p>
         </div>
       </div>
       <DataTable columns={columns} data={filteredData || []} />

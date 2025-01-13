@@ -78,6 +78,7 @@ export interface Client {
   yishyuye: boolean;
   yishyuyezingahe?: number;
   amazeKwishyura?: number;
+  facture: number;
 }
 
 export interface outOfStock {

@@ -43,8 +43,8 @@ const ActionComponents = ({
     <div className={cn(" text-center relative")}>
       <Popover>
         <PopoverTrigger>{children}</PopoverTrigger>
-        <PopoverContent asChild className="!p-0 !gap-0.5">
-          <div className="flex items-start justify-center flex-col  !w-full">
+        <PopoverContent asChild className="!p-2 !gap-0.5">
+          <div className="flex items-start justify-center flex-col space-y-1.5 !w-full">
             {ibyashize && (
               <Button
                 className="w-full !text-start  !items-start flex justify-start "
@@ -78,6 +78,7 @@ const ActionComponents = ({
                 </AlertDialog>
 
                 <SendSmsButton clientId={id} />
+
                 <SohoraFacture clientId={id} />
               </>
             ) : (

@@ -13,18 +13,17 @@ const SohoraFacturePage = () => {
   const session = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const { buzName, buzPhone, email, streetNo, name } = useBusinessStore();
+  const { buzName, buzPhone, email, streetNo, name, clientFacture } =
+    useBusinessStore();
 
   useEffect(() => {
     setIsMounted(true);
-    if (buzName === "" || !name) {
+    if (buzName === "" || !clientFacture) {
       router.back();
     }
   }, [buzName, name, router]);
 
-  const product = useQuery(api.clientName.getClientInIdenByName, {
-    name: name,
-  });
+  console.log(clientFacture, "clientFacture");
 
   const handleSendInvoice = async () => {
     if (!invoiceRef.current || isLoading) return;
@@ -93,7 +92,7 @@ const SohoraFacturePage = () => {
   if (!isMounted) return null;
   return (
     <section className="container  w-full h-full flex flex-col gap-10 px-3 lg:px-20 lg:py-10">
-      {product ? (
+      {clientFacture ? (
         <div
           className="border shadow-md shadow-gray-200 dark:shadow-black p-4 rounded-md"
           ref={invoiceRef}
@@ -116,15 +115,13 @@ const SohoraFacturePage = () => {
             <div
               className={cn(
                 "border border-dashed rounded-md animate-pulse px-2 py-1",
-                product
-                  ? product[0].yishyuye === true
-                    ? "text-blue-500 border-blue-500"
-                    : "text-red-500 border-red-500"
-                  : null
+                clientFacture[0].yishyuye === true
+                  ? "text-blue-500 border-blue-500"
+                  : "text-red-500 border-red-500"
               )}
             >
-              {product
-                ? product[0].yishyuye === true
+              {clientFacture
+                ? clientFacture[0].yishyuye === true
                   ? "paid"
                   : "not paid"
                 : null}
@@ -135,46 +132,62 @@ const SohoraFacturePage = () => {
             <div className=" ">
               <p className="dark:text-gray-200 ">Bill To</p>
               <p className="text-sm  dark:text-blue-200">{name}</p>
-              <p className="text-sm  dark:text-blue-200">{product[0].phone}</p>
+              <p className="text-sm  dark:text-blue-200">
+                {clientFacture[0].phone}
+              </p>
             </div>
             <div>
               <p className="dark:text-gray-200 ">
-                Invoice # {product[0].facture}
+                Invoice # {clientFacture[0].facture}
               </p>
               <p className="text-sm  dark:text-blue-200">
-                Issued {formatReadableDate(product[0]._creationTime)}
+                Issued {formatReadableDate(clientFacture[0]._creationTime)}
               </p>
             </div>
           </div>
-          <div className="grid grid-cols-8 border border-blue-400 rounded-sm shadow-sm shadow-gray-200 dark:shadow-black overflow-hidden ">
-            <div className=" col-span-3">
-              <div className="w-full h-fit py-2 bg-blue-400">
+          <div className="grid grid-cols-8 border border-blue-400/40 rounded-sm shadow-sm shadow-gray-200 dark:shadow-black overflow-hidden ">
+            <div className=" col-span-3 ">
+              <div className="w-full h-fit  py-2 bg-blue-400">
                 <p className="text-center text-black">Description</p>
               </div>
-              <div className="border text-sm lg:text-lg py-4 px-2 dark:text-blue-200">
-                {product[0].igicuruzwa}
-              </div>
+              {clientFacture.map((item) => (
+                <div
+                  key={item._creationTime}
+                  className=" text-sm lg:text-lg py-4 px-2 dark:text-blue-200 border-b border-blue-400/40 "
+                >
+                  {item.igicuruzwa}
+                </div>
+              ))}
             </div>
             <div className=" col-span-1">
               <div className="w-full h-fit py-2 bg-blue-400">
                 <p className="text-center text-black">QtY</p>
               </div>
-              <div className=" text-sm lg:text-lg py-4 px-2 dark:text-blue-200">
-                {product[0].aratwaraZingahe}
-              </div>
-              <div className="border-t text-sm lg:text-lg py-4 px-2 dark:text-blue-200"></div>
+              {clientFacture.map((item) => (
+                <div
+                  key={item._creationTime}
+                  className=" text-sm lg:text-lg py-4 px-2 dark:text-blue-200 border-b border-blue-400/40"
+                >
+                  {item.aratwaraZingahe}
+                </div>
+              ))}
             </div>
             <div className=" col-span-2">
               <div className="w-full h-fit py-2 bg-blue-400">
                 <p className="text-center text-black">Price</p>
               </div>
-              <div className="border border-b-0 text-sm lg:text-lg py-4 px-2 dark:text-blue-200">
-                {(
-                  product[0].yishyuyeAngahe / product[0].aratwaraZingahe
-                ).toLocaleString()}{" "}
-                Rwf
-              </div>
-              <div className=" border-t text-sm lg:text-lg py-4 px-2 dark:text-blue-200">
+              {clientFacture.map((item) => (
+                <div
+                  key={item._creationTime}
+                  className=" text-sm lg:text-lg py-4 px-2 dark:text-blue-200 border-b border-blue-400/40"
+                >
+                  {(
+                    item.yishyuyeAngahe / item.aratwaraZingahe
+                  ).toLocaleString()}{" "}
+                  Rwf
+                </div>
+              ))}
+              <div className=" text-sm lg:text-lg py-4 px-2 dark:text-blue-200">
                 Total
               </div>
             </div>
@@ -182,21 +195,26 @@ const SohoraFacturePage = () => {
               <div className="w-full h-fit py-2 bg-blue-400">
                 <p className="text-center text-black">Amount</p>
               </div>
-              <div className=" text-sm lg:text-lg py-4 px-2 dark:text-blue-200">
-                {(
-                  product[0].yishyuyeAngahe * product[0].aratwaraZingahe
-                ).toLocaleString()}{" "}
-                Rwf
-              </div>
-              <div className="border text-sm lg:text-lg py-4 px-2 c">
-                {(
-                  product[0].yishyuyeAngahe * product[0].aratwaraZingahe
-                ).toLocaleString()}{" "}
-                Rwf
+              {clientFacture.map((item) => (
+                <div
+                  key={item._creationTime}
+                  className=" text-sm lg:text-lg py-4 px-2 dark:text-blue-200 border-b border-blue-400/40"
+                >
+                  {(
+                    item.yishyuyeAngahe * item.aratwaraZingahe
+                  ).toLocaleString()}{" "}
+                  Rwf
+                </div>
+              ))}
+              <div className=" text-sm lg:text-lg py-4 px-2 text-blue-500">
+                {clientFacture
+                  .reduce((total, item) => total + item.yishyuyeAngahe, 0)
+                  .toLocaleString()}
+                Frw
               </div>
             </div>
           </div>
-          <div className="">
+          <div className="mt-10">
             <p className="text-black dark:text-gray-200">
               Notes & Payment instructions
             </p>
