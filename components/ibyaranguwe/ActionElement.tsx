@@ -19,6 +19,7 @@ import { MoreVertical } from "lucide-react";
 import IshyuyeIdeni from "./IshyuraFormAction";
 import SendSmsButton from "../SendSmsButton";
 import SohoraFacture from "../SohoraFacture";
+import DeleteProductButton from "../DeleteProductButton";
 
 const ActionElement = ({
   id,
@@ -56,6 +57,10 @@ const ActionElement = ({
                 </AlertDialogHeader>
               </AlertDialogContent>
             </AlertDialog>
+            <DeleteProductButton
+              setDialogOpen={setDialogOpen}
+              dialogOpen={dialogOpen}
+            />
           </div>
         </PopoverContent>
       </Popover>

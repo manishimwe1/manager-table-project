@@ -189,12 +189,17 @@ export const columns: ColumnDef<ProductType>[] = [
     cell: ({ row }) => {
       const naranguye = row.getValue("ndanguyeZingahe") as number;
       const nsigaje = row.getValue("ingano") as number;
-      const ukonyigurishaKuriDetail = row.getValue(
-        "ukonyigurishaKuriDetail"
-      ) as number;
+      const ukonyigurishaKuriDetail = row.getValue("ikiranguzo") as number;
+      const ikiranguzo = row.getValue("ikiranguzo") as number;
       const ayoMazeKunguka = (naranguye - nsigaje) * ukonyigurishaKuriDetail;
+      const wishyuyeAngahe = row.getValue("wishyuyeAngahe") as number;
       return (
-        <p className="text-center">{ayoMazeKunguka.toLocaleString()} Rwf</p>
+        <p className="text-center">
+          {ayoMazeKunguka === 0
+            ? `${(ikiranguzo * nsigaje - wishyuyeAngahe).toLocaleString()} Rwf`
+            : ayoMazeKunguka.toLocaleString()}{" "}
+          Rwf
+        </p>
       );
     },
   },
