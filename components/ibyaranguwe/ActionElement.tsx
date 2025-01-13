@@ -56,7 +56,6 @@ const ActionElement = ({
                 </AlertDialogHeader>
               </AlertDialogContent>
             </AlertDialog>
-            <SohoraFacture productId={id} />
           </div>
         </PopoverContent>
       </Popover>
