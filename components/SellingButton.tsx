@@ -25,7 +25,7 @@ const SellingButton = ({
 }) => {
   const router = useRouter();
 
-  const { productData, phone, setName } = useClientInfoStore();
+  const { productData, phone } = useClientInfoStore();
   const { toast } = useToast();
   const session = useSession();
   const userId = session.data?.user;
@@ -76,6 +76,7 @@ const SellingButton = ({
           yishyuye: value === "Yego" ? true : false,
           yishyuyezingahe: value === "Yego" ? product.aratwaraZingahe : 0,
           amazeKwishyura: value === "Yego" ? product.yishyuyeAngahe : 0,
+          ayomazeGucuruza: product.ayomazeGucuruza,
         });
       }
 

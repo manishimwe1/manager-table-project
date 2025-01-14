@@ -38,25 +38,28 @@ const ActionElement = ({
         </PopoverTrigger>
         <PopoverContent asChild className="!p-0 !gap-0.5">
           <div className="flex items-start justify-center flex-col  !w-full">
-            <AlertDialog
-              open={dialogOpen}
-              onOpenChange={() => {
-                setDialogOpen(!dialogOpen);
-              }}
-            >
-              <AlertDialogTrigger className="py-2 px-4 hover:bg-stone-700 w-full rounded-sm text-sm text-left">
-                Ishyuye ideni
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle></AlertDialogTitle>
+            {ndanguyeGute !== "nishyuyeCash" && (
+              <AlertDialog
+                open={dialogOpen}
+                onOpenChange={() => {
+                  setDialogOpen(!dialogOpen);
+                }}
+              >
+                <AlertDialogTrigger className="py-2 px-4 hover:bg-stone-700 w-full rounded-sm text-sm text-left">
+                  Ishyura ideni
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle></AlertDialogTitle>
 
-                  <div>
-                    <IshyuyeIdeni id={id} setDialogOpen={setDialogOpen} />
-                  </div>
-                </AlertDialogHeader>
-              </AlertDialogContent>
-            </AlertDialog>
+                    <div>
+                      <IshyuyeIdeni id={id} setDialogOpen={setDialogOpen} />
+                    </div>
+                  </AlertDialogHeader>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
+
             <DeleteProductButton id={id} />
           </div>
         </PopoverContent>

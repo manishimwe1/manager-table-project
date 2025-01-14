@@ -16,6 +16,7 @@ export const createTask = mutation({
     userId: v.id("user"),
     ibyoUranguyeType: v.string(),
     byoseHamwe: v.number(),
+    ayomazeGucuruza: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     console.log(args.userId, "userID..............");
@@ -33,6 +34,7 @@ export const createTask = mutation({
       byoseHamwe: args.byoseHamwe,
       inganoYizoNishyuye: args.inganoYizoNishyuye,
       wishyuyeAngahe: args.wishyuyeAngahe,
+      ayomazeGucuruza: args.ayomazeGucuruza,
     });
     if (!newProduct) {
       return new ConvexError("SOMETHING WENT WRONNG WHILE CREATING ");
@@ -171,7 +173,13 @@ export const getProductById = query({
 });
 
 export const updateProdut = internalMutation({
-  args: { id: v.id("product"), value: v.number(), productType: v.string() },
+  args: {
+    id: v.id("product"),
+    value: v.number(),
+    productType: v.string(),
+    ayomazeGucuruza: v.optional(v.number()),
+  },
+
   handler: async (ctx, args) => {
     const { id } = args;
     const product = await ctx.db.get(id);
@@ -186,11 +194,17 @@ export const updateProdut = internalMutation({
     ) {
       return await ctx.db.patch(id, {
         byoseHamwe: Number(product?.byoseHamwe) - args.value,
+        ayomazeGucuruza:
+          Number(product?.ayomazeGucuruza) +
+          args.value * product?.ukonyigurishaKuriDetail!,
       });
     } else if (args.productType === "Kuri detail") {
       return await ctx.db.patch(id, {
         ingano: Number(product?.ingano) - args.value,
         byoseHamwe: Number(product?.byoseHamwe) - args.value,
+        ayomazeGucuruza:
+          Number(product?.ayomazeGucuruza) +
+          args.value * product?.ukonyigurishaKuriDetail!,
       });
     }
   },

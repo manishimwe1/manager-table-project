@@ -105,6 +105,7 @@ export default function DataTable({
                     ingano={product.ingano}
                     igicuruzwa={product.igicuruzwa}
                     data={data}
+                    ayomazeGucuruza={product.ayomazeGucuruza}
                   />
                 </TableCell>
               </TableRow>

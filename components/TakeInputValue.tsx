@@ -27,6 +27,7 @@ const TakeInputValue = ({
   draftPurchase,
   loading,
   data,
+  ayomazeGucuruza,
 }: {
   id: Id<"product">;
   setActiveRow: Dispatch<SetStateAction<boolean>>;
@@ -38,6 +39,7 @@ const TakeInputValue = ({
   igicuruzwa: string;
   draftPurchase?: { aratwaraZingahe: number } | null;
   loading: boolean;
+  ayomazeGucuruza: number;
 }) => {
   const session = useSession();
   const userId = session.data?.user;
@@ -143,6 +145,7 @@ const TakeInputValue = ({
       igicuruzwa,
       ukonyigurishaKuriDetail,
       userId: user?._id as Id<"user">,
+      ayomazeGucuruza,
     });
   }, [
     localInputValue,

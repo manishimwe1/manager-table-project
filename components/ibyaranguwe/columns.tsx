@@ -179,18 +179,9 @@ export const columns: ColumnDef<ProductType>[] = [
       return <p className="text-nowrap">Ayo maze Gucuruza</p>;
     },
     cell: ({ row }) => {
-      const naranguye = row.getValue("ndanguyeZingahe") as number;
-      const nsigaje = row.getValue("ingano") as number;
-      const ukonyigurishaKuriDetail = row.getValue(
-        "ukonyigurishaKuriDetail"
-      ) as number;
-      const productType = row.getValue("ibyoUranguyeType") as string;
+      const ayomazeGucuruza = row.getValue("ayomazeGucuruza") as number;
 
-      const wishyuyeAngahe = row.getValue("") as number;
-      const ndanguyeGute = row.getValue("ndanguyeGute") as string;
-      const ikiranguzo = row.getValue("ikiranguzo") as number;
-      const ayoMazeKunguka = (naranguye - nsigaje) * ukonyigurishaKuriDetail;
-      return <p className="text-center">{ayoMazeKunguka.toLocaleString()} </p>;
+      return <p className="text-center">{ayomazeGucuruza.toLocaleString()} </p>;
     },
   },
   {
@@ -204,5 +195,10 @@ export const columns: ColumnDef<ProductType>[] = [
         | "nishyuyeMake";
       return <ActionElement id={id} ndanguyeGute={ndanguyeGute} />;
     },
+  },
+  {
+    accessorKey: "ayomazeGucuruza",
+    header: undefined,
+    cell: () => undefined,
   },
 ];

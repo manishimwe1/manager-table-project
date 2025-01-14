@@ -15,6 +15,7 @@ export default defineSchema({
     ndanguyeGute: v.string(),
     inganoYizoNishyuye: v.number(),
     wishyuyeAngahe: v.number(),
+    ayomazeGucuruza: v.optional(v.number()),
   })
     .index("by_igicuruzwa", ["igicuruzwa"])
     .index("by_userId", ["userId"]),

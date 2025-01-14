@@ -13,6 +13,7 @@ export interface ProductInfo {
   ukonyigurishaKuriDetail: number; // Amount left
   igicuruzwa: string; // Product name
   userId: Id<"user">;
+  ayomazeGucuruza: number;
 }
 
 interface ClientInfo {

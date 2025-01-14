@@ -82,6 +82,7 @@ export function PurchaseForm({
         inganoYizoNishyuye: 0,
         wishyuyeAngahe: 0,
         uzishyuraAngahe: 0,
+        ayomazeGucuruza: 0,
       }),
       [product, ndanguyeGute, byoseHamwe]
     ),
@@ -153,6 +154,7 @@ export function PurchaseForm({
         byoseHamwe: byoseHamwe,
         inganoYizoNishyuye: values.inganoYizoNishyuye,
         wishyuyeAngahe: values.wishyuyeAngahe,
+        ayomazeGucuruza: 0,
       });
     }
     setOpen(false);

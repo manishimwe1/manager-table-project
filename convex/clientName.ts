@@ -21,6 +21,7 @@ export const createClient = mutation({
     facture: v.number(),
     yishyuyezingahe: v.optional(v.number()),
     amazeKwishyura: v.optional(v.number()),
+    ayomazeGucuruza: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const product = await ctx.db.get(args.productId);
@@ -46,6 +47,7 @@ export const createClient = mutation({
       id: args.productId,
       value: args.aratwaraZingahe,
       productType: args.productType,
+      ayomazeGucuruza: args.ayomazeGucuruza,
     });
     if (!newClient) {
       return new ConvexError("SOMETHING WENT WRONNG WHILE CREATING ");
