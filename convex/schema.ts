@@ -42,20 +42,16 @@ export default defineSchema({
     image: v.optional(v.string()),
     role: v.string(),
   }),
-  draftPurchase: defineTable({
-    purchaseNumber: v.number(),
+  ingaruProduct: defineTable({
     igicuruzwa: v.string(),
-    ingano: v.number(),
-    ukonyigurishaKuriDetail: v.number(),
-    byoseHamwe: v.number(),
+    inganoYizoAgaruye: v.number(),
     userId: v.string(),
     productId: v.id("product"),
-    productType: v.string(),
-    aratwaraZingahe: v.number(),
-    yishyuyeAngahe: v.number(),
     name: v.string(),
+    phone: v.number(),
     factureNumber: v.number(),
+    ayoyariYishyuye: v.number(),
   })
-    .index("by_factureNumber", ["factureNumber"])
+    .index("by_name", ["name"])
     .index("by_userId", ["userId"]),
 });

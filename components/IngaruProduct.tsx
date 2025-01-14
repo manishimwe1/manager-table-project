@@ -40,6 +40,7 @@ function IngaruForm({ client }: { client: Client | null | undefined }) {
   const product = useQuery(api.product.getProductById, {
     id: client?.productId as Id<"product">,
   });
+  const ingaruProduct = useMutation(api.ingaruProduct.IngaruProduct);
   const updateProduct = useMutation(api.product.updateProduct);
   const updatClient = useMutation(api.clientName.updateClient);
 
@@ -89,7 +90,19 @@ function IngaruForm({ client }: { client: Client | null | undefined }) {
         inganoYizoNishyuye:
           product.inganoYizoNishyuye - Number(values.agaruyeZingahe),
         wishyuyeAngahe: product.wishyuyeAngahe - returnedClientMoney,
+        ayomazeGucuruza: product?.ayomazeGucuruza! - returnedClientMoney,
       },
+    });
+
+    ingaruProduct({
+      ayoyariYishyuye: client.yishyuyeAngahe,
+      factureNumber: client.facture,
+      igicuruzwa: client.igicuruzwa,
+      inganoYizoAgaruye: Number(values.agaruyeZingahe),
+      name: client.name,
+      phone: client.phone!,
+      productId: client.productId,
+      userId: client.userId,
     });
     form.reset();
     setLoading(false);

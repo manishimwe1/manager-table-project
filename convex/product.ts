@@ -118,6 +118,7 @@ export const updateProduct = mutation({
       byoseHamwe: v.optional(v.number()),
       ibyoUranguyeType: v.optional(v.string()),
       inganoYizoNishyuye: v.optional(v.number()),
+      ayomazeGucuruza: v.optional(v.number()),
     }),
   },
 
