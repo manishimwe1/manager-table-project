@@ -57,10 +57,7 @@ const ActionElement = ({
                 </AlertDialogHeader>
               </AlertDialogContent>
             </AlertDialog>
-            <DeleteProductButton
-              setDialogOpen={setDialogOpen}
-              dialogOpen={dialogOpen}
-            />
+            <DeleteProductButton id={id} />
           </div>
         </PopoverContent>
       </Popover>

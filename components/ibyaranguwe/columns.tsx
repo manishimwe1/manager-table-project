@@ -133,7 +133,6 @@ export const columns: ColumnDef<ProductType>[] = [
     },
     cell: ({ row }) => {
       const inganoYizoNishyuye = row.getValue("inganoYizoNishyuye") as number;
-      const productType = row.getValue("ibyoUranguyeType") as string;
       const wishyuyeAngahe = row.getValue("wishyuyeAngahe") as number;
       const ndanguyeGute = row.getValue("ndanguyeGute") as string;
       return (
@@ -147,13 +146,6 @@ export const columns: ColumnDef<ProductType>[] = [
               {inganoYizoNishyuye} zihagaze {wishyuyeAngahe.toLocaleString()}{" "}
               Rwf
             </span>
-          )}
-
-          {productType === "Ikesi x 12" && (
-            <span className="text-[12px] mr-1">Kwi kesi </span>
-          )}
-          {productType === "Ikesi x 20" && (
-            <span className="text-[12px] mr-1">Kwi kesi </span>
           )}
         </p>
       );
@@ -189,18 +181,16 @@ export const columns: ColumnDef<ProductType>[] = [
     cell: ({ row }) => {
       const naranguye = row.getValue("ndanguyeZingahe") as number;
       const nsigaje = row.getValue("ingano") as number;
-      const ukonyigurishaKuriDetail = row.getValue("ikiranguzo") as number;
+      const ukonyigurishaKuriDetail = row.getValue(
+        "ukonyigurishaKuriDetail"
+      ) as number;
+      const productType = row.getValue("ibyoUranguyeType") as string;
+
+      const wishyuyeAngahe = row.getValue("") as number;
+      const ndanguyeGute = row.getValue("ndanguyeGute") as string;
       const ikiranguzo = row.getValue("ikiranguzo") as number;
       const ayoMazeKunguka = (naranguye - nsigaje) * ukonyigurishaKuriDetail;
-      const wishyuyeAngahe = row.getValue("wishyuyeAngahe") as number;
-      return (
-        <p className="text-center">
-          {ayoMazeKunguka === 0
-            ? `${(ikiranguzo * nsigaje - wishyuyeAngahe).toLocaleString()} Rwf`
-            : ayoMazeKunguka.toLocaleString()}{" "}
-          Rwf
-        </p>
-      );
+      return <p className="text-center">{ayoMazeKunguka.toLocaleString()} </p>;
     },
   },
   {

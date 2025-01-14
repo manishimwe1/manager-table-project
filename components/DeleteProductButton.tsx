@@ -1,41 +1,58 @@
-import React, { Dispatch, SetStateAction } from "react";
+import { useState } from "react";
 import {
   AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
+  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "./ui/alert-dialog";
-import { Button } from "./ui/button";
+} from "@/components/ui/alert-dialog";
 
-function DeleteProductButton({
-  setDialogOpen,
-  dialogOpen,
-}: {
-  setDialogOpen: Dispatch<SetStateAction<boolean>>;
-  dialogOpen: boolean;
-}) {
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import { useToast } from "@/hooks/use-toast";
+
+function DeleteProductButton({ id }: { id: Id<"product"> }) {
+  const { toast } = useToast();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const deleteProduct = useMutation(api.product.deleteProduct);
   return (
-    <div>
-      <AlertDialog
-        open={dialogOpen}
-        onOpenChange={() => {
-          setDialogOpen(!dialogOpen);
-        }}
-      >
-        <AlertDialogTrigger className="py-2 px-4 hover:bg-stone-700 w-full rounded-sm text-sm text-left">
-          Ishyuye ideni
+    <div className="flex items-start justify-center flex-col  !w-full">
+      <AlertDialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
+        <AlertDialogTrigger className="text-red-500 py-2 px-4 hover:bg-stone-700 w-full rounded-sm text-sm text-left">
+          Siba igicuruzwa
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle></AlertDialogTitle>
-
-            <p>urabyemeza neza ikigikorwa nigisubizwa inyama</p>
+            <AlertDialogTitle>
+              {" "}
+              urabyemeza neza ikigikorwa nigisubizwa inyuma
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Iki gikorwa ntigishobora gusubirwamo. Ibi birasiba burundu
+              igicuruzwa cyawe muri seriveri yacu.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <Button>cancel</Button>
-            <Button>siba</Button>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 text-white hover:bg-red-700"
+              onClick={() => {
+                deleteProduct({ id });
+                setDeleteModalOpen(false);
+                toast({
+                  title: "Product deleted successfully",
+                  description: "Product has been deleted.",
+                  variant: "success",
+                });
+              }}
+            >
+              Siba igicuruzwa
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
