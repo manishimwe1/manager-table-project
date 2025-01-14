@@ -1,7 +1,7 @@
 import { ConvexError, v } from "convex/values";
-import { mutation } from "./_generated/server";
+import { internalMutation, mutation } from "./_generated/server";
 
-export const IngaruProduct = mutation({
+export const IngaruProduct = internalMutation({
   args: {
     igicuruzwa: v.string(),
     inganoYizoAgaruye: v.number(),
