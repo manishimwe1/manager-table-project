@@ -32,10 +32,7 @@ export default function DataTable({
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [activeRow, setActiveRow] = useState(false);
-  const draftPurchases = useQuery(api.draftPurchace.getDraftPurchase, {
-    name, // Use customerName instead of global name
-    factureNumber: factureNumber,
-  });
+
   return (
     <div className="w-full flex flex-col gap-1 md:gap-2 lg:flex-row  h-full justify-between shadow-lg dark:shadow-black shadow-slate-100 rounded-md ">
       {data ? (

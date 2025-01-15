@@ -43,7 +43,6 @@ export default defineSchema({
     role: v.string(),
   }),
   ingaruProduct: defineTable({
-    igicuruzwa: v.string(),
     inganoYizoAgaruye: v.number(),
     userId: v.string(),
     productId: v.id("product"),

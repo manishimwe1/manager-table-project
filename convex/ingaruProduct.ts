@@ -1,9 +1,8 @@
 import { ConvexError, v } from "convex/values";
-import { internalMutation, mutation } from "./_generated/server";
+import { internalMutation, mutation, query } from "./_generated/server";
 
-export const IngaruProduct = internalMutation({
+export const IngaruProduct = mutation({
   args: {
-    igicuruzwa: v.string(),
     inganoYizoAgaruye: v.number(),
     userId: v.id("user"),
     productId: v.id("product"),
@@ -17,7 +16,6 @@ export const IngaruProduct = internalMutation({
 
     const ingaruProduct = await ctx.db.insert("ingaruProduct", {
       userId: args.userId,
-      igicuruzwa: args.igicuruzwa,
       inganoYizoAgaruye: args.inganoYizoAgaruye,
       productId: args.productId,
       name: args.name,
@@ -29,5 +27,24 @@ export const IngaruProduct = internalMutation({
       return new ConvexError("SOMETHING WENT WRONNG WHILE CREATING ");
     }
     return ingaruProduct;
+  },
+});
+
+export const getIngaruProduct = query({
+  args: { userId: v.optional(v.id("user")) },
+  handler: async (ctx, args) => {
+    const IngaruProduct = await ctx.db
+      .query("ingaruProduct")
+      .withIndex("by_userId", (q) => q.eq("userId", args.userId!))
+      .order("desc")
+      .collect();
+
+    if (!IngaruProduct) {
+      console.log(
+        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING IngaruProduct")
+      );
+      return [];
+    }
+    return IngaruProduct;
   },
 });

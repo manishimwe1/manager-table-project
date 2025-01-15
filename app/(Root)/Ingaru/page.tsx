@@ -7,13 +7,13 @@ import { DataTable } from "@/components/ibyaranguwe/DataTable";
 import SearchBox from "@/components/SearchBox";
 import { api } from "@/convex/_generated/api";
 import { useClientInfoStore } from "@/lib/store/zustand";
-import { ProductType } from "@/types";
+import { IngaruProductType, ProductType } from "@/types";
 import { useQuery } from "convex/react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
-const StockPage = () => {
+const IngaruPage = () => {
   const [searchValue, setSearchValue] = useState("");
   const { openDrawer, setOpenDrawer } = useClientInfoStore();
   const session = useSession();
@@ -30,26 +30,29 @@ const StockPage = () => {
   const user = useQuery(api.user.getUserIndb, {
     email: userId?.email ?? undefined,
   });
-  const data: ProductType[] | undefined = useQuery(api.product.getProduct, {
-    userId: user?._id,
-  });
+  const data: IngaruProductType[] | undefined = useQuery(
+    api.ingaruProduct.getIngaruProduct,
+    {
+      userId: user?._id,
+    }
+  );
   console.log(openDrawer, "openDrawer");
   const filteredData = useMemo(() => {
     if (!searchValue) return data;
     return data?.filter((item) =>
-      item.igicuruzwa.toLowerCase().includes(searchValue.toLowerCase())
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
     );
   }, [searchValue, data]);
   console.log(data);
   return (
     <section className="w-full mt-2 space-y-4 px-2">
-      <HeaderSection title="Ibicuruzwa biri muri Stock" />
+      <HeaderSection title="Ibicuruzwa byagarutse muri Stock" />
 
       {data?.length === 0 ? (
         <EmptyPlaceholder
-          label="Rangura"
-          link="/rangura"
-          title="Stock ntakintu kirimo "
+          label="Ntangaru ufite muri stock"
+          link="/ibyagurishijwe"
+          title="Ntangaru ufite muri stock "
         />
       ) : (
         <>
@@ -71,4 +74,4 @@ const StockPage = () => {
   );
 };
 
-export default StockPage;
+export default IngaruPage;

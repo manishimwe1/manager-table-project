@@ -36,10 +36,6 @@ const IbyagurishijwePage = () => {
   // Always call hooks consistently
   const user = useQuery(api.user.getUserIndb, { email: userId?.email || "" });
 
-  const product: ProductType[] | undefined = useQuery(api.product.getProduct, {
-    userId: user?._id as Id<"user">,
-  });
-
   const saledProduct = useQuery(api.clientName.getSaledProduct, {
     userId: user?._id as Id<"user">,
   });

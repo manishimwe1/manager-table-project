@@ -9,7 +9,7 @@ import { Badge } from "../ui/badge";
 import React from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { AlertTriangleIcon, HandCoins, MoreVertical } from "lucide-react";
+import { MoreVertical } from "lucide-react";
 import ActionComponents from "../ActionComponents";
 import ShowBadge from "./ShowBadge";
 
@@ -46,7 +46,7 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: "aratwaraZingahe",
-    header: "Yatwaye ",
+    header: () => <p className="text-center">Yatwaye</p>,
     cell: ({ row }) => {
       const aratwaraZingahe = row.getValue("aratwaraZingahe") as number;
       return <p className="text-center">{aratwaraZingahe}</p>;
@@ -66,15 +66,15 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: "phone",
-    header: () => <p className="text-nowrap ">Phone y'umukiriya</p>,
+    header: () => <p className="text-nowrap text-center">Phone y'umukiriya</p>,
     cell: ({ row }) => {
       const phone = row.getValue("phone") as number;
-      return <p>{phone}</p>;
+      return <p className="text-center">0{phone}</p>;
     },
   },
   {
     accessorKey: "productId",
-    header: () => <p className="text-nowrap ">Uko nyigurisha</p>,
+    header: () => <p className="text-nowrap text-center">Uko nyigurisha</p>,
     cell: ({ row }) => {
       const productId = row.getValue("productId") as Id<"product">;
       return <ShowUkonyiranguza productId={productId} />;
@@ -88,7 +88,7 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: "yishyuyeAngahe",
-    header: undefined,
+    header: () => <p className="text-nowrap text-center">Yarishyuye</p>,
     cell: ({ row }) => {
       const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as number;
       const productId = row.getValue("productId") as Id<"product">;

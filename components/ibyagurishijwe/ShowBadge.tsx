@@ -23,7 +23,7 @@ export default function ShowBadge({
   const ukonyigurishaKuriDetail = product?.ukonyigurishaKuriDetail as number;
 
   return (
-    <div className="text-right">
+    <div className="text-center">
       {" "}
       {yarishyuye ? (
         <Badge

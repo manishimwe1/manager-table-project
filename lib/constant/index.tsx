@@ -4,6 +4,7 @@ import {
   Home,
   PackagePlus,
   ScrollText,
+  Undo2,
 } from "lucide-react";
 
 export const navLink = [
@@ -31,5 +32,10 @@ export const navLink = [
     label: "Amadeni ",
     route: "/ideni",
     Icon: <ScrollText className="text-gray-500 h-4 w-4" />,
+  },
+  {
+    label: "Ingaru ",
+    route: "/Ingaru",
+    Icon: <Undo2 className="text-gray-500 h-4 w-4" />,
   },
 ];

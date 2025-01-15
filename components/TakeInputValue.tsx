@@ -24,7 +24,6 @@ const TakeInputValue = ({
   byoseHamwe,
   ingano,
   igicuruzwa,
-  draftPurchase,
   loading,
   data,
   ayomazeGucuruza,
@@ -37,7 +36,6 @@ const TakeInputValue = ({
   byoseHamwe: number;
   ingano: number;
   igicuruzwa: string;
-  draftPurchase?: { aratwaraZingahe: number } | null;
   loading: boolean;
   ayomazeGucuruza: number;
 }) => {
@@ -46,22 +44,11 @@ const TakeInputValue = ({
   const { toast } = useToast();
   const user = useQuery(api.user.getUserIndb, { email: userId?.email || "" });
 
-  const [localInputValue, setLocalInputValue] = useState<string>(
-    draftPurchase?.aratwaraZingahe?.toString() || ""
-  );
-  const [localCalculatedValue, setLocalCalculatedValue] = useState<number>(
-    draftPurchase ? draftPurchase.aratwaraZingahe * ukonyigurishaKuriDetail : 0
-  );
+  const [localInputValue, setLocalInputValue] = useState<string>("");
+  const [localCalculatedValue, setLocalCalculatedValue] = useState<number>(0);
 
-  const {
-    name,
-    factureNumber,
-    updateProduct,
-    productData,
-    isSubmitting,
-    addProduct,
-    removeProduct,
-  } = useClientInfoStore();
+  const { name, updateProduct, productData, addProduct, removeProduct } =
+    useClientInfoStore();
 
   const MAX_VALUE =
     productType === "Ikesi x 20" || productType === "Ikesi x 12"
@@ -159,6 +146,7 @@ const TakeInputValue = ({
     igicuruzwa,
     user?._id,
     toast,
+    ayomazeGucuruza,
   ]);
 
   return (

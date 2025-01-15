@@ -64,7 +64,7 @@ export type ProductType = {
   ibyoUranguyeType: string;
   inganoYizoNishyuye: number;
   wishyuyeAngahe: number;
-  ayomazeGucuruza: number;
+  ayomazeGucuruza?: number;
 };
 
 export interface Client {
@@ -95,26 +95,21 @@ export interface outOfStock {
   ndanguyeZingahe: number;
 }
 
-export interface DraftPurchaseType {
-  _id: Id<"draftPurchase">;
-  _creationTime: number;
-  purchaseNumber: number;
-  userId: Id<"user">;
-  igicuruzwa: string;
-  ingano: number;
-  ukonyigurishaKuriDetail: number;
-  aratwaraZingahe: number;
-  productType: string;
-  byoseHamwe: number;
-  productId: Id<"product">;
-  yishyuyeAngahe: number;
-  name: string;
-  factureNumber: number;
-}
-
 export type NdanguyeGute = {
   nishyuyeCash: "nishyuyeCash";
   mfasheIdeni: "mfasheIdeni";
   nishyuyeMake: "nishyuyeMake";
   undefined;
 };
+
+export interface IngaruProductType {
+  _id: Id<"ingaruProduct">;
+  _creationTime: number;
+  userId: string;
+  name: string;
+  phone: number;
+  productId: Id<"product">;
+  inganoYizoAgaruye: number;
+  factureNumber: number;
+  ayoyariYishyuye: number;
+}

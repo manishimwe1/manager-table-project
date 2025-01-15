@@ -1,5 +1,3 @@
-import { DraftPurchaseType } from "@/types";
-import { ArrowUp01, Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { ProductInfo, useClientInfoStore } from "@/lib/store/zustand";

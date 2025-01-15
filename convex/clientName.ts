@@ -49,6 +49,7 @@ export const createClient = mutation({
       productType: args.productType,
       ayomazeGucuruza: args.ayomazeGucuruza,
     });
+
     if (!newClient) {
       return new ConvexError("SOMETHING WENT WRONNG WHILE CREATING ");
     }

@@ -40,10 +40,10 @@ function IngaruForm({ client }: { client: Client | null | undefined }) {
   const product = useQuery(api.product.getProductById, {
     id: client?.productId as Id<"product">,
   });
-  const ingaruProduct = useMutation(api.ingaruProduct.IngaruProduct);
+
   const updateProduct = useMutation(api.product.updateProduct);
   const updatClient = useMutation(api.clientName.updateClient);
-
+  const createIngaru = useMutation(api.ingaruProduct.IngaruProduct);
   const form = useForm<z.infer<typeof ingaruSchema>>({
     resolver: zodResolver(ingaruSchema),
     defaultValues: {
@@ -94,11 +94,10 @@ function IngaruForm({ client }: { client: Client | null | undefined }) {
       },
     });
 
-    ingaruProduct({
+    createIngaru({
       ayoyariYishyuye: client.yishyuyeAngahe,
       factureNumber: client.facture,
-      igicuruzwa: client.igicuruzwa,
-      inganoYizoAgaruye: Number(values.agaruyeZingahe),
+      inganoYizoAgaruye: values.agaruyeZingahe,
       name: client.name,
       phone: client.phone!,
       productId: client.productId,
@@ -152,7 +151,7 @@ function IngaruForm({ client }: { client: Client | null | undefined }) {
                 className="bg-blue-600 font-bold text-white hover:bg-blue-700"
                 disabled={loading}
               >
-                {loading ? "saving..." : "yakire"}
+                {loading ? "saving..." : "yibike"}
               </Button>
               <Button
                 type="submit"
