@@ -40,15 +40,6 @@ const IbyagurishijwePage = () => {
     userId: user?._id as Id<"user">,
   });
 
-  const ClientWhoPaid = useQuery(api.clientName.getClientWhoPaid, {
-    userId: user?._id as Id<"user">,
-  });
-
-  const saledProductInDENI: Client[] | undefined = useQuery(
-    api.clientName.getSaledProductInDeni,
-    undefined
-  );
-
   useEffect(() => {
     if (!userId) {
       redirect("/login");
@@ -57,7 +48,13 @@ const IbyagurishijwePage = () => {
 
   if (session.status === "loading") return <SkeletonLoader />;
 
-  if (!saledProduct?.length) {
+  const groupedData = groupByDateInSaled(saledProduct || []);
+
+  const handleToggle = (date: string) => {
+    setOpenState((prev) => ({ ...prev, [date]: !prev[date] })); // Toggle open state
+    setSelectedDate(date); // Set the selected date
+  };
+  if (saledProduct?.length === 0) {
     return (
       <EmptyPlaceholder
         title="Ntagicuruzwa uracuruza uyumunsi"
@@ -66,14 +63,6 @@ const IbyagurishijwePage = () => {
       />
     );
   }
-
-  const groupedData = groupByDateInSaled(saledProduct || []);
-
-  const handleToggle = (date: string) => {
-    setOpenState((prev) => ({ ...prev, [date]: !prev[date] })); // Toggle open state
-    setSelectedDate(date); // Set the selected date
-  };
-
   return (
     <section className="w-full">
       <HeaderSection title="Urutonde rw'ibyacurujwe" />

@@ -151,15 +151,24 @@ function SohoraFactureForm({
                 )}
               />
             </div>
-            <div className="w-full  flex justify-end">
-              <Button
-                type="submit"
-                className="bg-blue-600 font-bold text-white hover:bg-blue-700"
-                disabled={loading}
-              >
-                {loading ? "Ohereza..." : "Ohereza"}
-              </Button>
-            </div>
+            <Dialog>
+              <DialogTrigger>
+                <div className="w-full  flex justify-end">
+                  <p className="bg-blue-600 font-bold text-white hover:bg-blue-700">
+                    {loading ? "Ohereza..." : "Ohereza"}
+                  </p>
+                </div>
+              </DialogTrigger>
+              <DialogContent className="!w-full lg:!max-w-[700px]">
+                <DialogHeader>
+                  <DialogTitle>Are you absolutely sure?</DialogTitle>
+                  <DialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your account and remove your data from our servers.
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
           </form>
         </Form>
       )}
