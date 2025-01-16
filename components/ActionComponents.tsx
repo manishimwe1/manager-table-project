@@ -46,17 +46,6 @@ const ActionComponents = ({
         <PopoverTrigger>{children}</PopoverTrigger>
         <PopoverContent asChild className="!p-2 !gap-0.5">
           <div className="flex items-start justify-center flex-col space-y-1.5 !w-full">
-            {ibyashize && (
-              <Button
-                className="w-full !text-start  !items-start flex justify-start "
-                variant={"ghost"}
-                onClick={() => {
-                  // handleClick();
-                }}
-              >
-                Rangura indi
-              </Button>
-            )}{" "}
             {bishyuye === false ? (
               <>
                 <AlertDialog

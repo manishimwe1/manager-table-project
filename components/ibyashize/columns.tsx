@@ -8,6 +8,7 @@ import { Badge } from "../ui/badge";
 import ActionComponents from "../ActionComponents";
 import { MoreVertical } from "lucide-react";
 import { Id } from "@/convex/_generated/dataModel";
+import ActionElement from "../ibyaranguwe/ActionElement";
 
 export const columns: ColumnDef<outOfStock>[] = [
   {
@@ -105,10 +106,10 @@ export const columns: ColumnDef<outOfStock>[] = [
       const status = row.getValue("status") as boolean;
       console.log(status, "status");
       const id = row.getValue("_id") as Id<"product">;
+      const ndanguyeGute = row.getValue("ndanguyeGute") as "nishyuyeCash" | "mfasheIdeni" | "nishyuyeMake";
+
       return (
-        <ActionComponents id={id} bishyuye={status} ibyashize={true}>
-          <MoreVertical />
-        </ActionComponents>
+        <ActionElement id={id} ndanguyeGute={ndanguyeGute} />
       );
     },
   },

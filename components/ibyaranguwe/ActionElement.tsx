@@ -20,6 +20,7 @@ import IshyuyeIdeni from "./IshyuraFormAction";
 import SendSmsButton from "../SendSmsButton";
 import SohoraFacture from "../SohoraFacture";
 import DeleteProductButton from "../DeleteProductButton";
+import Link from "next/link";
 
 const ActionElement = ({
   id,
@@ -59,7 +60,16 @@ const ActionElement = ({
                 </AlertDialogContent>
               </AlertDialog>
             )}
-
+            <Button
+              className="w-full !text-start  !items-start flex justify-start "
+              variant={"ghost"}
+              onClick={() => {
+                // handleClick();
+              }}
+              asChild
+            >
+              <Link href={'/rangura'}> Rangura indi</Link>
+            </Button>
             <DeleteProductButton id={id} />
           </div>
         </PopoverContent>
