@@ -174,7 +174,7 @@ const IngaruProduct = ({ clientId }: { clientId: Id<"client"> }) => {
     id: clientId as Id<"client">,
   });
 
-  console.log(client, "client");
+  // console.log(client, "client");
 
   return (
     <Dialog>

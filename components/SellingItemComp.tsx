@@ -82,7 +82,7 @@ const SellingItemComp = ({
                     <p className="capitalize text-sm">{purchase.igicuruzwa}</p>
                     <p className="text-sm">{purchase.aratwaraZingahe}</p>
                   </div>
-                  <p className="text-sm">{purchase.yishyuyeAngahe}</p>
+                  <p className="text-sm">{purchase.yishyuyeAngahe.toLocaleString()}{" "}rwf</p>
                 </div>
               </ScrollArea>
             ))}

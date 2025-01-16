@@ -106,9 +106,7 @@ const SalesPage: React.FC = () => {
               className={cn(
                 "flex items-center justify-between w-full text-lg text-balance border-b-2 border-blue-200 dark:border-stone-700 shadow-sm text-gray-800 dark:text-gray-200 shadow-background py-2 px-3 rounded-xl bg-background  dark:shadow-black/70"
               )}
-              onClick={() => {
-                console.log(isListOpen);
-              }}
+
             >
               Reba abakiriya buyumunsi
               <ChevronsDownUp
@@ -184,7 +182,7 @@ const SalesPage: React.FC = () => {
                       });
                       return;
                     }
-                    setPhone(Number(phoneInput));
+                    setPhone(Number(`25${phoneInput}`));
                   }}
                   placeholder="Shyiramo telephone"
                 />

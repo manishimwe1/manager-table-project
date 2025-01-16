@@ -69,7 +69,7 @@ export const columns: ColumnDef<Client>[] = [
     header: () => <p className="text-nowrap text-center">Phone y'umukiriya</p>,
     cell: ({ row }) => {
       const phone = row.getValue("phone") as number;
-      return <p className="text-center">0{phone}</p>;
+      return <p className="text-center">+{phone}</p>;
     },
   },
   {

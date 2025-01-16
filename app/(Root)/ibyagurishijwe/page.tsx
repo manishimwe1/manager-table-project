@@ -79,18 +79,6 @@ const IbyagurishijwePage = () => {
               >
                 Urutonde rw'ibyacurujwe {getTranslatedDay(date)}
                 <div className="lg:flex items-center justify-end lg:gap-3 gap-1 hidden">
-                  {/* <p className="font-semibold text-gray-800 dark:text-gray-50 italic text-xs uppercase flex justify-end items-center gap-1">
-                    Ideni ufitemo:{" "}
-                    <span className="text-lg ml-2 text-red-300">
-                      {items
-                        ?.reduce(
-                          (a, item) => a + (item.aratwaraZingahe || 0),
-                          0
-                        )
-                        .toLocaleString()}
-                    </span>{" "}
-                    Rwf
-                  </p> */}
                   <ChevronsDownUp
                     className={cn(
                       "text-gray-800 dark:text-gray-200 transition-transform",

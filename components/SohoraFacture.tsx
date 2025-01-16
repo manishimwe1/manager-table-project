@@ -19,6 +19,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
+
 } from "@/components/ui/dialog";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,16 +31,19 @@ import useBusinessStore from "@/lib/store/zustand";
 import { useRouter } from "next/navigation";
 import { Client, ProductType } from "@/types";
 import SkeletonLoader from "./SkeletonLoader";
+import InvoiceClient from "./InvoiceClient";
 
 function SohoraFactureForm({
   clientFacture,
+  setopenDialog
 }: {
   clientFacture: Client[] | undefined;
+  setopenDialog: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { setBusinessData } = useBusinessStore();
-
+  const [openFacture, setOpenFacture] = useState(false)
   const form = useForm<z.infer<typeof invoiceSchema>>({
     resolver: zodResolver(invoiceSchema),
     defaultValues: {
@@ -59,10 +64,9 @@ function SohoraFactureForm({
       streetNo: values.streetNo,
       clientFacture: clientFacture,
     });
-    setLoading(false);
+    console.log('here');
+    setOpenFacture(true)
 
-    form.reset();
-    router.push("/sohora-facture");
   }
 
   return (
@@ -151,43 +155,48 @@ function SohoraFactureForm({
                 )}
               />
             </div>
-            <Dialog>
-              <DialogTrigger>
-                <div className="w-full  flex justify-end">
-                  <p className="bg-blue-600 font-bold text-white hover:bg-blue-700">
-                    {loading ? "Ohereza..." : "Ohereza"}
-                  </p>
-                </div>
-              </DialogTrigger>
-              <DialogContent className="!w-full lg:!max-w-[700px]">
-                <DialogHeader>
-                  <DialogTitle>Are you absolutely sure?</DialogTitle>
-                  <DialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    your account and remove your data from our servers.
-                  </DialogDescription>
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
+            <div className="flex justify-end gap-2">
+              <Button
+                type="submit"
+                className="bg-blue-600 font-bold text-white hover:bg-blue-700 px-2 py-1 rounded-md">
+                Ohereza
+              </Button>
+              <DialogClose className="border rounded-md px-2 py-1 ">Cancel</DialogClose>
+            </div>
+
           </form>
         </Form>
       )}
+
+      <Dialog open={openFacture} onOpenChange={() => setOpenFacture(!openFacture)}>
+        <DialogTrigger >
+        </DialogTrigger>
+        <DialogContent className="!w-full lg:!max-w-[700px] !h-full !overflow-y-scroll !overflow-x-hidden">
+          <DialogHeader>
+            <DialogTitle></DialogTitle>
+            <InvoiceClient setOpenFacture={setOpenFacture} setopenDialog={setopenDialog} />
+
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
 
 const SohoraFacture = ({ clientId }: { clientId?: Id<"client"> }) => {
+  const [openDialog, setopenDialog] = useState(false)
+
   const client = clientId
     ? useQuery(api.clientName.getClientById, { id: clientId })
     : null;
-  const clientFacture = useQuery(api.clientName.getClientWhoPaidByName, {
+  const clientFacture = useQuery(api.clientName.getClientByName, {
     name: client?.name as string,
     facture: client?.facture as number,
   });
-  console.log(clientFacture, "clientFacture");
+  // console.log(clientFacture, "clientFacture");
 
   return (
-    <Dialog>
+    <Dialog open={openDialog} onOpenChange={() => setopenDialog(!openDialog)}>
       <DialogTrigger className="  dark:hover:bg-stone-700 hover:bg-stone-200 w-full rounded-sm text-sm text-left">
         <span className="w-full !text-start !items-start flex justify-start p-2">
           Sohora facture
@@ -196,7 +205,7 @@ const SohoraFacture = ({ clientId }: { clientId?: Id<"client"> }) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle></DialogTitle>
-          <SohoraFactureForm clientFacture={clientFacture} />
+          <SohoraFactureForm clientFacture={clientFacture} setopenDialog={setopenDialog} />
         </DialogHeader>
       </DialogContent>
     </Dialog>

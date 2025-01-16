@@ -249,13 +249,12 @@ export const getClientInIdenByName = query({
   },
 });
 
-export const getClientWhoPaidByName = query({
+export const getClientByName = query({
   args: { name: v.string(), facture: v.number() },
   handler: async (ctx, args) => {
     const Client = await ctx.db
       .query("client")
       .withIndex("by_name", (q) => q.eq("name", args.name))
-      .filter((q) => q.eq(q.field("yishyuye"), true))
       .filter((q) => q.eq(q.field("facture"), args.facture))
       .order("desc")
       .collect();

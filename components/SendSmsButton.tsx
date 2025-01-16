@@ -127,9 +127,7 @@ const SendSmsButton = ({
             <span className="text-base text-blue-500">{client?.name}</span>{" "}
             ufite nimero ya {client?.phone}
           </DialogTitle>
-          <DialogDescription>
-            <ProfileForm clientName={client?.name} clientProduct={client} />
-          </DialogDescription>
+          <ProfileForm clientName={client?.name} clientProduct={client} />
         </DialogHeader>
       </DialogContent>
     </Dialog>
