@@ -1,12 +1,10 @@
-import { Loader2 } from "lucide-react";
-import React, { useMemo, useState } from "react";
-import { DataTable } from "./ibyagurishijwe/DataTable";
-import { columns } from "./ibyagurishijwe/columns";
-import { Client } from "@/types";
+import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
+import { useMemo, useState } from "react";
 import SearchBox from "./SearchBox";
+import { DataTable } from "./ibyagurishijwe/DataTable";
+import { columns } from "./ibyagurishijwe/columns";
 
 const Ibyagurishijwe = ({ userId }: { userId: Id<"user"> | undefined }) => {
   const [searchValue, setSearchValue] = useState("");

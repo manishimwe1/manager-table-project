@@ -77,7 +77,7 @@ const IbyagurishijwePage = () => {
                 )}
                 onClick={() => handleToggle(date)}
               >
-                Urutonde rw'ibyacurujwe {getTranslatedDay(date)}
+                Ibyacurujwe uyu munsi {getTranslatedDay(date)}
                 <div className="lg:flex items-center justify-end lg:gap-3 gap-1 hidden">
                   <ChevronsDownUp
                     className={cn(

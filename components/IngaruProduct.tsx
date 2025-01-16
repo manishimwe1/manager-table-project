@@ -3,7 +3,7 @@
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,6 +21,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose
 } from "@/components/ui/dialog";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,7 +34,7 @@ import SkeletonLoader from "./SkeletonLoader";
 import { ingaruSchema } from "@/lib/validations";
 import { useToast } from "@/hooks/use-toast";
 
-function IngaruForm({ client }: { client: Client | null | undefined }) {
+function IngaruForm({ client, setOpenDialog }: { client: Client | null | undefined; setOpenDialog: Dispatch<SetStateAction<boolean>> }) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
@@ -105,6 +106,7 @@ function IngaruForm({ client }: { client: Client | null | undefined }) {
     });
     form.reset();
     setLoading(false);
+    setOpenDialog(false)
   }
 
   return (
@@ -153,14 +155,12 @@ function IngaruForm({ client }: { client: Client | null | undefined }) {
               >
                 {loading ? "saving..." : "yibike"}
               </Button>
-              <Button
-                type="submit"
+              <DialogClose
                 className=""
                 disabled={loading}
-                variant={"outline"}
               >
                 cancel
-              </Button>
+              </DialogClose>
             </div>
           </form>
         </Form>
@@ -170,6 +170,7 @@ function IngaruForm({ client }: { client: Client | null | undefined }) {
 }
 
 const IngaruProduct = ({ clientId }: { clientId: Id<"client"> }) => {
+  const [openDialog, setOpenDialog] = useState(false)
   const client = useQuery(api.clientName.getClientById, {
     id: clientId as Id<"client">,
   });
@@ -177,7 +178,7 @@ const IngaruProduct = ({ clientId }: { clientId: Id<"client"> }) => {
   // console.log(client, "client");
 
   return (
-    <Dialog>
+    <Dialog open={openDialog} onOpenChange={() => setOpenDialog(!openDialog)}>
       <DialogTrigger className=" dark:hover:bg-stone-700 hover:bg-stone-200 w-full rounded-sm text-sm text-left">
         <span className="w-full !text-start !items-start text-red-600 flex justify-start p-2">
           Ingaru
@@ -186,7 +187,7 @@ const IngaruProduct = ({ clientId }: { clientId: Id<"client"> }) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle></DialogTitle>
-          <IngaruForm client={client} />
+          <IngaruForm client={client} setOpenDialog={setOpenDialog} />
         </DialogHeader>
       </DialogContent>
     </Dialog>
