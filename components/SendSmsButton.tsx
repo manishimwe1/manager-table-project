@@ -50,7 +50,7 @@ function ProfileForm({
     setSending(true);
     const requestData = {
       message: `${values.message}`,
-      to: `+250${clientProduct?.phone}`, // Example phone number
+      to: `+${clientProduct?.phone}`, // Example phone number
       provider: "twilio",
     };
 
