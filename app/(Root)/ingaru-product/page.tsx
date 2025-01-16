@@ -103,7 +103,7 @@ const IngaruPage = () => {
                   </TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody className='dark:text-gray-200 '>
                 {filteredData.map((item, index) => (
                   <TableRow key={item._id}>
                     <TableCell className="font-medium">{index + 1}</TableCell>

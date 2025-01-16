@@ -41,7 +41,7 @@ export const navLink = [
   },
   {
     label: "Ingaru ",
-    route: "/ingaru",
+    route: "/ingaru-product",
     Icon: <Undo2 className="text-gray-500 h-4 w-4" />,
   },
 ];
