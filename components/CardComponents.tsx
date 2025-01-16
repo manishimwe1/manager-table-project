@@ -46,7 +46,7 @@ const CardComponents = () => {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4  w-full ">
         <HomeCard title="Muri stock" content={product?.length} link="/stock" />
         <HomeCard
-          title="Abakiriya bafite Ideni"
+          title="Abakiriya bafite amadeni"
           content={Client?.length}
           link="/ideni"
         />

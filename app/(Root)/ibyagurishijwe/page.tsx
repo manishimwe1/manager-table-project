@@ -69,47 +69,17 @@ const IbyagurishijwePage = () => {
       <div className="w-full h-full">
         {Object.entries(groupedData).map(([date, items]) => (
           <div key={date} className={cn("py-4 rounded-lg")}>
-            <Collapsible>
-              <CollapsibleTrigger
-                className={cn(
-                  "flex items-center justify-between w-full text-lg border-b-2 border-blue-200 dark:border-stone-700 shadow-sm text-gray-800 dark:text-gray-200 shadow-background py-2 px-3 rounded-xl bg-background  dark:shadow-black/70",
-                  openState[date] ? "text-blue-300" : "text-black"
-                )}
-                onClick={() => handleToggle(date)}
-              >
-                Ibyacurujwe uyu munsi {getTranslatedDay(date)}
-                <div className="lg:flex items-center justify-end lg:gap-3 gap-1 hidden">
-                  <ChevronsDownUp
-                    className={cn(
-                      "text-gray-800 dark:text-gray-200 transition-transform",
-                      openState[date]
-                        ? "rotate-180 transition-all duration-200"
-                        : "rotate-0"
-                    )}
-                  />
-                </div>
-              </CollapsibleTrigger>
-              <CollapsibleContent
-                className={cn(
-                  "flex flex-col h-fit w-full mt-2 lg:mt-4",
-                  openState[date]
-                    ? "bg-blue-50/20 dark:bg-stone-900 rounded-lg transition-all duration-200 "
-                    : "rotate-0"
-                )}
-              >
-                <div className="flex items-center gap-2 justify-end px-4 ">
-                  <p className="lg:font-bold pr-10 text-nowrap text-xs lg:text-sm dark:text-gray-200">
-                    Byose hamwe:{" "}
-                    <span className="text-lg ml-2 text-blue-800">
-                      {items?.length}
-                    </span>
-                  </p>
-                </div>
-                <ul>
-                  <DataTable columns={columns} data={items || []} />
-                </ul>
-              </CollapsibleContent>
-            </Collapsible>
+            <div className="flex items-center gap-2 justify-end px-4 ">
+              <p className="lg:font-bold pr-10 text-nowrap text-xs lg:text-sm dark:text-gray-200">
+                Byose hamwe:{" "}
+                <span className="text-lg ml-2 text-blue-800">
+                  {items?.length}
+                </span>
+              </p>
+            </div>
+            <ul>
+              <DataTable columns={columns} data={items || []} />
+            </ul>
           </div>
         ))}
       </div>

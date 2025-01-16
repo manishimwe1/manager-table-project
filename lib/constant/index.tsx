@@ -4,14 +4,20 @@ import {
   Home,
   PackagePlus,
   ScrollText,
+  Store,
   Undo2,
 } from "lucide-react";
 
 export const navLink = [
   {
-    label: "Stock",
+    label: "Home",
     route: "/",
     Icon: <Home className="text-gray-500 h-4 w-4" />,
+  },
+  {
+    label: "Stock",
+    route: "/stock",
+    Icon: <Store className="text-gray-500 h-4 w-4" />,
   },
   {
     label: "Curuza",

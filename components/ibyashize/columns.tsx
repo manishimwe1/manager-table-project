@@ -12,6 +12,15 @@ import ActionElement from "../ibyaranguwe/ActionElement";
 
 export const columns: ColumnDef<outOfStock>[] = [
   {
+    accessorKey: "_id",
+    header: "",
+    cell: ({ row }) => {
+      <p className="text-sm dark:text-stone-400 text-stone-800">
+        {row.index + 1}
+      </p>;
+    },
+  },
+  {
     accessorKey: "igicuruzwa",
     header: "Igicuruzwa",
     cell: ({ row }) => {
@@ -33,7 +42,7 @@ export const columns: ColumnDef<outOfStock>[] = [
   },
   {
     accessorKey: "ingano",
-    header: "Hasigaye",
+    header: () => <p className="text-center">Hasigaye</p>,
     cell: ({ row }) => {
       const hasgaye = row.getValue("ingano") as number;
       return (
@@ -43,7 +52,7 @@ export const columns: ColumnDef<outOfStock>[] = [
   },
   {
     accessorKey: "ndanguyeZingahe",
-    header: "Naranguye",
+    header: () => < p className="text-center" > Naranguye</p>,
     cell: ({ row }) => {
       const naranguye = row.getValue("ndanguyeZingahe") as number;
       return (
@@ -54,7 +63,7 @@ export const columns: ColumnDef<outOfStock>[] = [
 
   {
     accessorKey: "status",
-    header: "Ideni narangujwe",
+    header: () => <p className="text-center">Naranguye gute</p>,
     cell: ({ row }) => {
       const status = row.getValue("status") as boolean;
       console.log(status, "status");
@@ -63,10 +72,10 @@ export const columns: ColumnDef<outOfStock>[] = [
         <div className="text-right">
           <Badge
             className={cn(
-              "!text-right",
+              "!text-center",
               status === false
-                ? "bg-red-500 hover:bg-red-600"
-                : "bg-green-500 hover:bg-green-600"
+                ? "bg-[#FFAAAA] hover:bg-[#FFAAAA]"
+                : "bg-[#859F3D] hover:bg-[#859F3D]"
             )}
           >
             {status === false ? (
@@ -83,22 +92,7 @@ export const columns: ColumnDef<outOfStock>[] = [
       );
     },
   },
-  {
-    accessorKey: "_id",
-    header: undefined,
-    cell: ({ row }) => {
-      //   const status = row.getValue("status") as boolean;
-      //   console.log(status, "status");
-      //   const id = row.getValue("_id") as Id<"product">;
-      //   return (
-      //     <ActionComponents id={id} bishyuye={status}>
-      //       <MoreVertical />
-      //     </ActionComponents>
-      //   );
-      // },
-      undefined;
-    },
-  },
+
   {
     accessorKey: "uzishyuraAngahe",
     header: undefined,

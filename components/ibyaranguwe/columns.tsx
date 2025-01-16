@@ -181,7 +181,7 @@ export const columns: ColumnDef<ProductType>[] = [
     cell: ({ row }) => {
       const ayomazeGucuruza = row.getValue("ayomazeGucuruza") as number;
 
-      return <p className="text-center">{ayomazeGucuruza.toLocaleString()} </p>;
+      return <p className="text-center">{ayomazeGucuruza.toLocaleString()} rwf</p>;
     },
   },
   {
