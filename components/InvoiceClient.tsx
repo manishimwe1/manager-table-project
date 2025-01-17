@@ -40,7 +40,7 @@ const InvoiceClient = ({
   console.log(clientFacture, 'clientFacture');
 
   return (
-    <section className="overflow-y-scroll w-full h-full flex flex-col gap-10 px-3 lg:px-20 lg:py-10">
+    <section className="overflow-y-scroll w-full h-full flex flex-col gap-10 px-3">
       {clientFacture ? (
         <div
           className="border shadow-md shadow-gray-200 dark:shadow-black p-4 rounded-md"
@@ -111,7 +111,7 @@ const InvoiceClient = ({
               {clientFacture.map((item) => (
                 <div
                   key={item._creationTime}
-                  className="text-sm lg:text-lg py-4 px-2 dark:text-blue-200 border-b border-blue-400/40"
+                  className=" lg:text-sm text-xs py-4 px-2 dark:text-blue-200 border-b border-blue-400/40"
                 >
                   {item.igicuruzwa}
                 </div>
@@ -124,7 +124,7 @@ const InvoiceClient = ({
               {clientFacture.map((item) => (
                 <div
                   key={item._creationTime}
-                  className="text-sm lg:text-lg py-4 px-2 dark:text-blue-200 border-b border-blue-400/40"
+                  className=" lg:text-sm text-xs py-4 px-2 dark:text-blue-200 border-b border-blue-400/40"
                 >
                   {item.aratwaraZingahe}
                 </div>
@@ -137,7 +137,7 @@ const InvoiceClient = ({
               {clientFacture.map((item) => (
                 <div
                   key={item._creationTime}
-                  className="text-sm lg:text-lg py-4 px-2 dark:text-blue-200 border-b border-blue-400/40"
+                  className=" lg:text-sm text-xs py-4 px-2 dark:text-blue-200 border-b border-blue-400/40"
                 >
                   {(item.yishyuyeAngahe / item.aratwaraZingahe).toLocaleString()}{" "}
                   Rwf
@@ -151,7 +151,7 @@ const InvoiceClient = ({
               {clientFacture.map((item) => (
                 <div
                   key={item._creationTime}
-                  className="text-sm lg:text-lg py-4 px-2 dark:text-blue-200 border-b border-blue-400/40"
+                  className=" lg:text-sm text-xs py-4 px-2 dark:text-blue-200 border-b border-blue-400/40"
                 >
                   {(item.yishyuyeAngahe * item.aratwaraZingahe).toLocaleString()}{" "}
                   Rwf
@@ -168,7 +168,7 @@ const InvoiceClient = ({
               <p className="dark:text-blue-200 text-sm">Warranty: 3 months</p>
             </div>
             <div className='text-right'>
-              <UploadStampButton />
+              {/* <UploadStampButton /> */}
             </div>
           </div>
         </div>

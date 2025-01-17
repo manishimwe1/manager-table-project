@@ -64,7 +64,7 @@ const IbyagurishijwePage = () => {
   return (
     <section className="w-full">
       <HeaderSection title="Urutonde rw'ibyacurujwe" />
-      <div className="w-full h-full">
+      <div className="w-full h-full space-y-2">
         {Object.entries(groupedData).map(([date, items]) => (
           <div key={date} className={cn("py-4 rounded-lg")}><div className=" flex items-center justify-between  w-full flex-row-reverse lg:flex-row">
             <p className="text-blue-400 text-nowrap lg:text-base text-sm ">
