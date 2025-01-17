@@ -26,6 +26,18 @@ export function ShowUkonyiranguza({ productId }: { productId: Id<"product"> }) {
 
 export const columns: ColumnDef<Client>[] = [
   {
+    accessorKey: "name",
+    header: () => <p className="text-nowrap text-center">Izina ry'umukiriya</p>,
+    cell: ({ row }) => {
+      const name = row.getValue("name") as string;
+      return (
+        <p className="text-blue-600/90 font-bold text-nowrap text-center">
+          {name}
+        </p>
+      );
+    },
+  },
+  {
     accessorKey: "_id",
     header: "",
     cell: ({ row }) => {
@@ -52,18 +64,7 @@ export const columns: ColumnDef<Client>[] = [
       return <p className="text-center">{aratwaraZingahe}</p>;
     },
   },
-  {
-    accessorKey: "name",
-    header: () => <p className="text-nowrap text-center">Izina ry'umukiriya</p>,
-    cell: ({ row }) => {
-      const name = row.getValue("name") as string;
-      return (
-        <p className="text-blue-600/90 font-bold text-nowrap text-center">
-          {name}
-        </p>
-      );
-    },
-  },
+
   {
     accessorKey: "phone",
     header: () => <p className="text-nowrap text-center">Phone y'umukiriya</p>,

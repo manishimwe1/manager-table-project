@@ -1,16 +1,14 @@
 "use client";
 
-import { cn, formatReadableDate } from "@/lib/utils";
-import { outOfStock } from "@/types";
+import { cn, } from "@/lib/utils";
+import { ProductType } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "../ui/badge";
 
-import ActionComponents from "../ActionComponents";
-import { MoreVertical } from "lucide-react";
 import { Id } from "@/convex/_generated/dataModel";
 import ActionElement from "../ibyaranguwe/ActionElement";
 
-export const columns: ColumnDef<outOfStock>[] = [
+export const columns: ColumnDef<ProductType>[] = [
   {
     accessorKey: "_id",
     header: "",
@@ -22,10 +20,10 @@ export const columns: ColumnDef<outOfStock>[] = [
   },
   {
     accessorKey: "igicuruzwa",
-    header: "Igicuruzwa",
+    header: () => <p className="text-center">Igicuruzwa</p>,
     cell: ({ row }) => {
       const igicuruzwa = row.getValue("igicuruzwa") as string;
-      return <p className="text-nowrap">{igicuruzwa}</p>;
+      return <p className="text-nowrap text-center">{igicuruzwa}</p>;
     },
   },
   {
@@ -62,32 +60,40 @@ export const columns: ColumnDef<outOfStock>[] = [
   },
 
   {
-    accessorKey: "status",
-    header: () => <p className="text-center">Naranguye gute</p>,
+    accessorKey: "ndanguyeGute",
+    header: () => <p className="text-center text-nowrap">Naranguye gute</p>,
     cell: ({ row }) => {
-      const status = row.getValue("status") as boolean;
-      console.log(status, "status");
+      const ndanguyeGute = row.getValue("ndanguyeGute") as "nishyuyeCash" | "mfasheIdeni" | "nishyuyeMake";
       const amaount = row.getValue("uzishyuraAngahe") as number;
       return (
         <div className="text-right">
-          <Badge
-            className={cn(
-              "!text-center",
-              status === false
-                ? "bg-[#FFAAAA] hover:bg-[#FFAAAA]"
-                : "bg-[#859F3D] hover:bg-[#859F3D]"
-            )}
-          >
-            {status === false ? (
-              <p className="flex items-center text-[11px] text-nowrap">
-                Ryari ideni
-                <span className="text-xs">{amaount.toLocaleString()}</span>
-                Rwf
-              </p>
-            ) : (
-              "Nashyuye cash"
-            )}
-          </Badge>
+          {ndanguyeGute === "nishyuyeCash" && (
+            <Badge
+              className={cn(
+                "!text-center text-nowrap bg-[#859F3D] hover:bg-[#859F3D]"
+              )}
+            > Nishyuye cash
+
+            </Badge>
+          )}
+          {ndanguyeGute === "nishyuyeMake" && (
+            <Badge
+              className={cn(
+                "!text-center text-nowrap bg-[#3d789f] hover:bg-[#3d789f]"
+              )}
+            > Nishyuye make {amaount.toLocaleString()} rwf
+            </Badge>
+          )}
+          {ndanguyeGute === "mfasheIdeni" && (
+            <Badge
+              className={cn(
+                "!text-center text-nowrap bg-[#FFAAAA] hover:bg-[#FFAAAA]"
+              )}
+            > ufite ideni {amaount.toLocaleString()} rwf
+
+            </Badge>
+          )}
+
         </div>
       );
     },
@@ -97,8 +103,7 @@ export const columns: ColumnDef<outOfStock>[] = [
     accessorKey: "uzishyuraAngahe",
     header: undefined,
     cell: ({ row }) => {
-      const status = row.getValue("status") as boolean;
-      console.log(status, "status");
+
       const id = row.getValue("_id") as Id<"product">;
       const ndanguyeGute = row.getValue("ndanguyeGute") as "nishyuyeCash" | "mfasheIdeni" | "nishyuyeMake";
 

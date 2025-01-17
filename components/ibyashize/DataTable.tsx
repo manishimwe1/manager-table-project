@@ -15,18 +15,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
 
-interface DataTableProps<outOfStock, TValue> {
-  columns: ColumnDef<outOfStock, TValue>[];
-  data: outOfStock[];
+
+interface DataTableProps<ProductType, TValue> {
+  columns: ColumnDef<ProductType, TValue>[];
+  data: ProductType[];
 }
 
-export function DataTable<outOfStock, TValue>({
+export function DataTable<ProductType, TValue>({
   columns,
   data,
-}: DataTableProps<outOfStock, TValue>) {
+}: DataTableProps<ProductType, TValue>) {
   const table = useReactTable({
     data,
     columns,
@@ -45,9 +44,9 @@ export function DataTable<outOfStock, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                   </TableHead>
                 );
               })}

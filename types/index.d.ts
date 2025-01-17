@@ -94,7 +94,23 @@ export interface outOfStock {
   ukonyigurishaKuriDetail: number;
   ndanguyeZingahe: number;
 }
-
+export type ProductType = {
+  _id: Id<"product">;
+  _creationTime: number;
+  igicuruzwa: string;
+  ikiranguzo: number;
+  ingano: number;
+  uzishyuraAngahe: number;
+  ndanguyeGute: string | undefined;
+  ukonyigurishaKuriDetail: number;
+  byoseHamwe: number;
+  ndanguyeZingahe: number;
+  userId: string;
+  ibyoUranguyeType: string;
+  inganoYizoNishyuye: number;
+  wishyuyeAngahe: number;
+  ayomazeGucuruza?: number;
+};
 export type NdanguyeGute = {
   nishyuyeCash: "nishyuyeCash";
   mfasheIdeni: "mfasheIdeni";

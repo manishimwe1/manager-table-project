@@ -26,10 +26,11 @@ import { useSession } from "next-auth/react";
 import { Id } from "@/convex/_generated/dataModel";
 import SkeletonLoader from "@/components/SkeletonLoader";
 import { redirect } from "next/navigation";
+import SearchBox from "@/components/SearchBox";
 
 const IbyagurishijwePage = () => {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [openState, setOpenState] = useState<{ [key: string]: boolean }>({});
+  const [searchValue, setSearchValue] = useState('');
   const session = useSession();
   const userId = session.data?.user;
 
@@ -50,10 +51,7 @@ const IbyagurishijwePage = () => {
 
   const groupedData = groupByDateInSaled(saledProduct || []);
 
-  const handleToggle = (date: string) => {
-    setOpenState((prev) => ({ ...prev, [date]: !prev[date] })); // Toggle open state
-    setSelectedDate(date); // Set the selected date
-  };
+
   if (saledProduct?.length === 0) {
     return (
       <EmptyPlaceholder
@@ -68,15 +66,18 @@ const IbyagurishijwePage = () => {
       <HeaderSection title="Urutonde rw'ibyacurujwe" />
       <div className="w-full h-full">
         {Object.entries(groupedData).map(([date, items]) => (
-          <div key={date} className={cn("py-4 rounded-lg")}>
-            <div className="flex items-center gap-2 justify-end px-4 ">
-              <p className="lg:font-bold pr-10 text-nowrap text-xs lg:text-sm dark:text-gray-200">
-                Byose hamwe:{" "}
-                <span className="text-lg ml-2 text-blue-800">
-                  {items?.length}
-                </span>
-              </p>
+          <div key={date} className={cn("py-4 rounded-lg")}><div className=" flex items-center justify-between  w-full flex-row-reverse lg:flex-row">
+            <p className="text-blue-400 text-nowrap lg:text-base text-sm ">
+              Yose hamwe: {items?.length}
+            </p>
+            <div className="lg:w-[600px] w-full">
+              <SearchBox
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+              />
             </div>
+          </div>
+
             <ul>
               <DataTable columns={columns} data={items || []} />
             </ul>

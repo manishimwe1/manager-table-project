@@ -4,7 +4,7 @@ import { columns } from "@/components/ibyashize/columns";
 import { DataTable } from "@/components/ibyashize/DataTable";
 import SkeletonLoader from "@/components/SkeletonLoader";
 import { api } from "@/convex/_generated/api";
-import { outOfStock } from "@/types";
+import { ProductType } from "@/types";
 import { useQuery } from "convex/react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
@@ -17,7 +17,7 @@ const IbyashizePage = () => {
   // Fetch all products
   const user = useQuery(api.user.getUserIndb, { email: userId?.email! });
 
-  const outOfStock: outOfStock[] | undefined = useQuery(
+  const outOfStock: ProductType[] | undefined = useQuery(
     api.product.getProductOutOfStock,
     { userId: user?._id! }
   );
