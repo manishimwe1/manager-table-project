@@ -38,7 +38,7 @@ const UserButton = ({ user }: { user: User }) => {
               signOut();
             }}
           >
-            <Button type="submit">Sign Out</Button>
+            <Button type="submit" size={"sm"} variant={"ghost"}>Sign Out</Button>
           </form>
         </DropdownMenuItem>
         {/* <DropdownMenuItem>Team</DropdownMenuItem>

@@ -25,6 +25,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Client } from "@/types";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   message: z.string().min(2).max(5000),
@@ -33,10 +34,13 @@ const formSchema = z.object({
 function ProfileForm({
   clientName,
   clientProduct,
+  setOpenMsgBox
 }: {
   clientName?: string;
   clientProduct?: Client | undefined | null;
+  setOpenMsgBox: React.Dispatch<React.SetStateAction<boolean>>
 }) {
+  const { toast } = useToast();
   const [sending, setSending] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,6 +51,7 @@ function ProfileForm({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("Form Values:", values);
+    if (values.message === "") return;
     setSending(true);
     const requestData = {
       message: `${values.message}`,
@@ -56,12 +61,28 @@ function ProfileForm({
 
     console.log("Sending SMS:", requestData);
 
-    await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/send-sms`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/send-sms`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestData),
     });
     setSending(false);
+    form.reset();
+    setOpenMsgBox(false)
+    if (response.ok) {
+      return toast({
+        title: "Success",
+        description: "Message sent successfully",
+        variant: "success",
+      })
+    } else {
+      return toast({
+        title: "Error",
+        description: "Failed to send message",
+        variant: "destructive",
+      })
+    }
+
   }
 
   return (
@@ -76,9 +97,8 @@ function ProfileForm({
               <FormControl>
                 <Textarea
                   rows={5}
-                  value={`Mwiriwe neza ${clientName}! watwaye  ${clientProduct?.igicuruzwa} ${clientProduct?.aratwaraZingahe! - clientProduct?.yishyuyezingahe!} ufite ideni rya ${clientProduct ? (clientProduct?.yishyuyeAngahe! - clientProduct?.amazeKwishyura!).toLocaleString() : 0} rwf 
-                  Murakoze`}
-                  onChange={field.onChange}
+                  {...field}
+                  placeholder="andika message"
                 />
               </FormControl>
               <FormMessage />
@@ -106,6 +126,7 @@ const SendSmsButton = ({
   clientId?: Id<"client">;
   productId?: Id<"product">;
 }) => {
+  const [openMsgBox, setOpenMsgBox] = useState(false)
   const client = clientId
     ? useQuery(api.clientName.getClientById, { id: clientId })
     : null;
@@ -114,7 +135,7 @@ const SendSmsButton = ({
     : null;
 
   return (
-    <Dialog>
+    <Dialog open={openMsgBox} onOpenChange={() => setOpenMsgBox(!openMsgBox)}>
       <DialogTrigger>
         <span className=" dark:hover:bg-stone-700 hover:bg-stone-200 p-2 w-full rounded-sm text-sm text-left">
           Mwohereze sms
@@ -127,7 +148,7 @@ const SendSmsButton = ({
             <span className="text-base text-blue-500">{client?.name}</span>{" "}
             ufite nimero ya {client?.phone}
           </DialogTitle>
-          <ProfileForm clientName={client?.name} clientProduct={client} />
+          <ProfileForm clientName={client?.name} clientProduct={client} setOpenMsgBox={setOpenMsgBox} />
         </DialogHeader>
       </DialogContent>
     </Dialog>
