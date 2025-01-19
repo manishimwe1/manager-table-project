@@ -51,7 +51,7 @@ function ProfileForm({
     const requestData = {
       message: `${values.message}`,
       to: `+${clientProduct?.phone}`, // Example phone number
-      provider: "twilio",
+      provider: "africastalking",
     };
 
     console.log("Sending SMS:", requestData);

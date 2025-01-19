@@ -41,11 +41,6 @@ const IbyagurishijwePage = () => {
     userId: user?._id as Id<"user">,
   });
 
-  useEffect(() => {
-    if (!userId) {
-      redirect("/login");
-    }
-  }, [userId]);
 
   if (session.status === "loading") return <SkeletonLoader />;
 

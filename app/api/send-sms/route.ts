@@ -5,7 +5,7 @@ import twilio from "twilio";
 // Africa's Talking Client Setup
 const africasTalkingClient = africastalking({
   apiKey: process.env.AFRICASTALKING_API_KEY!, // Add to your .env.local
-  username: "sandbox", // Use "sandbox" for testing in Africa's Talking
+  username: "emino", // Use "sandbox" for testing in Africa's Talking
 });
 
 // Twilio Client Setup
@@ -38,10 +38,11 @@ export async function POST(req: NextRequest) {
     }
     if (provider === "africastalking") {
       // Sending SMS via Africa's Talking
+      console.log(provider,'this provider')
       const response = await africasTalkingClient.SMS.send({
         to: [to],
         message,
-        from: "emino.dev", // Your sender ID (optional)
+        from: "EMINO", // Your sender ID (optional)
       });
       return NextResponse.json({ success: true, response });
     } else if (provider === "twilio") {
@@ -61,7 +62,7 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     console.error("Error sending SMS:", error);
     return NextResponse.json(
-      { error: "Failed to send SMS", details: error.message },
+      { error: "Failed to send SMS", details: error },
       { status: 500 }
     );
   }
