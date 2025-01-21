@@ -16,6 +16,7 @@ import type {
 import type * as clientName from "../clientName.js";
 import type * as http from "../http.js";
 import type * as ingaruProduct from "../ingaruProduct.js";
+import type * as notification from "../notification.js";
 import type * as product from "../product.js";
 import type * as user from "../user.js";
 
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   clientName: typeof clientName;
   http: typeof http;
   ingaruProduct: typeof ingaruProduct;
+  notification: typeof notification;
   product: typeof product;
   user: typeof user;
 }>;

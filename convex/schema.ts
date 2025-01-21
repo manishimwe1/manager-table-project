@@ -53,4 +53,10 @@ export default defineSchema({
   })
     .index("by_name", ["name"])
     .index("by_userId", ["userId"]),
+    notification: defineTable({
+      userId: v.string(),
+      message: v.string(),
+      seen: v.boolean(),
+    }).index("by_userId", ["userId"]).index("by_seen", ["seen"]),
+
 });
