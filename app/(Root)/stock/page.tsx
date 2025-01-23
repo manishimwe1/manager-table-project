@@ -15,7 +15,7 @@ import { useEffect, useMemo, useState } from "react";
 
 const StockPage = () => {
   const [searchValue, setSearchValue] = useState("");
-  const { openDrawer, setOpenDrawer } = useClientInfoStore();
+  const [totalOfIkiranguzo, setTotalOfIkiranguzo ] = useState(0);
   const session = useSession();
   const userId = session.data?.user;
 
@@ -33,14 +33,14 @@ const StockPage = () => {
   const data: ProductType[] | undefined = useQuery(api.product.getProduct, {
     userId: user?._id,
   });
-  console.log(openDrawer, "openDrawer");
   const filteredData = useMemo(() => {
     if (!searchValue) return data;
     return data?.filter((item) =>
       item.igicuruzwa.toLowerCase().includes(searchValue.toLowerCase())
     );
   }, [searchValue, data]);
-  console.log(data);
+  if(!filteredData)return
+  
   return (
     <section className="w-full mt-2 space-y-4 px-2">
       <HeaderSection title="Ibicuruzwa biri muri Stock" />
@@ -54,9 +54,13 @@ const StockPage = () => {
       ) : (
         <>
           <div className="flex items-center justify-between w-full">
+            <div className='flex items-center justify-start '>
             <p className="text-blue-400 text-nowrap hidden lg:flex">
               Byose hamwe: {data?.length}
+            </p><p className="text-blue-400 text-nowrap hidden lg:flex">
+              Total y'ikiranguzo: { filteredData.reduce((total, item) => total + item?.ndanguyeZingahe * item.ikiranguzo!, 0).toLocaleString() } Rwf
             </p>
+            </div>
             <div className="lg:w-[600px] w-full">
               <SearchBox
                 searchValue={searchValue}

@@ -92,6 +92,7 @@ function IngaruForm({ client, setOpenDialog }: { client: Client | null | undefin
           product.inganoYizoNishyuye - Number(values.agaruyeZingahe),
         wishyuyeAngahe: product.wishyuyeAngahe - returnedClientMoney,
         ayomazeGucuruza: product?.ayomazeGucuruza! - returnedClientMoney,
+        ingano:product.inganoYizoNishyuye + Number(values.agaruyeZingahe)
       },
     });
 

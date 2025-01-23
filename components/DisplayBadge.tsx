@@ -13,7 +13,6 @@ const DisplayBadge = ({
 }) => {
   return (
     <div className="text-right">
-      {" "}
       <Badge
         className={cn(
           "cursor-pointer text-stone-900 shadow-sm shadow-black/15 text-nowrap",
@@ -26,8 +25,8 @@ const DisplayBadge = ({
         )}
       >
         {ndanguyeGute === "nishyuyeCash" && (
-          <span className="text-nowrap">
-            Nishyuye {value.toLocaleString()} Rwf
+          <span className="text-nowrap">s
+            Nishyuye cash
           </span>
         )}
 

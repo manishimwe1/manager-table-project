@@ -158,14 +158,13 @@ export const columns: ColumnDef<ProductType>[] = [
       return <p className="text-nowrap  text-center">Ideni mfite</p>;
     },
     cell: ({ row }) => {
-      const iden = row.getValue("uzishyuraAngahe") as number;
       const ndanguyeGute = row.getValue("ndanguyeGute") as string;
       const wishyuyeAngahe = row.getValue("wishyuyeAngahe") as number;
       const uzishyuraAngahe = row.getValue("uzishyuraAngahe") as number;
 
       return (
         <DisplayBadge
-          value={ndanguyeGute === "mfasheIdeni" ? iden : wishyuyeAngahe}
+          value={ndanguyeGute === "mfasheIdeni" ? uzishyuraAngahe : wishyuyeAngahe}
           ndanguyeGute={ndanguyeGute}
           uzishyuraAngahe={uzishyuraAngahe}
         />
