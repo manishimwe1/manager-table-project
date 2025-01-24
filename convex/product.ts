@@ -198,6 +198,7 @@ export const updateProdut = internalMutation({
         ayomazeGucuruza:
           Number(product?.ayomazeGucuruza) +
           args.value * product?.ukonyigurishaKuriDetail!,
+          ingano:product?.ingano === 0 ? args.value : product?.ingano
       });
     } else if (args.productType === "Kuri detail") {
       return await ctx.db.patch(id, {
