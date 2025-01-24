@@ -92,7 +92,7 @@ const SalesPage: React.FC = () => {
   };
   return (
     <section className="flex flex-col w-full h-full lg:pl-0 space-y-4">
-      <div className="w-full h-fit  flex items-center justify-between gap-4">
+      {/* <div className="w-full h-fit  flex items-center justify-between gap-4">
         <div className="flex items-center w-full  justify-center h-full ">
           <Collapsible
             open={isListOpen}
@@ -124,7 +124,7 @@ const SalesPage: React.FC = () => {
             )}
           </Collapsible>
         </div>
-      </div>
+      </div> */}
 
       {clientData.length === 0 ? (
         <div className="h-[200px] w-full px-1 lg:px-2 space-y-2">

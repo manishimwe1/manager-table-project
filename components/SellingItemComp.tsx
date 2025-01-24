@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { ProductInfo, useClientInfoStore } from "@/lib/store/zustand";
 import { ScrollArea } from "./ui/scroll-area";
 import Link from "next/link";
+import SohoraFacture from "./SohoraFacture";
 
 interface SellingItemCompProps {
   loading: boolean;
@@ -49,17 +50,6 @@ const SellingItemComp = ({
           <h2 className="flex items-start h-fit">
             Umukiriya: <span>{name}</span>
           </h2>
-          <Button
-            disabled={!loading}
-            type="button"
-            asChild
-            // onClick={() => handleSales("Yego")}
-            className="boder-customer border-l-2 border-stone-900 dark:!border-gray-500 hover:!text-stone-400 hover:dark:!bg-stone-900 transition-all duration-200 ease-in-out hover:!bg-slate-50 hover:!shadow-gray-500/50 dark:!bg-stone-900 disabled:cursor-not-allowed"
-          >
-            <Link href={``}>
-              <span>Sohora Factire</span>
-            </Link>
-          </Button>
         </div>
       )}
       <ScrollArea className="h-[200px] w-full">
@@ -82,7 +72,9 @@ const SellingItemComp = ({
                     <p className="capitalize text-sm">{purchase.igicuruzwa}</p>
                     <p className="text-sm">{purchase.aratwaraZingahe}</p>
                   </div>
-                  <p className="text-sm">{purchase.yishyuyeAngahe.toLocaleString()}{" "}rwf</p>
+                  <p className="text-sm">
+                    {purchase.yishyuyeAngahe.toLocaleString()} rwf
+                  </p>
                 </div>
               </ScrollArea>
             ))}

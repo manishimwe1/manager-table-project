@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { ProductType } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "../ui/badge";
@@ -20,10 +20,10 @@ export const columns: ColumnDef<ProductType>[] = [
   },
   {
     accessorKey: "igicuruzwa",
-    header: () => <p className="text-center">Igicuruzwa</p>,
+    header: () => <p className="text-left">Igicuruzwa</p>,
     cell: ({ row }) => {
       const igicuruzwa = row.getValue("igicuruzwa") as string;
-      return <p className="text-nowrap text-center">{igicuruzwa}</p>;
+      return <p className="text-nowrap text-left">{igicuruzwa}</p>;
     },
   },
   {
@@ -50,7 +50,7 @@ export const columns: ColumnDef<ProductType>[] = [
   },
   {
     accessorKey: "ndanguyeZingahe",
-    header: () => < p className="text-center" > Naranguye</p>,
+    header: () => <p className="text-center"> Naranguye</p>,
     cell: ({ row }) => {
       const naranguye = row.getValue("ndanguyeZingahe") as number;
       return (
@@ -61,9 +61,12 @@ export const columns: ColumnDef<ProductType>[] = [
 
   {
     accessorKey: "ndanguyeGute",
-    header: () => <p className="text-center text-nowrap">Naranguye gute</p>,
+    header: () => <p className="text-right text-nowrap">Naranguye gute</p>,
     cell: ({ row }) => {
-      const ndanguyeGute = row.getValue("ndanguyeGute") as "nishyuyeCash" | "mfasheIdeni" | "nishyuyeMake";
+      const ndanguyeGute = row.getValue("ndanguyeGute") as
+        | "nishyuyeCash"
+        | "mfasheIdeni"
+        | "nishyuyeMake";
       const amaount = row.getValue("uzishyuraAngahe") as number;
       return (
         <div className="text-right">
@@ -72,8 +75,9 @@ export const columns: ColumnDef<ProductType>[] = [
               className={cn(
                 "!text-center text-nowrap bg-[#859F3D] hover:bg-[#859F3D]"
               )}
-            > Nishyuye cash
-
+            >
+              {" "}
+              Nishyuye cash
             </Badge>
           )}
           {ndanguyeGute === "nishyuyeMake" && (
@@ -81,7 +85,9 @@ export const columns: ColumnDef<ProductType>[] = [
               className={cn(
                 "!text-center text-nowrap bg-[#3d789f] hover:bg-[#3d789f]"
               )}
-            > Nishyuye make {amaount.toLocaleString()} rwf
+            >
+              {" "}
+              Nishyuye make {amaount.toLocaleString()} rwf
             </Badge>
           )}
           {ndanguyeGute === "mfasheIdeni" && (
@@ -89,11 +95,11 @@ export const columns: ColumnDef<ProductType>[] = [
               className={cn(
                 "!text-center text-nowrap bg-[#FFAAAA] hover:bg-[#FFAAAA]"
               )}
-            > ufite ideni {amaount.toLocaleString()} rwf
-
+            >
+              {" "}
+              ufite ideni {amaount.toLocaleString()} rwf
             </Badge>
           )}
-
         </div>
       );
     },
@@ -103,13 +109,13 @@ export const columns: ColumnDef<ProductType>[] = [
     accessorKey: "uzishyuraAngahe",
     header: undefined,
     cell: ({ row }) => {
-
       const id = row.getValue("_id") as Id<"product">;
-      const ndanguyeGute = row.getValue("ndanguyeGute") as "nishyuyeCash" | "mfasheIdeni" | "nishyuyeMake";
+      const ndanguyeGute = row.getValue("ndanguyeGute") as
+        | "nishyuyeCash"
+        | "mfasheIdeni"
+        | "nishyuyeMake";
 
-      return (
-        <ActionElement id={id} ndanguyeGute={ndanguyeGute} />
-      );
+      return <ActionElement id={id} ndanguyeGute={ndanguyeGute} />;
     },
   },
 ];
