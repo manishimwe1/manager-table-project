@@ -31,7 +31,6 @@ export const columns: ColumnDef<ProductType>[] = [
     accessorKey: "ingano",
     header: " hasigaye",
     cell: ({ row }) => {
-      const ingano = row.getValue("ingano") as number;
       const byoseHamwe = row.getValue("byoseHamwe") as number;
       const productType = row.getValue("ibyoUranguyeType") as string;
       return (
