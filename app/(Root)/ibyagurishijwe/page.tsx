@@ -46,11 +46,6 @@ const IbyagurishijwePage = () => {
     );
   }, [searchValue, saledProduct]);
 
-  const groupedData = useMemo(
-    () => groupByDateInSaled(filteredData || []),
-    [filteredData]
-  );
-
   if (session.status === "loading") return <SkeletonLoader />;
 
   if (saledProduct?.length === 0) {
@@ -67,25 +62,23 @@ const IbyagurishijwePage = () => {
     <section className="w-full">
       <HeaderSection title="Urutonde rw'ibyacurujwe" />
       <div className="w-full h-full space-y-2">
-        {Object.entries(groupedData).map(([date, items]) => (
-          <div key={date} className={cn("py-4 rounded-lg")}>
-            <div className="flex items-center justify-between w-full flex-row-reverse lg:flex-row py-2">
-              <p className="text-blue-400 text-nowrap lg:text-base text-sm ">
-                Yose hamwe: {items?.length}
-              </p>
-              <div className="lg:w-[600px] w-full">
-                <SearchBox
-                  searchValue={searchValue}
-                  setSearchValue={setSearchValue}
-                />
-              </div>
+        <div className={cn("py-4 rounded-lg")}>
+          <div className="flex items-center justify-between w-full flex-row-reverse lg:flex-row py-2">
+            <p className="text-blue-400 text-nowrap lg:text-base text-sm ">
+              Yose hamwe: {filteredData?.length}
+            </p>
+            <div className="lg:w-[600px] w-full">
+              <SearchBox
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+              />
             </div>
-
-            <ul>
-              <DataTable columns={columns} data={items || []} />
-            </ul>
           </div>
-        ))}
+
+          <ul>
+            <DataTable columns={columns} data={filteredData || []} />
+          </ul>
+        </div>
       </div>
     </section>
   );

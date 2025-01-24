@@ -48,6 +48,18 @@ export const columns: ColumnDef<Client>[] = [
     },
   },
   {
+    accessorKey: "facture",
+    header: "Itariki",
+    cell: ({ row }) => {
+      const date = row.getValue("_creationTime") as number;
+      return (
+        <p className="text-sm dark:text-stone-400 text-stone-800">
+          {formatReadableDate(date)}
+        </p>
+      );
+    },
+  },
+  {
     accessorKey: "name",
     header: () => {
       return <p className="text-nowrap">Izina ry'umu client</p>;
@@ -67,7 +79,9 @@ export const columns: ColumnDef<Client>[] = [
     header: "Phone",
     cell: ({ row }) => {
       const phone = row.getValue("phone") as number;
-      return <p className="text-left text-nowrap">0{phone}</p>;
+      return (
+        <p className="text-left text-nowrap">{phone === 0 ? 0 : `+${phone}`}</p>
+      );
     },
   },
   {
@@ -135,7 +149,6 @@ export const columns: ColumnDef<Client>[] = [
     header: undefined,
 
     cell: undefined,
-
   },
 
   {

@@ -55,12 +55,13 @@ const StockPage = () => {
         <>
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center justify-start ">
-              <p className="text-blue-400 text-nowrap hidden lg:flex">
-                Byose hamwe: {data?.length}
+              <p className="text-stone-500 text-sm text-nowrap hidden lg:flex">
+                Byose hamwe:{" "}
+                <span className="text-blue-500">{data?.length}</span>
               </p>
-              <p className="text-blue-400 text-nowrap hidden lg:flex">
+              <p className="text-sm text-stone-500 text-nowrap hidden lg:flex">
                 Total y'ikiranguzo:{" "}
-                <span className="text-blue-400 text-nowrap">
+                <span className="text-blue-500 text-nowrap">
                   {filteredData
                     .reduce(
                       (total, item) =>

@@ -17,17 +17,15 @@ const DisplayBadge = ({
         className={cn(
           "cursor-pointer text-stone-900 shadow-sm shadow-black/15 text-nowrap",
           ndanguyeGute === "nishyuyeCash" &&
-          " bg-[#859F3D] hover:bg-[#859F3D] text-black  shadow-sm shadow-[#859F3D]",
+            " bg-[#859F3D] hover:bg-[#859F3D] text-black  shadow-sm shadow-[#859F3D]",
           ndanguyeGute === "mfasheIdeni" &&
-          " bg-[#FFAAAA] hover:bg-[#FFAAAA] text-black shadow-sm shadow-[#FFAAAA]",
+            " bg-[#FFAAAA] hover:bg-[#FFAAAA] text-black shadow-sm shadow-[#FFAAAA]",
           ndanguyeGute === "nishyuyeMake" &&
-          " bg-blue-600 hover:bg-blue-500 text- shadow-sm shadow-blue-500"
+            " bg-blue-600 hover:bg-blue-500 text- shadow-sm shadow-blue-500"
         )}
       >
         {ndanguyeGute === "nishyuyeCash" && (
-          <span className="text-nowrap">s
-            Nishyuye cash
-          </span>
+          <span className="text-nowrap">Nishyuye cash</span>
         )}
 
         {ndanguyeGute === "mfasheIdeni" && (
