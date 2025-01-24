@@ -29,6 +29,7 @@ import { redirect } from "next/navigation";
 import SearchBox from "@/components/SearchBox";
 
 const IbyagurishijwePage = () => {
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [searchValue, setSearchValue] = useState("");
   const session = useSession();
   const userId = session.data?.user;
@@ -38,14 +39,19 @@ const IbyagurishijwePage = () => {
     userId: user?._id as Id<"user">,
   });
 
-  if (session.status === "loading") return <SkeletonLoader />;
-
-  const groupedData = useMemo(() => {
-    const filteredProducts = (saledProduct || []).filter((product) =>
-      product.name.toLowerCase().includes(searchValue.toLowerCase())
+  const filteredData = useMemo(() => {
+    if (!searchValue) return saledProduct;
+    return saledProduct?.filter((item) =>
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
     );
-    return groupByDateInSaled(filteredProducts);
-  }, [saledProduct, searchValue]);
+  }, [searchValue, saledProduct]);
+
+  const groupedData = useMemo(
+    () => groupByDateInSaled(filteredData || []),
+    [filteredData]
+  );
+
+  if (session.status === "loading") return <SkeletonLoader />;
 
   if (saledProduct?.length === 0) {
     return (
