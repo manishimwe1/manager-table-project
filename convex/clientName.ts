@@ -284,11 +284,12 @@ export const updateClient = mutation({
     const { id, fields } = args;
 
     // Only update fields that are provided
-    await ctx.db.patch(id, fields);
+    const returnedClient = await ctx.db.patch(id, fields);
+console.log(returnedClient);
 
     const client = await ctx.db.get(id);
     if (!client) return;
-    if (client.yishyuyezingahe === 0 && client.aratwaraZingahe === 0) {
+    if (client.yishyuyezingahe === 0 || client.aratwaraZingahe === 0) {
       console.log("HERE IN DELETING");
 
       ctx.runMutation(internal.clientName.deleteClient, { id });

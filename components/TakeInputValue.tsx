@@ -167,7 +167,7 @@ const TakeInputValue = ({
         max={MAX_VALUE}
         placeholder="0"
       />
-      <Plus className="h-5 w-5 absolute right-1.5 top-[50%] translate-y-[-50%] hover:scale-110 cursor-pointer border bg-stone-700 rounded-md" />
+      <Plus className="h-5 w-5 absolute right-1.5 top-[50%] translate-y-[-50%] hover:scale-110 cursor-pointer border dark:bg-stone-700 bg-slate-400 rounded-md" />
     </div>
   );
 };

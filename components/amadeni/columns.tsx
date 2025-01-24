@@ -15,6 +15,24 @@ import { ShowUkonyiranguza } from "../ibyagurishijwe/columns";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
+function ShowIdeniAfite({
+  productId,
+  yishyuyezingahe,
+}: {
+  productId: Id<"product">;
+  yishyuyezingahe: number;
+}) {
+  const product = useQuery(api.product.getProductById, { id: productId });
+  console.log(product, "product ", yishyuyezingahe);
+
+  if (!product) return null;
+  return (
+    <p className="text-center">
+      {(product.ukonyigurishaKuriDetail * yishyuyezingahe).toLocaleString()} Rwf
+    </p>
+  );
+}
+
 function ShowNibaYishyuyeIdeni({
   yishyuyeAngahe,
 }: {
@@ -92,18 +110,7 @@ export const columns: ColumnDef<Client>[] = [
       return <p className="text-nowrap px-5 text-center">{igicuruzwa}</p>;
     },
   },
-  {
-    accessorKey: "productId",
-    header: () => {
-      return <p className="text-nowrap">Uko nyirangura</p>;
-    },
-    cell: ({ row }) => {
-      const ukonyigurishaKuriDetail = row.getValue(
-        "productId"
-      ) as Id<"product">;
-      return <ShowUkonyigurishije productId={ukonyigurishaKuriDetail} />;
-    },
-  },
+
   {
     accessorKey: "aratwaraZingahe",
     header: () => {
@@ -124,6 +131,22 @@ export const columns: ColumnDef<Client>[] = [
     cell: ({ row }) => {
       const productId = row.getValue("productId") as Id<"product">;
       return <ShowUkonyiranguza productId={productId} />;
+    },
+  },
+  {
+    accessorKey: "productId",
+    header: () => {
+      return <p className="text-nowrap">Ideni amfitiye</p>;
+    },
+    cell: ({ row }) => {
+      const productId = row.getValue("productId") as Id<"product">;
+      const aratwaraZingahe = row.getValue("aratwaraZingahe") as number;
+      return (
+        <ShowIdeniAfite
+          productId={productId}
+          yishyuyezingahe={aratwaraZingahe}
+        />
+      );
     },
   },
   {
