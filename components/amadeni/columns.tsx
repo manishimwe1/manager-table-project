@@ -71,7 +71,7 @@ export const columns: ColumnDef<Client>[] = [
     cell: ({ row }) => {
       const date = row.getValue("_creationTime") as number;
       return (
-        <p className="text-sm dark:text-stone-400 text-stone-800">
+        <p className="text-sm dark:text-stone-400 text-stone-800 text-nowrap">
           {formatReadableDate(date)}
         </p>
       );
