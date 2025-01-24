@@ -202,11 +202,11 @@ export const updateProdut = internalMutation({
       });
     } else if (args.productType === "Kuri detail") {
       return await ctx.db.patch(id, {
-        ingano: Number(product?.ingano) - args.value,
-        byoseHamwe: Number(product?.byoseHamwe) - args.value,
+        byoseHamwe: product?.byoseHamwe === 0 ? args.value : Number(product?.byoseHamwe) - args.value,
         ayomazeGucuruza:
           Number(product?.ayomazeGucuruza) +
           args.value * product?.ukonyigurishaKuriDetail!,
+          
       });
     }
   },
