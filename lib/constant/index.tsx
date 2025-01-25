@@ -20,12 +20,12 @@ export const navLink = [
     Icon: <Store className="text-gray-500 h-4 w-4" />,
   },
   {
-    label: "Curuza",
+    label: "Gucuruza",
     route: "/curuza",
     Icon: <BadgeDollarSign className="text-gray-500 h-4 w-4" />,
   },
   {
-    label: "Rangura ",
+    label: "Kurangura ",
     route: "/rangura",
     Icon: <PackagePlus className="text-gray-500 h-4 w-4" />,
   },

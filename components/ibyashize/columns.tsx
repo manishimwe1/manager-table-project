@@ -38,16 +38,7 @@ export const columns: ColumnDef<ProductType>[] = [
       );
     },
   },
-  {
-    accessorKey: "ingano",
-    header: () => <p className="text-center">Hasigaye</p>,
-    cell: ({ row }) => {
-      const hasgaye = row.getValue("ingano") as number;
-      return (
-        <p className="text-blue-900/90 font-bold text-center">{hasgaye}</p>
-      );
-    },
-  },
+
   {
     accessorKey: "ndanguyeZingahe",
     header: () => <p className="text-center"> Naranguye</p>,
@@ -55,6 +46,27 @@ export const columns: ColumnDef<ProductType>[] = [
       const naranguye = row.getValue("ndanguyeZingahe") as number;
       return (
         <p className="text-blue-900/90 font-bold text-center">{naranguye}</p>
+      );
+    },
+  },
+  {
+    accessorKey: "ukonyigurishaKuriDetail",
+    header: undefined,
+    cell: ({ row }) => {
+      return undefined;
+    },
+  },
+  {
+    accessorKey: "ingano",
+    header: () => <p className="text-center">Ayo nacuruje</p>,
+    cell: ({ row }) => {
+      const ingano = row.getValue("ndanguyeZingahe") as number;
+      const ukongurisha = row.getValue("ukonyigurishaKuriDetail") as number;
+      const total = ingano * ukongurisha;
+      return (
+        <p className="text-blue-900/90 font-bold text-center">
+          {total.toLocaleString()} rwf
+        </p>
       );
     },
   },

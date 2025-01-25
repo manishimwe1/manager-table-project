@@ -21,6 +21,7 @@ import SendSmsButton from "../SendSmsButton";
 import SohoraFacture from "../SohoraFacture";
 import DeleteProductButton from "../DeleteProductButton";
 import Link from "next/link";
+import IngaruInProduct from "../IngaruInProduct";
 
 const ActionElement = ({
   id,
@@ -68,8 +69,9 @@ const ActionElement = ({
               }}
               asChild
             >
-              <Link href={'/rangura'}> Rangura indi</Link>
+              <Link href={"/rangura"}> Rangura indi</Link>
             </Button>
+            <IngaruInProduct id={id} />
             <DeleteProductButton id={id} />
           </div>
         </PopoverContent>
