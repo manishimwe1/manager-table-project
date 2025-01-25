@@ -127,7 +127,9 @@ export const columns: ColumnDef<ProductType>[] = [
         | "mfasheIdeni"
         | "nishyuyeMake";
 
-      return <ActionElement id={id} ndanguyeGute={ndanguyeGute} />;
+      return (
+        <ActionElement id={id} ndanguyeGute={ndanguyeGute} showIngaru={true} />
+      );
     },
   },
 ];

@@ -82,19 +82,12 @@ export const getSaledProduct = query({
   args: { userId: v.optional(v.id("user")) },
   handler: async (ctx, args) => {
     try {
-      // Get the start of the current day in UTC
-      const startOfToday = new Date();
-      startOfToday.setUTCHours(0, 0, 0, 0);
-      const todayTimestamp = startOfToday.getTime();
 
       // Query the database for products created today
       const products = await ctx.db
         .query("client")
         .withIndex("by_userId", (q) =>
           q.eq("userId", args.userId ? args.userId : "")
-        )
-        .filter(
-          (q) => q.gte(q.field("_creationTime"), todayTimestamp) // Cast _creationTime to number
         )
         .order("desc") // Order products by creation time in descending order
         .collect();

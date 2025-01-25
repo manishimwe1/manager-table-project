@@ -29,7 +29,8 @@ import { redirect } from "next/navigation";
 import SearchBox from "@/components/SearchBox";
 
 const IbyagurishijwePage = () => {
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [openState, setOpenState] = useState<{ [key: string]: boolean }>({});
+
   const [searchValue, setSearchValue] = useState("");
   const session = useSession();
   const userId = session.data?.user;
@@ -48,7 +49,7 @@ const IbyagurishijwePage = () => {
 
   if (session.status === "loading") return <SkeletonLoader />;
 
-  if (saledProduct?.length === 0) {
+  if (!saledProduct) {
     return (
       <EmptyPlaceholder
         title="Ntagicuruzwa uracuruza uyumunsi"
@@ -57,7 +58,7 @@ const IbyagurishijwePage = () => {
       />
     );
   }
-
+  const groupedData = groupByDateInSaled(filteredData);
   return (
     <section className="w-full">
       <HeaderSection title="Urutonde rw'ibyacurujwe" />
@@ -74,10 +75,62 @@ const IbyagurishijwePage = () => {
               />
             </div>
           </div>
-
-          <ul>
+          {Object.entries(groupedData).map(([date, items]) => (
+            <div key={date} className={cn("py-4 rounded-lg")}>
+              <Collapsible>
+                <CollapsibleTrigger
+                  className={cn(
+                    "flex items-center justify-between w-full text-lg border-b-2 border-blue-200 dark:border-stone-700 shadow-sm text-gray-800 dark:text-gray-200 shadow-background py-2 px-3 rounded-xl bg-background  dark:shadow-black/70",
+                    openState[date] ? "text-blue-300" : "text-black"
+                  )}
+                >
+                  Urutonde rw'ibyacurujwe {getTranslatedDay(date)}
+                  <div className="lg:flex items-center justify-end lg:gap-3 gap-1 hidden">
+                    {/* <p className="font-semibold text-gray-800 dark:text-gray-50 italic text-xs uppercase flex justify-end items-center gap-1">
+                  Ideni ufitemo:{" "}
+                  <span className="text-lg ml-2 text-red-300">
+                    {items
+                      ?.reduce((a, item) => a + (item.ay || 0), 0)
+                      .toLocaleString()}
+                  </span>{" "}
+                  Rwf
+                </p> */}
+                    <ChevronsDownUp
+                      className={cn(
+                        "text-gray-800 dark:text-gray-200 transition-transform",
+                        openState[date]
+                          ? "rotate-180 transition-all duration-200"
+                          : "rotate-0"
+                      )}
+                    />
+                  </div>
+                </CollapsibleTrigger>
+                <CollapsibleContent
+                  className={cn(
+                    "flex flex-col h-fit w-full mt-2 lg:mt-4",
+                    openState[date]
+                      ? "bg-blue-50/20 dark:bg-stone-900 rounded-lg transition-all duration-200 "
+                      : "rotate-0"
+                  )}
+                >
+                  <div className="flex items-center gap-2  justify-center lg:justify-end px-4 ">
+                    <p className="lg:font-bold pr-10 text-nowrap text-xs lg:text-sm dark:text-gray-200">
+                      Byose hamwe by'byacurujwe:{" "}
+                      <span className="text-lg ml-2 text-blue-800">
+                        {items?.length}
+                      </span>
+                    </p>
+                  </div>
+                  <ul>
+                    <DataTable columns={columns} data={items || []} />
+                  </ul>
+                </CollapsibleContent>
+              </Collapsible>
+            </div>
+          ))}
+          {/* <ul>
             <DataTable columns={columns} data={filteredData || []} />
-          </ul>
+          </ul> */}
         </div>
       </div>
     </section>

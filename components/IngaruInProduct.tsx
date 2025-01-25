@@ -61,8 +61,8 @@ function IngaruForm({
     if (!product) return;
 
     if (
-      Number(form.getValues("agaruyeZingahe")) > 0 ||
-      Number(form.getValues("agaruyeZingahe")) <= product.ndanguyeZingahe
+      Number(form.getValues("agaruyeZingahe")) <= 0 ||
+      Number(form.getValues("agaruyeZingahe")) > product.ndanguyeZingahe
     ) {
       form.setError("agaruyeZingahe", {
         message: "washyizemo byinshi kurusha ibyo waranguye.",

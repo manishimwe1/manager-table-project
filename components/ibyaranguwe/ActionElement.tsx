@@ -26,8 +26,10 @@ import IngaruInProduct from "../IngaruInProduct";
 const ActionElement = ({
   id,
   ndanguyeGute,
+  showIngaru,
 }: {
   id: Id<"product">;
+  showIngaru?: boolean;
   ndanguyeGute: "nishyuyeCash" | "mfasheIdeni" | "nishyuyeMake";
 }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -71,7 +73,8 @@ const ActionElement = ({
             >
               <Link href={"/rangura"}> Rangura indi</Link>
             </Button>
-            <IngaruInProduct id={id} />
+            {showIngaru ? <IngaruInProduct id={id} /> : null}
+
             <DeleteProductButton id={id} />
           </div>
         </PopoverContent>
