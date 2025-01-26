@@ -49,7 +49,7 @@ export const getProduct = query({
     const Product = await ctx.db
       .query("product")
       .withIndex("by_userId", (q) => q.eq("userId", args.userId!))
-      .filter((q) => q.gt(q.field("ingano"), 0))
+      .filter((q) => q.gt(q.field("byoseHamwe"), 0))
       .order("desc")
       .collect();
 
@@ -88,7 +88,7 @@ export const getProductOutOfStock = query({
     const Product = await ctx.db
       .query("product")
       .withIndex("by_userId", (q) => q.eq("userId", args.userId!))
-      .filter((q) => q.lte(q.field("ingano"), 0))
+      .filter((q) => q.eq(q.field("byoseHamwe"), 0))
       .order("desc")
       .collect();
 

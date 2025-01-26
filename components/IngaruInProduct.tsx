@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -17,7 +16,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -27,9 +25,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "./ui/input";
-import useBusinessStore from "@/lib/store/zustand";
-import { useRouter } from "next/navigation";
-import { Client, ProductType } from "@/types";
 import SkeletonLoader from "./SkeletonLoader";
 import { ingaruSchema } from "@/lib/validations";
 import { useToast } from "@/hooks/use-toast";
@@ -43,10 +38,8 @@ function IngaruForm({
 }) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const router = useRouter();
 
   const updateProduct = useMutation(api.product.updateProduct);
-  const updatClient = useMutation(api.clientName.updateClient);
   const createIngaru = useMutation(api.ingaruProduct.IngaruProduct);
   const form = useForm<z.infer<typeof ingaruSchema>>({
     resolver: zodResolver(ingaruSchema),
@@ -55,7 +48,6 @@ function IngaruForm({
     },
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof ingaruSchema>) {
     setLoading(true);
     if (!product) return;
@@ -77,7 +69,7 @@ function IngaruForm({
     updateProduct({
       id: product._id,
       fields: {
-        ingano: product.ingano + Number(values.agaruyeZingahe),
+        byoseHamwe: product.byoseHamwe + Number(values.agaruyeZingahe),
       },
     });
 
