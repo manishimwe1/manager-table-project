@@ -74,11 +74,9 @@ function IngaruForm({ client, setOpenDialog }: { client: Client | null | undefin
       fields: {
         aratwaraZingahe: client.aratwaraZingahe - Number(values.agaruyeZingahe),
         yishyuyeAngahe: client.yishyuyeAngahe! - returnedClientMoney,
-        amazeKwishyura: client?.yishyuye
+        amazeKwishyura: client?.amazeKwishyura !== 0
           ? client?.amazeKwishyura! - returnedClientMoney
-          : client.amazeKwishyura !== 0
-            ? client?.amazeKwishyura! - returnedClientMoney
-            : 0,
+          : 0,
         yishyuyezingahe: client?.yishyuye
           ? client?.yishyuyezingahe! - Number(values.agaruyeZingahe)
           : 0,
@@ -88,9 +86,6 @@ function IngaruForm({ client, setOpenDialog }: { client: Client | null | undefin
     updateProduct({
       id: client.productId,
       fields: {
-        inganoYizoNishyuye:
-          product.inganoYizoNishyuye - Number(values.agaruyeZingahe),
-        wishyuyeAngahe: product.wishyuyeAngahe - returnedClientMoney,
         ayomazeGucuruza: product?.ayomazeGucuruza! - returnedClientMoney,
         byoseHamwe:product.byoseHamwe + Number(values.agaruyeZingahe)
       },

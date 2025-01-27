@@ -90,7 +90,7 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: "yishyuyeAngahe",
-    header: () => <p className="text-nowrap text-center">Yarishyuye</p>,
+    header: () => <p className="text-nowrap text-center">Yariyishyuye</p>,
     cell: ({ row }) => {
       const yishyuyeAngahe = row.getValue("yishyuyeAngahe") as number;
       const productId = row.getValue("productId") as Id<"product">;

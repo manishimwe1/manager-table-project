@@ -87,28 +87,30 @@ const IngaruPage = () => {
             </div>
           </div>
           <div>
-            <Table>
+            <Table className="border border-stone-400">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[100px]"></TableHead>
-                  <TableHead className="w-[100px]">Name</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead>Igicuruzwa</TableHead>
-                  <TableHead className="text-nowrap">
+                  <TableHead className=""></TableHead>
+                  <TableHead className="text-center">Name</TableHead>
+                  <TableHead className="text-center">Phone</TableHead>
+                  <TableHead className="text-center">Igicuruzwa</TableHead>
+                  <TableHead className="text-nowrap text-center">
                     ingano yibyo agaruye
                   </TableHead>
-                  <TableHead className="text-right">Facture Number</TableHead>
+                  <TableHead className="text-center">Facture Number</TableHead>
                   <TableHead className="text-nowrap text-center">
                     ayo yari yishyuye{" "}
                   </TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody className='dark:text-gray-200 '>
+              <TableBody className="dark:text-gray-200 ">
                 {filteredData.map((item, index) => (
                   <TableRow key={item._id}>
                     <TableCell className="font-medium">{index + 1}</TableCell>
-                    <TableCell className="font-medium">{item.name}</TableCell>
-                    <TableCell>{item.phone}</TableCell>
+                    <TableCell className="font-medium text-center">
+                      {item.name}
+                    </TableCell>
+                    <TableCell className="text-center">{item.phone}</TableCell>
                     <TableCell className="text-center text-nowrap">
                       {item.productName}
                     </TableCell>

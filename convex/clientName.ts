@@ -282,9 +282,7 @@ console.log(returnedClient);
 
     const client = await ctx.db.get(id);
     if (!client) return;
-    if (client.yishyuyezingahe === 0 || client.aratwaraZingahe === 0) {
-      console.log("HERE IN DELETING");
-
+    if (client.aratwaraZingahe === 0 && client.yishyuyeAngahe === 0) {
       ctx.runMutation(internal.clientName.deleteClient, { id });
     }
   },

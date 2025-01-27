@@ -15,7 +15,7 @@ const DisplayBadge = ({
     <div className="text-right">
       <Badge
         className={cn(
-          "cursor-pointer text-gray-200 shadow-sm shadow-black/15 text-nowrap",
+          "cursor-pointer text-gray-950 shadow-sm shadow-black/15 text-nowrap",
           ndanguyeGute === "nishyuyeCash" &&
             " bg-[#859F3D] hover:bg-[#859F3D]   shadow-sm shadow-[#859F3D]",
           ndanguyeGute === "mfasheIdeni" &&
