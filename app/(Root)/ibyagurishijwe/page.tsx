@@ -63,30 +63,18 @@ const IbyagurishijwePage = () => {
     <section className="w-full">
       <HeaderSection title="Urutonde rw'ibyacurujwe" />
       <div className="w-full h-full space-y-2">
-        <div className={cn("py-4 rounded-lg")}>
-          <div className="flex items-center justify-between w-full flex-row-reverse lg:flex-row py-2">
-            <p className="text-blue-400 text-nowrap lg:text-base text-sm ">
-              Yose hamwe: {filteredData?.length}
-            </p>
-            <div className="lg:w-[600px] w-full">
-              <SearchBox
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
-              />
-            </div>
-          </div>
-          {Object.entries(groupedData).map(([date, items]) => (
-            <div key={date} className={cn("py-4 rounded-lg")}>
-              <Collapsible>
-                <CollapsibleTrigger
-                  className={cn(
-                    "flex items-center justify-between w-full text-lg border-b-2 border-blue-200 dark:border-stone-700 shadow-sm text-gray-800 dark:text-gray-200 shadow-background py-2 px-3 rounded-xl bg-background  dark:shadow-black/70",
-                    openState[date] ? "text-blue-300" : "text-black"
-                  )}
-                >
-                  Urutonde rw'ibyacurujwe {getTranslatedDay(date)}
-                  <div className="lg:flex items-center justify-end lg:gap-3 gap-1 hidden">
-                    {/* <p className="font-semibold text-gray-800 dark:text-gray-50 italic text-xs uppercase flex justify-end items-center gap-1">
+        {Object.entries(groupedData).map(([date, items]) => (
+          <div key={date} className={cn("py-4 rounded-lg")}>
+            <Collapsible>
+              <CollapsibleTrigger
+                className={cn(
+                  "flex items-center justify-between w-full text-lg border-b-2 border-blue-200 dark:border-stone-700 shadow-sm text-gray-800 dark:text-gray-200 shadow-background py-2 px-3 rounded-xl bg-background  dark:shadow-black/70",
+                  openState[date] ? "text-blue-300" : "text-black"
+                )}
+              >
+                Urutonde rw'ibyacurujwe {getTranslatedDay(date)}
+                <div className="lg:flex items-center justify-end lg:gap-3 gap-1 hidden">
+                  {/* <p className="font-semibold text-gray-800 dark:text-gray-50 italic text-xs uppercase flex justify-end items-center gap-1">
                   Ideni ufitemo:{" "}
                   <span className="text-lg ml-2 text-red-300">
                     {items
@@ -95,43 +83,59 @@ const IbyagurishijwePage = () => {
                   </span>{" "}
                   Rwf
                 </p> */}
-                    <ChevronsDownUp
-                      className={cn(
-                        "text-gray-800 dark:text-gray-200 transition-transform",
-                        openState[date]
-                          ? "rotate-180 transition-all duration-200"
-                          : "rotate-0"
-                      )}
-                    />
-                  </div>
-                </CollapsibleTrigger>
-                <CollapsibleContent
-                  className={cn(
-                    "flex flex-col h-fit w-full mt-2 lg:mt-4",
-                    openState[date]
-                      ? "bg-blue-50/20 dark:bg-stone-900 rounded-lg transition-all duration-200 "
-                      : "rotate-0"
-                  )}
-                >
-                  <div className="flex items-center gap-2  justify-center lg:justify-end px-4 ">
-                    <p className="lg:font-bold pr-10 text-nowrap text-xs lg:text-sm dark:text-gray-200">
-                      Byose hamwe by'byacurujwe:{" "}
-                      <span className="text-lg ml-2 text-blue-800">
-                        {items?.length}
+                  <ChevronsDownUp
+                    className={cn(
+                      "text-gray-800 dark:text-gray-200 transition-transform",
+                      openState[date]
+                        ? "rotate-180 transition-all duration-200"
+                        : "rotate-0"
+                    )}
+                  />
+                </div>
+              </CollapsibleTrigger>
+              <CollapsibleContent
+                className={cn(
+                  "flex flex-col h-fit w-full mt-2 lg:mt-4",
+                  openState[date]
+                    ? "bg-blue-50/20 dark:bg-stone-900 rounded-lg transition-all duration-200 "
+                    : "rotate-0"
+                )}
+              >
+                <div className="flex items-center justify-between w-full flex-row-reverse lg:flex-row py-2 px-4">
+                  <div className="flex justify-between items-center">
+                    <p className="text-blue-400 text-nowrap lg:text-base text-sm ">
+                      Byose hamwe: {items?.length}
+                    </p>
+                    <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-base text-sm ">
+                      Total yacurujwe uyu munsi:{" "}
+                      <span className="text-blue-800">
+                        {items
+                          ?.reduce(
+                            (acc, item) =>
+                              acc + item.ukoNyigurisha! * item.aratwaraZingahe,
+                            0
+                          )
+                          .toLocaleString()}
                       </span>
                     </p>
                   </div>
-                  <ul>
-                    <DataTable columns={columns} data={items || []} />
-                  </ul>
-                </CollapsibleContent>
-              </Collapsible>
-            </div>
-          ))}
-          {/* <ul>
+                  <div className="lg:w-[600px] w-full">
+                    <SearchBox
+                      searchValue={searchValue}
+                      setSearchValue={setSearchValue}
+                    />
+                  </div>
+                </div>
+                <ul>
+                  <DataTable columns={columns} data={items || []} />
+                </ul>
+              </CollapsibleContent>
+            </Collapsible>
+          </div>
+        ))}
+        {/* <ul>
             <DataTable columns={columns} data={filteredData || []} />
           </ul> */}
-        </div>
       </div>
     </section>
   );

@@ -1,36 +1,27 @@
-import React, { ReactNode, useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "./ui/button";
-import { useMutation, useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import Link from "next/link";
-import { cn, printData } from "@/lib/utils";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import IshyuraFormAction from "./ibyaranguwe/IshyuraFormAction";
+import { cn } from "@/lib/utils";
+import { ReactNode, useState } from "react";
+import ChangeUkoNyigurisha from "./ChangeUkoNyigurisha";
 import YishyuyeIdeni from "./ibyagurishijwe/YishyuyeIdeni";
+import IngaruProduct from "./IngaruProduct";
 import SendSmsButton from "./SendSmsButton";
 import SohoraFacture from "./SohoraFacture";
-import IngaruProduct from "./IngaruProduct";
 
 const ActionComponents = ({
   children,
   id,
-  ibyashize,
   bishyuye,
 }: {
   children: ReactNode;
@@ -48,6 +39,7 @@ const ActionComponents = ({
           <div className="flex items-start justify-center flex-col space-y-1.5 !w-full">
             {bishyuye === false ? (
               <>
+                <ChangeUkoNyigurisha clientId={id} />
                 <AlertDialog
                   open={dialogOpen}
                   onOpenChange={() => {
@@ -75,6 +67,7 @@ const ActionComponents = ({
               </>
             ) : (
               <>
+                <ChangeUkoNyigurisha clientId={id} />
                 <SendSmsButton />
                 <SohoraFacture clientId={id} />
                 <IngaruProduct clientId={id} />

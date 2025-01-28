@@ -31,9 +31,7 @@ export default function ShowBadge({
             "cursor-pointer text-stone-900 shadow-sm text-nowrap bg-[#859F3D] hover:bg-[#859F3D] shadow-[#859F3D]"
           )}
         >
-          <span className="text-nowrap">
-            Yishyuye {yishyuyeAngahe ? yishyuyeAngahe.toLocaleString() : 0} Rwf
-          </span>
+          <span className="text-nowrap">Yishyuye cash</span>
         </Badge>
       ) : (
         <Badge
@@ -46,9 +44,9 @@ export default function ShowBadge({
             {amazeKwishyura === 0
               ? (ukonyigurishaKuriDetail * yatwaye).toLocaleString()
               : (
-                ukonyigurishaKuriDetail * yatwaye -
-                amazeKwishyura
-              ).toLocaleString()}{" "}
+                  ukonyigurishaKuriDetail * yatwaye -
+                  amazeKwishyura
+                ).toLocaleString()}{" "}
             Rwf
           </span>
         </Badge>

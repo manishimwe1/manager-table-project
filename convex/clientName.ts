@@ -41,6 +41,7 @@ export const createClient = mutation({
       facture: args.facture,
       yishyuyezingahe: args.yishyuyezingahe,
       amazeKwishyura: args.amazeKwishyura,
+      ukoNyigurisha: product.ukonyigurishaKuriDetail,
     });
 
     await ctx.runMutation(internal.product.updateProdut, {
@@ -82,7 +83,6 @@ export const getSaledProduct = query({
   args: { userId: v.optional(v.id("user")) },
   handler: async (ctx, args) => {
     try {
-
       // Query the database for products created today
       const products = await ctx.db
         .query("client")
@@ -266,10 +266,11 @@ export const updateClient = mutation({
   args: {
     id: v.id("client"),
     fields: v.object({
-      aratwaraZingahe: v.number(),
-      yishyuyeAngahe: v.number(),
+      aratwaraZingahe: v.optional(v.number()),
+      yishyuyeAngahe: v.optional(v.number()),
       yishyuyezingahe: v.optional(v.number()),
       amazeKwishyura: v.optional(v.number()),
+      ukoNyigurisha: v.optional(v.number()),
     }),
   },
 
@@ -278,7 +279,7 @@ export const updateClient = mutation({
 
     // Only update fields that are provided
     const returnedClient = await ctx.db.patch(id, fields);
-console.log(returnedClient);
+    console.log(returnedClient);
 
     const client = await ctx.db.get(id);
     if (!client) return;

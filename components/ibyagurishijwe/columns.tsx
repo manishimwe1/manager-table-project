@@ -76,13 +76,25 @@ export const columns: ColumnDef<Client>[] = [
   },
   {
     accessorKey: "productId",
-    header: () => <p className="text-nowrap text-center">Uko nyigurisha</p>,
+    header: () => <p className="text-nowrap text-center">Uko nyigurishije</p>,
     cell: ({ row }) => {
-      const productId = row.getValue("productId") as Id<"product">;
-      return <ShowUkonyiranguza productId={productId} />;
+      const ukoNyigurisha = row.getValue("ukoNyigurisha") as number;
+      return (
+        <p className="text-center">{ukoNyigurisha.toLocaleString()} Rwf</p>
+      );
     },
   },
 
+  {
+    accessorKey: "ukoNyigurisha",
+    header: () => <p className="text-nowrap text-center"> Ayishyurwa</p>,
+    cell: ({ row }) => {
+      const ukonyigurisha = row.getValue("ukoNyigurisha") as number;
+      const atwayeZingahe = row.getValue("aratwaraZingahe") as number;
+      const total = ukonyigurisha * atwayeZingahe;
+      return <p className="text-center">{total.toLocaleString()} Rwf</p>;
+    },
+  },
   {
     accessorKey: "yishyuye",
     header: "",

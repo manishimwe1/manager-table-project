@@ -31,6 +31,7 @@ export default defineSchema({
     facture: v.number(),
     yishyuyezingahe: v.optional(v.number()),
     amazeKwishyura: v.optional(v.number()),
+    ukoNyigurisha: v.optional(v.number()),
   })
     .index("by_name", ["name"])
     .index("by_userId", ["userId"]),
