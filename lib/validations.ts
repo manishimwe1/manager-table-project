@@ -27,9 +27,7 @@ export const EditProductformSchema = z.object({
   ikiranguzo: z.coerce
     .number()
     .min(1, { message: "ikiranguzo kigomba kuba hejuru ya 0" }),
-  ingano: z.coerce
-    .number()
-    .min(1, { message: "ingano igomba kuba hejuru ya 0" }),
+  ingano: z.coerce.number(),
   birishyuwe: z.string(),
   uzishyuraAngahe: z.number(),
   ukonyigurishaKuriDetail: z.coerce

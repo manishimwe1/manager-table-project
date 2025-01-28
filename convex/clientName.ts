@@ -295,3 +295,24 @@ export const deleteClient = internalMutation({
     await ctx.db.delete(args.id);
   },
 });
+
+export const updateUkonyigurisha = mutation({
+  args: {
+    id: v.id("client"),
+    fields: v.object({
+      ukoNyigurisha: v.number(),
+    }),
+  },
+
+  handler: async (ctx, args) => {
+    const { id, fields } = args;
+
+    // Only update fields that are provided
+    const client = await ctx.db.get(id);
+    if (!client) return;
+    await ctx.db.patch(id, {
+      ukoNyigurisha: client?.ukoNyigurisha! + fields.ukoNyigurisha!,
+      yishyuyezingahe: client?.yishyuyezingahe! + fields.ukoNyigurisha!,
+    });
+  },
+});
