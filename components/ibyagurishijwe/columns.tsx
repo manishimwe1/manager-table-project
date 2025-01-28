@@ -109,13 +109,14 @@ export const columns: ColumnDef<Client>[] = [
       const yatwaye = row.getValue("aratwaraZingahe") as number;
       const amazeKwishyura = row.getValue("amazeKwishyura") as number;
       const yarishyuye = row.getValue("yishyuye") as boolean;
+      const ukonyigurisha = row.getValue("ukoNyigurisha") as number;
       return (
         <ShowBadge
-          yishyuyeAngahe={yishyuyeAngahe}
           yarishyuye={yarishyuye}
           amazeKwishyura={amazeKwishyura}
           productId={productId}
           yatwaye={yatwaye}
+          ukonyigurisha={ukonyigurisha}
         />
       );
     },

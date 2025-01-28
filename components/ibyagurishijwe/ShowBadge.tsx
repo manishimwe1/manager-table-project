@@ -10,13 +10,13 @@ export default function ShowBadge({
   yatwaye,
   yarishyuye,
   amazeKwishyura,
-  yishyuyeAngahe,
+  ukonyigurisha,
 }: {
   productId: Id<"product">;
   yarishyuye?: boolean;
   yatwaye: number;
   amazeKwishyura: number;
-  yishyuyeAngahe?: number;
+  ukonyigurisha: number;
 }) {
   const product = useQuery(api.product.getProductById, { id: productId });
 
@@ -42,9 +42,9 @@ export default function ShowBadge({
           <span className="text-nowrap">
             Afite ideni{" "}
             {amazeKwishyura === 0
-              ? (ukonyigurishaKuriDetail * yatwaye).toLocaleString()
+              ? (ukonyigurisha * yatwaye).toLocaleString()
               : (
-                  ukonyigurishaKuriDetail * yatwaye -
+                  ukonyigurisha * yatwaye -
                   amazeKwishyura
                 ).toLocaleString()}{" "}
             Rwf
