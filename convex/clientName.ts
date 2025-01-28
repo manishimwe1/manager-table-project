@@ -58,6 +58,26 @@ export const createClient = mutation({
   },
 });
 
+export const getClietFromDB = query({
+  args: { userId: v.optional(v.id("user")) },
+  handler: async (ctx, args) => {
+    const userId = args.userId as Id<"user">;
+    const Client = await ctx.db
+      .query("client")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .order("desc")
+      .collect();
+
+    if (!Client) {
+      console.log(
+        new ConvexError("SOMETHING WENT WRONNG WHILE GETTING Client")
+      );
+      return [];
+    }
+    return Client;
+  },
+});
+
 export const getClientByIden = query({
   args: { userId: v.optional(v.id("user")) },
   handler: async (ctx, args) => {

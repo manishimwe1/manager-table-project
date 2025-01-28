@@ -21,7 +21,7 @@ import { useQuery } from "convex/react";
 import { ChevronDown, ChevronsDownUp, ChevronUp, Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { FocusEvent, useEffect, useState } from "react";
+import { FocusEvent, useEffect, useMemo, useState } from "react";
 
 // Start with empty array instead of undefined data
 const SalesPage: React.FC = () => {
@@ -46,6 +46,8 @@ const SalesPage: React.FC = () => {
   const [phoneInput, setPhoneInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isListOpen, setIsListOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+
   const userId = session.data?.user;
 
   // Queries
@@ -57,6 +59,16 @@ const SalesPage: React.FC = () => {
     userId: user?._id as Id<"user">,
   });
 
+  const client = useQuery(api.clientName.getClietFromDB, {
+    userId: user?._id as Id<"user">,
+  });
+
+  const filteredData = useMemo(() => {
+    if (!searchValue) return [];
+    return client?.filter((item) =>
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
+  }, [searchValue, client]);
   // Redirect unauthenticated users
   useEffect(() => {
     if (session.status === "unauthenticated") {
@@ -72,7 +84,10 @@ const SalesPage: React.FC = () => {
     }
   }, [data, addClientData, isSubmitting]);
 
-  console.log(productData, "productData");
+  const timeoutId = setTimeout(() => {
+    setSearchValue("");
+    clearTimeout(timeoutId);
+  }, 5000);
   const handleBlur = (e: FocusEvent<HTMLInputElement, Element>) => {
     if (e.target.value === "") {
       toast({
@@ -151,6 +166,7 @@ const SalesPage: React.FC = () => {
                   onChange={(e) => {
                     setNameInput(e.target.value);
                     setName(e.target.value);
+                    setSearchValue(e.target.value);
                   }}
                   placeholder="Shyiramo umukiriya"
                   onBlur={handleBlur}
@@ -174,7 +190,7 @@ const SalesPage: React.FC = () => {
                   onBlur={() => {
                     console.log(phoneInput.length);
 
-                    if (phoneInput.length !== 10) {
+                    if (phoneInput.length <= 10) {
                       toast({
                         title: `Ushyizemo imibare ${phoneInput.length} kandi yakabaye 10`,
                         variant: "destructive",
@@ -206,6 +222,29 @@ const SalesPage: React.FC = () => {
               </div>
             )}
           </div>
+          {filteredData?.length !== 0 && (
+            <div className=" h-full w-full lg:w-[800px] mx-auto -mt-6 shadow-md shadow-blue-300 rounded-md">
+              {filteredData?.map(
+                (data) =>
+                  data.phone !== 0 && (
+                    <div
+                      key={data._id}
+                      className=" w-full lg:w-[800px] mx-auto hover:bg-gray-200 cursor-pointer flex justify-between p-2 px-4 items-start"
+                      onClick={() => {
+                        setName(data.name);
+                        setNameInput(data.name);
+                        setPhoneInput(data.phone.toString());
+                        setPhone(data.phone);
+                        setSearchValue("");
+                      }}
+                    >
+                      <p>{data.name}</p>
+                      <p>{data.phone}</p>
+                    </div>
+                  )
+              )}
+            </div>
+          )}
           {isOpen && (
             <DataTable
               loading={loading}

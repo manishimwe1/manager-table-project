@@ -136,7 +136,7 @@ function IngaruForm({
                 className="bg-blue-600 font-bold text-white hover:bg-blue-700"
                 disabled={loading}
               >
-                {loading ? "saving..." : "yibike"}
+                {loading ? "Ogera igicuruzwa..." : "Ogera igicuruzwa"}
               </Button>
               <DialogClose className="" disabled={loading}>
                 cancel
