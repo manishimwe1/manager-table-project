@@ -21,7 +21,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose
+  DialogClose,
 } from "@/components/ui/dialog";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,7 +34,13 @@ import SkeletonLoader from "./SkeletonLoader";
 import { ingaruSchema } from "@/lib/validations";
 import { useToast } from "@/hooks/use-toast";
 
-function IngaruForm({ client, setOpenDialog }: { client: Client | null | undefined; setOpenDialog: Dispatch<SetStateAction<boolean>> }) {
+function IngaruForm({
+  client,
+  setOpenDialog,
+}: {
+  client: Client | null | undefined;
+  setOpenDialog: Dispatch<SetStateAction<boolean>>;
+}) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
@@ -74,9 +80,10 @@ function IngaruForm({ client, setOpenDialog }: { client: Client | null | undefin
       fields: {
         aratwaraZingahe: client.aratwaraZingahe - Number(values.agaruyeZingahe),
         yishyuyeAngahe: client.yishyuyeAngahe! - returnedClientMoney,
-        amazeKwishyura: client?.amazeKwishyura !== 0
-          ? client?.amazeKwishyura! - returnedClientMoney
-          : 0,
+        amazeKwishyura:
+          client?.amazeKwishyura !== 0
+            ? client?.amazeKwishyura! - returnedClientMoney
+            : 0,
         yishyuyezingahe: client?.yishyuye
           ? client?.yishyuyezingahe! - Number(values.agaruyeZingahe)
           : 0,
@@ -87,7 +94,7 @@ function IngaruForm({ client, setOpenDialog }: { client: Client | null | undefin
       id: client.productId,
       fields: {
         ayomazeGucuruza: product?.ayomazeGucuruza! - returnedClientMoney,
-        byoseHamwe:product.byoseHamwe + Number(values.agaruyeZingahe)
+        byoseHamwe: product.byoseHamwe + Number(values.agaruyeZingahe),
       },
     });
 
@@ -99,10 +106,11 @@ function IngaruForm({ client, setOpenDialog }: { client: Client | null | undefin
       phone: client.phone!,
       productId: client.productId,
       userId: client.userId,
+      igicuruzwa: product?.igicuruzwa,
     });
     form.reset();
     setLoading(false);
-    setOpenDialog(false)
+    setOpenDialog(false);
   }
 
   return (
@@ -151,10 +159,7 @@ function IngaruForm({ client, setOpenDialog }: { client: Client | null | undefin
               >
                 {loading ? "saving..." : "yibike"}
               </Button>
-              <DialogClose
-                className=""
-                disabled={loading}
-              >
+              <DialogClose className="" disabled={loading}>
                 cancel
               </DialogClose>
             </div>
@@ -166,7 +171,7 @@ function IngaruForm({ client, setOpenDialog }: { client: Client | null | undefin
 }
 
 const IngaruProduct = ({ clientId }: { clientId: Id<"client"> }) => {
-  const [openDialog, setOpenDialog] = useState(false)
+  const [openDialog, setOpenDialog] = useState(false);
   const client = useQuery(api.clientName.getClientById, {
     id: clientId as Id<"client">,
   });

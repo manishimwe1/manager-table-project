@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useQuery } from "convex/react";
+import SkeletonLoader from "@/components/SkeletonLoader";
 
 const IngaruPage = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -58,14 +59,31 @@ const IngaruPage = () => {
   // Filter data based on search value
   const filteredData = useMemo(() => {
     if (!searchValue) return enrichedData;
-    return enrichedData.filter((item) =>
-      item.name.toLowerCase().includes(searchValue.toLowerCase())
+    return enrichedData.filter(
+      (item) =>
+        item.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.productName?.toLowerCase().includes(searchValue.toLowerCase())
     );
   }, [searchValue, enrichedData]);
+
+  if (session.status === "loading") return <SkeletonLoader />;
 
   return (
     <section className="w-full mt-2 space-y-4 px-2">
       <HeaderSection title="Ibicuruzwa byagarutse muri Stock" />
+
+      <div className="flex items-center justify-between w-full flex-col lg:flex-row gap-4">
+        <div className="lg:w-[600px] w-full">
+          <SearchBox
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            placeholder="Shakisha ukoresha izina, telefone cyangwa igicuruzwa..."
+          />
+        </div>
+        <p className="text-blue-400 text-nowrap">
+          Byose hamwe: {filteredData.length}
+        </p>
+      </div>
 
       {filteredData.length === 0 ? (
         <EmptyPlaceholder
@@ -74,61 +92,50 @@ const IngaruPage = () => {
           title="Ntangaru ufite muri stock"
         />
       ) : (
-        <>
-          <div className="flex items-center justify-between w-full">
-            <p className="text-blue-400 text-nowrap hidden lg:flex">
-              Byose hamwe: {filteredData.length}
-            </p>
-            <div className="lg:w-[600px] w-full">
-              <SearchBox
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
-              />
-            </div>
-          </div>
-          <div>
-            <Table className="border border-stone-400">
-              <TableHeader>
-                <TableRow>
-                  <TableHead className=""></TableHead>
-                  <TableHead className="text-center">Name</TableHead>
-                  <TableHead className="text-center">Phone</TableHead>
-                  <TableHead className="text-center">Igicuruzwa</TableHead>
-                  <TableHead className="text-nowrap text-center">
-                    ingano yibyo agaruye
-                  </TableHead>
-                  <TableHead className="text-center">Facture Number</TableHead>
-                  <TableHead className="text-nowrap text-center">
-                    ayo yari yishyuye{" "}
-                  </TableHead>
+        <div className="overflow-x-auto">
+          <Table className="border border-stone-400/20 rounded-md">
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-center">#</TableHead>
+                <TableHead className="text-center">Amazina</TableHead>
+                <TableHead className="text-center">Telefone</TableHead>
+                <TableHead className="text-center">Igicuruzwa</TableHead>
+                <TableHead className="text-nowrap text-center">
+                  Ingano y'ibyo agaruye
+                </TableHead>
+                <TableHead className="text-center">Numero ya Facture</TableHead>
+                <TableHead className="text-nowrap text-center">
+                  Ayo yari yishyuye
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="dark:text-gray-200">
+              {filteredData.map((item, index) => (
+                <TableRow key={item._id}>
+                  <TableCell className="font-medium text-center">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell className="font-medium text-center">
+                    {item.name}
+                  </TableCell>
+                  <TableCell className="text-center">{item.phone}</TableCell>
+                  <TableCell className="text-center text-nowrap">
+                    {item.igicuruzwa ?? "unknow product"}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {item.inganoYizoAgaruye}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {item.factureNumber}
+                  </TableCell>
+                  <TableCell className="text-center font-medium">
+                    {item.ayoyariYishyuye?.toLocaleString()} Rwf
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody className="dark:text-gray-200 ">
-                {filteredData.map((item, index) => (
-                  <TableRow key={item._id}>
-                    <TableCell className="font-medium">{index + 1}</TableCell>
-                    <TableCell className="font-medium text-center">
-                      {item.name}
-                    </TableCell>
-                    <TableCell className="text-center">{item.phone}</TableCell>
-                    <TableCell className="text-center text-nowrap">
-                      {item.productName}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {item.inganoYizoAgaruye}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {item.factureNumber}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {item.ayoyariYishyuye}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       )}
     </section>
   );

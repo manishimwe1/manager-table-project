@@ -51,13 +51,15 @@ export default defineSchema({
     phone: v.number(),
     factureNumber: v.number(),
     ayoyariYishyuye: v.number(),
+    igicuruzwa: v.optional(v.string()),
   })
     .index("by_name", ["name"])
     .index("by_userId", ["userId"]),
-    notification: defineTable({
-      userId: v.string(),
-      message: v.string(),
-      seen: v.boolean(),
-    }).index("by_userId", ["userId"]).index("by_seen", ["seen"]),
-
+  notification: defineTable({
+    userId: v.string(),
+    message: v.string(),
+    seen: v.boolean(),
+  })
+    .index("by_userId", ["userId"])
+    .index("by_seen", ["seen"]),
 });

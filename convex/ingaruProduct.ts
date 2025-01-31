@@ -10,6 +10,7 @@ export const IngaruProduct = mutation({
     phone: v.number(),
     factureNumber: v.number(),
     ayoyariYishyuye: v.number(),
+    igicuruzwa: v.string(),
   },
   handler: async (ctx, args) => {
     console.log(args.userId, "userID..............");
@@ -22,6 +23,7 @@ export const IngaruProduct = mutation({
       phone: args.phone,
       factureNumber: args.factureNumber,
       ayoyariYishyuye: args.ayoyariYishyuye,
+      igicuruzwa: args.igicuruzwa,
     });
     if (!ingaruProduct) {
       return new ConvexError("SOMETHING WENT WRONNG WHILE CREATING ");

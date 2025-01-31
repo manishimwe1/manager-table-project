@@ -37,6 +37,7 @@ const IdeniPage = () => {
         </p>
         <div className="lg:w-[600px] w-full">
           <SearchBox
+            placeholder="Shaka umukiriya ufite ideni"
             searchValue={searchValue}
             setSearchValue={setSearchValue}
           />

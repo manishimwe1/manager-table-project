@@ -35,10 +35,16 @@ import SearchBox from "@/components/SearchBox";
 
 const IbyagurishijwePage = () => {
   const [openState, setOpenState] = useState<{ [key: string]: boolean }>({});
-
   const [searchValue, setSearchValue] = useState("");
   const session = useSession();
   const userId = session.data?.user;
+
+  const handleCollapsibleClick = (date: string) => {
+    setOpenState((prev) => ({
+      ...prev,
+      [date]: !prev[date],
+    }));
+  };
 
   const user = useQuery(api.user.getUserIndb, { email: userId?.email || "" });
   const saledProduct = useQuery(api.clientName.getSaledProduct, {
@@ -88,10 +94,11 @@ const IbyagurishijwePage = () => {
       <div className="w-full h-full space-y-2">
         {Object.entries(filteredGroupedData).map(([date, items]) => (
           <div key={date} className={cn("py-4 rounded-lg")}>
-            <Collapsible>
+            <Collapsible open={openState[date]}>
               <CollapsibleTrigger
+                onClick={() => handleCollapsibleClick(date)}
                 className={cn(
-                  "flex items-center justify-between w-full text-lg border-b-2 border-blue-200 dark:border-stone-700 shadow-sm text-gray-800 dark:text-gray-200 shadow-background py-2 px-3 rounded-xl bg-background  dark:shadow-black/70",
+                  "flex items-center justify-between w-full text-lg border-b-2 border-blue-200 dark:border-stone-700 shadow-sm text-gray-800 dark:text-gray-200 shadow-background py-2 px-3 rounded-xl bg-background dark:shadow-black/70",
                   openState[date] ? "text-blue-300" : "text-black"
                 )}
               >
@@ -120,12 +127,12 @@ const IbyagurishijwePage = () => {
                 className={cn(
                   "flex flex-col h-fit w-full mt-2 lg:mt-4",
                   openState[date]
-                    ? "bg-blue-50/20 dark:bg-stone-900 rounded-lg transition-all duration-200 "
-                    : "rotate-0"
+                    ? "bg-blue-50/20 dark:bg-stone-900 rounded-lg transition-all duration-200"
+                    : ""
                 )}
               >
                 <div className="flex items-center justify-between w-full flex-col py-2 px-4">
-                  <div className="flex items-center justify-end gap-4 w-full ">
+                  <div className="flex items-center justify-end gap-4 w-full">
                     <div className="w-full lg:w-1/2">
                       <SearchBox
                         searchValue={searchValue}
@@ -137,11 +144,11 @@ const IbyagurishijwePage = () => {
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-start w-full">
-                    <p className="text-black dark:text-gray-200 text-nowrap lg:text-sm text-sm ">
+                  <div className="flex flex-col lg:flex-row justify-between items-start w-full gap-2 mt-4">
+                    <p className="text-black dark:text-gray-200 text-nowrap lg:text-sm text-sm">
                       Byose hamwe: {items?.length}
                     </p>
-                    <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-sm text-xs ">
+                    <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-sm text-xs">
                       Total yacurujwe uyu munsi:{" "}
                       <span className="text-blue-800 text-base font-bold">
                         {items
@@ -154,9 +161,9 @@ const IbyagurishijwePage = () => {
                         rwf
                       </span>
                     </p>
-                    <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-sm text-sm ">
+                    <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-sm text-xs">
                       Total yamadeni uyu munsi:{" "}
-                      <span className="text-blue-800 text-base font-bold">
+                      <span className="text-red-500 text-base font-bold">
                         {items
                           ?.reduce(
                             (acc, item) =>
@@ -170,9 +177,9 @@ const IbyagurishijwePage = () => {
                         rwf
                       </span>
                     </p>
-                    <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-sm text-xs ">
+                    <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-sm text-xs">
                       Total y'ishyuwe uyu munsi:{" "}
-                      <span className="text-blue-800 text-base font-bold">
+                      <span className="text-green-500 text-base font-bold">
                         {items
                           ?.reduce(
                             (acc, item) =>
