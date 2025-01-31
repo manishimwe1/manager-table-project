@@ -3,7 +3,12 @@
 import { Client, ProductType } from "@/types";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { ChevronsDownUp, Loader2 } from "lucide-react";
+import {
+  ChevronsDownUp,
+  Filter,
+  Loader2,
+  LucideListFilter,
+} from "lucide-react";
 import {
   cn,
   getTranslatedDay,
@@ -40,13 +45,6 @@ const IbyagurishijwePage = () => {
     userId: user?._id as Id<"user">,
   });
 
-  const filteredData = useMemo(() => {
-    if (!searchValue) return saledProduct;
-    return saledProduct?.filter((item) =>
-      item.name.toLowerCase().includes(searchValue.toLowerCase())
-    );
-  }, [searchValue, saledProduct]);
-
   if (session.status === "loading") return <SkeletonLoader />;
 
   if (!saledProduct) {
@@ -58,12 +56,37 @@ const IbyagurishijwePage = () => {
       />
     );
   }
-  const groupedData = groupByDateInSaled(filteredData);
+
+  // First group the data by date
+  const groupedData = groupByDateInSaled(saledProduct);
+
+  // Then filter the items within each group based on search
+  const filteredGroupedData = Object.entries(groupedData).reduce(
+    (acc, [date, items]) => {
+      const filteredItems = searchValue
+        ? items.filter(
+            (item) =>
+              item.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+              item.igicuruzwa?.toLowerCase().includes(searchValue.toLowerCase())
+          )
+        : items;
+
+      // Only include dates that have matching items
+      if (filteredItems.length >= 0) {
+        acc[date] = filteredItems;
+      }
+      return acc;
+    },
+    {} as typeof groupedData
+  );
+
+  console.log(filteredGroupedData, "filteredGroupedData");
+
   return (
     <section className="w-full">
       <HeaderSection title="Urutonde rw'ibyacurujwe" />
       <div className="w-full h-full space-y-2">
-        {Object.entries(groupedData).map(([date, items]) => (
+        {Object.entries(filteredGroupedData).map(([date, items]) => (
           <div key={date} className={cn("py-4 rounded-lg")}>
             <Collapsible>
               <CollapsibleTrigger
@@ -101,29 +124,68 @@ const IbyagurishijwePage = () => {
                     : "rotate-0"
                 )}
               >
-                <div className="flex items-center justify-between w-full flex-row-reverse lg:flex-row py-2 px-4">
-                  <div className="flex justify-between items-center">
-                    <p className="text-blue-400 text-nowrap lg:text-base text-sm ">
+                <div className="flex items-center justify-between w-full flex-col py-2 px-4">
+                  <div className="flex items-center justify-end gap-4 w-full ">
+                    <div className="w-full lg:w-1/2">
+                      <SearchBox
+                        searchValue={searchValue}
+                        setSearchValue={setSearchValue}
+                      />
+                    </div>
+                    <div>
+                      <LucideListFilter className="text-gray-600 dark:text-gray-300" />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-start w-full">
+                    <p className="text-black dark:text-gray-200 text-nowrap lg:text-sm text-sm ">
                       Byose hamwe: {items?.length}
                     </p>
-                    <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-base text-sm ">
+                    <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-sm text-xs ">
                       Total yacurujwe uyu munsi:{" "}
-                      <span className="text-blue-800">
+                      <span className="text-blue-800 text-base font-bold">
                         {items
                           ?.reduce(
                             (acc, item) =>
                               acc + item.ukoNyigurisha! * item.aratwaraZingahe,
                             0
                           )
-                          .toLocaleString()}
+                          .toLocaleString()}{" "}
+                        rwf
                       </span>
                     </p>
-                  </div>
-                  <div className="lg:w-[600px] w-full">
-                    <SearchBox
-                      searchValue={searchValue}
-                      setSearchValue={setSearchValue}
-                    />
+                    <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-sm text-sm ">
+                      Total yamadeni uyu munsi:{" "}
+                      <span className="text-blue-800 text-base font-bold">
+                        {items
+                          ?.reduce(
+                            (acc, item) =>
+                              !item.yishyuye
+                                ? acc +
+                                  item.ukoNyigurisha! * item.aratwaraZingahe
+                                : acc,
+                            0
+                          )
+                          .toLocaleString()}{" "}
+                        rwf
+                      </span>
+                    </p>
+                    <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-sm text-xs ">
+                      Total y'ishyuwe uyu munsi:{" "}
+                      <span className="text-blue-800 text-base font-bold">
+                        {items
+                          ?.reduce(
+                            (acc, item) =>
+                              item.yishyuye
+                                ? acc +
+                                  item.ukoNyigurisha! * item.aratwaraZingahe
+                                : acc,
+                            0
+                          )
+                          .toLocaleString()}{" "}
+                        rwf
+                      </span>
+                    </p>
                   </div>
                 </div>
                 <ul>

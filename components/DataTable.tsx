@@ -40,7 +40,7 @@ export default function DataTable({
           <TableHeader>
             <TableRow>
               <TableHead className="text-nowrap">Igicuruzwa</TableHead>
-              <TableHead className="text-nowrap text-left ">Ingano</TableHead>
+              <TableHead className="text-nowrap text-left ">Hasigaye</TableHead>
 
               <TableHead className="text-nowrap">Ikiranguzo</TableHead>
               <TableHead className="text-nowrap">Uko Ngurisha</TableHead>

@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import { Doc, Id } from "@/convex/_generated/dataModel";
 import { useToast } from "@/hooks/use-toast";
 import { ingaruSchema } from "@/lib/validations";
 import { Client } from "@/types";
@@ -41,7 +41,7 @@ function IngaruForm({
   client,
   setOpenDialog,
 }: {
-  client: Client | null | undefined;
+  client: Doc<"client"> | null | undefined;
   setOpenDialog: Dispatch<SetStateAction<boolean>>;
 }) {
   const [loading, setLoading] = useState(false);
@@ -57,7 +57,7 @@ function IngaruForm({
   const form = useForm<z.infer<typeof ingaruSchema>>({
     resolver: zodResolver(ingaruSchema),
     defaultValues: {
-      agaruyeZingahe: product?.ukonyigurishaKuriDetail,
+      agaruyeZingahe: product?.ukoNyigurisha,
     },
   });
 

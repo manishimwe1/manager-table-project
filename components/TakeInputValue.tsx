@@ -1,20 +1,20 @@
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import { useToast } from "@/hooks/use-toast";
+import { useClientInfoStore } from "@/lib/store/zustand";
+import { cn } from "@/lib/utils";
+import { ProductType } from "@/types";
+import { useQuery } from "convex/react";
+import { Plus } from "lucide-react";
+import { useSession } from "next-auth/react";
 import React, {
-  useState,
-  useCallback,
-  useEffect,
   Dispatch,
   SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
 } from "react";
 import { Input } from "./ui/input";
-import { useClientInfoStore } from "@/lib/store/zustand";
-import { Id } from "@/convex/_generated/dataModel";
-import { cn } from "@/lib/utils";
-import { useMutation, useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { useSession } from "next-auth/react";
-import { useToast } from "@/hooks/use-toast";
-import { ProductType } from "@/types";
-import { Plus } from "lucide-react";
 
 const TakeInputValue = ({
   setActiveRow,
@@ -50,10 +50,7 @@ const TakeInputValue = ({
   const { name, updateProduct, productData, addProduct, removeProduct } =
     useClientInfoStore();
 
-  const MAX_VALUE =
-    productType === "Ikesi x 20" || productType === "Ikesi x 12"
-      ? data?.find((product) => product._id === id)?.byoseHamwe
-      : data?.find((product) => product._id === id)?.ingano;
+  const MAX_VALUE = data?.find((product) => product._id === id)?.byoseHamwe;
 
   useEffect(() => {
     if (loading === true) {
