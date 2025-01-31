@@ -32,6 +32,12 @@ import { Id } from "@/convex/_generated/dataModel";
 import SkeletonLoader from "@/components/SkeletonLoader";
 import { redirect } from "next/navigation";
 import SearchBox from "@/components/SearchBox";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import ShowDetailsInIbyacurujwe from "@/components/ShowDetailsInIbyacurujwe";
 
 const IbyagurishijwePage = () => {
   const [openState, setOpenState] = useState<{ [key: string]: boolean }>({});
@@ -140,59 +146,69 @@ const IbyagurishijwePage = () => {
                       />
                     </div>
                     <div>
-                      <LucideListFilter className="text-gray-600 dark:text-gray-300" />
+                      <Popover>
+                        <PopoverTrigger>
+                          <LucideListFilter className="text-gray-600 dark:text-gray-300" />
+                        </PopoverTrigger>
+                        <PopoverContent>
+                          <ShowDetailsInIbyacurujwe items={items} />
+                        </PopoverContent>
+                      </Popover>
                     </div>
                   </div>
 
-                  <div className="flex flex-col lg:flex-row justify-between items-start w-full gap-2 mt-4">
-                    <p className="text-black dark:text-gray-200 text-nowrap lg:text-sm text-sm">
-                      Byose hamwe: {items?.length}
-                    </p>
-                    <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-sm text-xs">
-                      Total yacurujwe uyu munsi:{" "}
-                      <span className="text-blue-800 text-base font-bold">
-                        {items
-                          ?.reduce(
-                            (acc, item) =>
-                              acc + item.ukoNyigurisha! * item.aratwaraZingahe,
-                            0
-                          )
-                          .toLocaleString()}{" "}
-                        rwf
-                      </span>
-                    </p>
-                    <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-sm text-xs">
-                      Total yamadeni uyu munsi:{" "}
-                      <span className="text-red-500 text-base font-bold">
-                        {items
-                          ?.reduce(
-                            (acc, item) =>
-                              !item.yishyuye
-                                ? acc +
-                                  item.ukoNyigurisha! * item.aratwaraZingahe
-                                : acc,
-                            0
-                          )
-                          .toLocaleString()}{" "}
-                        rwf
-                      </span>
-                    </p>
-                    <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-sm text-xs">
-                      Total y'ishyuwe uyu munsi:{" "}
-                      <span className="text-green-500 text-base font-bold">
-                        {items
-                          ?.reduce(
-                            (acc, item) =>
-                              item.yishyuye
-                                ? acc +
-                                  item.ukoNyigurisha! * item.aratwaraZingahe
-                                : acc,
-                            0
-                          )
-                          .toLocaleString()}{" "}
-                        rwf
-                      </span>
-                    </p>
+                  <div className="lg:flex flex-col lg:flex-row justify-between items-start w-full gap-2 mt-4 hidden">
+                    <div className="lg:flex justify-between w-full gap-2 hidden items-center">
+                      <p className="text-black dark:text-gray-200 text-nowrap lg:text-sm text-sm">
+                        Byose hamwe: {items?.length}
+                      </p>
+                      <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-sm text-xs">
+                        Total yacurujwe uyu munsi:{" "}
+                        <span className="text-blue-800 text-base font-bold">
+                          {items
+                            ?.reduce(
+                              (acc, item) =>
+                                acc +
+                                item.ukoNyigurisha! * item.aratwaraZingahe,
+                              0
+                            )
+                            .toLocaleString()}{" "}
+                          rwf
+                        </span>
+                      </p>
+                      <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-sm text-xs">
+                        Total yamadeni uyu munsi:{" "}
+                        <span className="text-red-500 text-base font-bold">
+                          {items
+                            ?.reduce(
+                              (acc, item) =>
+                                !item.yishyuye
+                                  ? acc +
+                                    item.ukoNyigurisha! * item.aratwaraZingahe
+                                  : acc,
+                              0
+                            )
+                            .toLocaleString()}{" "}
+                          rwf
+                        </span>
+                      </p>
+                      <p className="text-stone-900 dark:text-gray-200 text-nowrap lg:text-sm text-xs">
+                        Total y'ishyuwe uyu munsi:{" "}
+                        <span className="text-green-500 text-base font-bold">
+                          {items
+                            ?.reduce(
+                              (acc, item) =>
+                                item.yishyuye
+                                  ? acc +
+                                    item.ukoNyigurisha! * item.aratwaraZingahe
+                                  : acc,
+                              0
+                            )
+                            .toLocaleString()}{" "}
+                          rwf
+                        </span>
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <ul>
