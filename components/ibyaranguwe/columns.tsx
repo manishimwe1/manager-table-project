@@ -105,15 +105,12 @@ export const columns: ColumnDef<ProductType>[] = [
       const ikiranguzo = row.getValue("ikiranguzo") as number;
       const productType = row.getValue("ibyoUranguyeType") as string;
       const ingano = row.getValue("ingano") as number;
+      const byoseHamwe = row.getValue("byoseHamwe") as number;
       return (
+
         <p className="text-nowrap text-center text-blue-950 dark:text-blue-200">
-          {(ikiranguzo * ingano).toLocaleString()} Rwf{" "}
-          {productType === "Ikesi x 12" && (
-            <span className="text-[12px] mr-1">Kw'ikesi </span>
-          )}
-          {productType === "Ikesi x 20" && (
-            <span className="text-[12px] mr-1">Kw'ikesi </span>
-          )}
+          {productType === "Ikesi x 12" || productType === "Ikesi x 20" ? (ikiranguzo * ingano).toLocaleString() : (ikiranguzo * byoseHamwe).toLocaleString()} Rwf
+          
         </p>
       );
     },

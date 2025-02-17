@@ -28,9 +28,10 @@ const SellingItemComp = ({
     name,
     setName,
     setPhone,
+    phone,
     removeProduct,
   } = useClientInfoStore();
-
+  console.log('phone',phone)
   useEffect(() => {
     if (loading === true) {
       resetClientData();
@@ -46,10 +47,13 @@ const SellingItemComp = ({
   return (
     <div className="max-h-[210px] h-full w-full   rounded-md flex flex-col dark:text-gray-200 !gap-2">
       {productData.length !== 0 && (
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-1">
           <h2 className="flex items-start h-fit">
             Umukiriya: <span>{name}</span>
           </h2>
+          <p className="flex items-start h-fit text-xs ">
+            numero: <span>{phone}</span>
+          </p>
         </div>
       )}
       <ScrollArea className="h-[200px] w-full">

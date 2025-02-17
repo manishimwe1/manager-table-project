@@ -188,16 +188,16 @@ const SalesPage: React.FC = () => {
                     setPhoneInput(e.target.value);
                   }}
                   onBlur={() => {
-                    console.log(phoneInput.length);
+                    console.log(Number(`250${phoneInput}`));
 
-                    if (phoneInput.length <= 10) {
+                    if (phoneInput.length !== 10) {
                       toast({
                         title: `Ushyizemo imibare ${phoneInput.length} kandi yakabaye 10`,
                         variant: "destructive",
                       });
                       return;
                     }
-                    setPhone(Number(`25${phoneInput}`));
+                    setPhone(Number(`250${phoneInput}`));
                   }}
                   placeholder="Shyiramo telephone"
                 />

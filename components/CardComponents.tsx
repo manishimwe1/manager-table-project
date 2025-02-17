@@ -49,11 +49,13 @@ const CardComponents = () => {
           title="Abakiriya bafite amadeni"
           content={Client?.length}
           link="/ideni"
+          Percentage={saledProduct?.length}
         />
         <HomeCard
           title="Ibyashize muri stock"
           content={outOfStock?.length}
           link="/ibyashize"
+          Percentage={product?.length}
         />
         <HomeCard
           title="Ibyacurujwe uyu munsi"
@@ -64,11 +66,13 @@ const CardComponents = () => {
           title="abamaze kw'ishyura"
           content={ClientWhoPaid?.length}
           link="/abishyuye"
+          Percentage={saledProduct?.length}
         />
         <HomeCard
           title="amadeni mfite ndangura"
           content={productInIdeni?.length}
           link="/ideniryokurangura"
+          Percentage={product?.length}
         />
       </div>
     </div>

@@ -19,7 +19,7 @@ const UserButton = ({ user }: { user: User }) => {
           {user.image ? (
             <Image
               src={user.image}
-              alt={user.name ?? "username"}
+              alt={"user"}
               className="object-contain rounded-full"
               height={25}
               width={25}

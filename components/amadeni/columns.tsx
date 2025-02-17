@@ -18,9 +18,12 @@ import { api } from "@/convex/_generated/api";
 function ShowIdeniAfite({
   productId,
   yishyuyezingahe,
+  amazeKwishyura
 }: {
   productId: Id<"product">;
   yishyuyezingahe: number;
+  amazeKwishyura?: number;
+
 }) {
   const product = useQuery(api.product.getProductById, { id: productId });
   console.log(product, "product ", yishyuyezingahe);
@@ -28,7 +31,7 @@ function ShowIdeniAfite({
   if (!product) return null;
   return (
     <p className="text-center">
-      {(product.ukonyigurishaKuriDetail * yishyuyezingahe).toLocaleString()} Rwf
+      {((product.ukonyigurishaKuriDetail * yishyuyezingahe-amazeKwishyura!)).toLocaleString()} Rwf
     </p>
   );
 }
@@ -141,10 +144,12 @@ export const columns: ColumnDef<Client>[] = [
     cell: ({ row }) => {
       const productId = row.getValue("productId") as Id<"product">;
       const aratwaraZingahe = row.getValue("aratwaraZingahe") as number;
+      const amazeKwishyura = row.getValue("amazeKwishyura") as number;
       return (
         <ShowIdeniAfite
           productId={productId}
           yishyuyezingahe={aratwaraZingahe}
+          amazeKwishyura={amazeKwishyura}
         />
       );
     },

@@ -45,6 +45,7 @@ const YishyuyeIdeni = ({
   });
   const updateClient = useMutation(api.clientName.updatePayedClient);
 
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -72,7 +73,7 @@ const YishyuyeIdeni = ({
         description: "Ushyizemo menshi kurusha ideni yose.",
         variant: "destructive",
       });
-    } else if (values.wishyuyeAngahe === remainingAmount) {
+    } else if (values.wishyuyeAngahe === remainingAmount || remainingAmount  <= 0 ) {
       // Payment equals the remaining amount: Debt is fully paid
       updateClient({
         id: id,
@@ -105,6 +106,7 @@ const YishyuyeIdeni = ({
         variant: "default",
       });
     }
+    
   };
 
   if (product && productById) {

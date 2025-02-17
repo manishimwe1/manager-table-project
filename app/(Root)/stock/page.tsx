@@ -65,7 +65,7 @@ const StockPage = () => {
                   {filteredData
                     .reduce(
                       (total, item) =>
-                        total + item?.ndanguyeZingahe * item.ikiranguzo!,
+                        total + item?.byoseHamwe * item.ikiranguzo!,
                       0
                     )
                     .toLocaleString()}{" "}
